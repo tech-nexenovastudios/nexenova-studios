@@ -1,0 +1,65 @@
+[
+  {
+    "slug": "pirate-tile-clash",
+    "title": "Pirate Tile-Clash",
+    "genre": "Puzzle",
+    "description": "An exciting puzzle game where you clash tiles in a pirate-themed adventure. Challenge yourself with engaging gameplay and strategic tile matching.",
+    "status": "released",
+    "platforms": ["Android", "iOS"],
+    "category": "Puzzle"
+  },
+  {
+    "slug": "2048-no-limit",
+    "title": "2048 No Limit",
+    "genre": "Puzzle",
+    "description": "A captivating puzzle game that will keep you hooked for hours. Combine tiles to reach the highest number possible in this endless challenge.",
+    "status": "released",
+    "platforms": ["Android", "iOS"],
+    "category": "Puzzle"
+  },
+  {
+    "slug": "bird-hunter",
+    "title": "Bird Hunter",
+    "genre": "Adventure",
+    "description": "Embark on an epic adventure with Bird Hunter. Track and hunt birds in various environments with realistic gameplay mechanics.",
+    "status": "released",
+    "platforms": ["Android", "iOS"],
+    "category": "Adventure"
+  },
+  {
+    "slug": "jump-on",
+    "title": "Jump On",
+    "genre": "Arcade",
+    "description": "Jump your way through challenging platforms in this fast-paced arcade game. Test your reflexes and timing skills.",
+    "status": "released",
+    "platforms": ["Android", "iOS"],
+    "category": "Arcade"
+  },
+  {
+    "slug": "feed-the-cat",
+    "title": "Feed the Cat",
+    "genre": "Casual",
+    "description": "A delightful casual game where you feed and care for adorable cats. Enjoy relaxing gameplay with charming graphics.",
+    "status": "released",
+    "platforms": ["Android", "iOS"],
+    "category": "Casual"
+  },
+  {
+    "slug": "ripple-delete",
+    "title": "Ripple Delete",
+    "genre": "Puzzle",
+    "description": "A unique puzzle game where you strategically delete tiles to create satisfying ripple effects. Coming soon!",
+    "status": "coming-soon",
+    "platforms": ["Android", "iOS"],
+    "category": "Puzzle"
+  },
+  {
+    "slug": "pirates-royale",
+    "title": "Pirates Royale",
+    "genre": "Multiplayer",
+    "description": "Join the quest for treasure in this thrilling multiplayer game. Battle other players and claim the ultimate pirate glory. Coming soon!",
+    "status": "coming-soon",
+    "platforms": ["Android", "iOS"],
+    "category": "Multiplayer"
+  }
+]

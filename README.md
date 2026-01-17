@@ -69,11 +69,61 @@ npm run build
 npm start
 ```
 
+## Deployment to GitHub Pages
+
+This project is configured to deploy automatically to GitHub Pages using GitHub Actions.
+
+### Automatic Deployment
+
+1. **Push your code to GitHub:**
+   ```bash
+   git init
+   git add .
+   git commit -m "Initial commit"
+   git branch -M main
+   git remote add origin https://github.com/YOUR_USERNAME/nexenova-studios.git
+   git push -u origin main
+   ```
+
+2. **Enable GitHub Pages:**
+   - Go to your repository on GitHub
+   - Navigate to **Settings** → **Pages**
+   - Under **Source**, select **GitHub Actions**
+   - The workflow will automatically deploy on every push to `main` branch
+
+3. **Your site will be available at:**
+   - `https://YOUR_USERNAME.github.io/nexenova-studios/`
+
+### Manual Deployment
+
+If you prefer to deploy manually:
+
+```bash
+# Build the static site
+npm run export
+
+# The output will be in the 'out' directory
+# You can then upload the contents of 'out' to GitHub Pages
+```
+
+### Custom Domain
+
+If you want to deploy to a custom domain or the root of your GitHub Pages site:
+
+1. Update `next.config.js` and set `basePath` and `assetPrefix` to empty strings:
+   ```javascript
+   basePath: '',
+   assetPrefix: '',
+   ```
+
+2. If deploying to `username.github.io` repository (root domain), the basePath should be empty.
+
 ## Technologies Used
 
 - Next.js 14
 - React 18
 - CSS3
+- GitHub Actions (for deployment)
 
 ## License
 

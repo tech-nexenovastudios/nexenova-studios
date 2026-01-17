@@ -1,21 +1,7 @@
 import Layout from '../../components/Layout';
 import gamesData from '../../data/games.json';
-import { useRouter } from 'next/router';
 
-export default function GameDetail() {
-  const router = useRouter();
-  const { slug } = router.query;
-
-  if (!slug) {
-    return (
-      <Layout>
-        <div>Loading...</div>
-      </Layout>
-    );
-  }
-
-  const game = gamesData.find(g => g.slug === slug);
-
+export default function GameDetail({ game }) {
   if (!game) {
     return (
       <Layout>
@@ -58,4 +44,25 @@ export default function GameDetail() {
       </div>
     </Layout>
   );
+}
+
+export async function getStaticPaths() {
+  const paths = gamesData.map((game) => ({
+    params: { slug: game.slug },
+  }));
+
+  return {
+    paths,
+    fallback: false,
+  };
+}
+
+export async function getStaticProps({ params }) {
+  const game = gamesData.find((g) => g.slug === params.slug);
+
+  return {
+    props: {
+      game: game || null,
+    },
+  };
 }

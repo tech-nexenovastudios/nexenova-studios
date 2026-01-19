@@ -73,6 +73,16 @@ npm start
 
 This project is configured to deploy automatically to GitHub Pages using GitHub Actions.
 
+### ⚠️ Important: Enable GitHub Pages First!
+
+**Before the workflow can deploy, you MUST enable GitHub Pages in your repository settings:**
+
+1. Go to your repository → **Settings** → **Pages**
+2. Under **Source**, select **GitHub Actions**
+3. Click **Save**
+
+**If you see "Get Pages site failed" error**, it means Pages isn't enabled yet. Follow the steps above.
+
 ### Automatic Deployment
 
 1. **Push your code to GitHub:**

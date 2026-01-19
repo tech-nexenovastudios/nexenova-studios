@@ -36,7 +36,12 @@ export default function Contact() {
         <div style={{ marginTop: '3rem', padding: '2rem', background: '#f5f5f5', borderRadius: '8px' }}>
           <h2 style={{ marginBottom: '1rem' }}>Other Ways to Reach Us</h2>
           <p style={{ marginBottom: '0.5rem' }}>
-            <strong>Email:</strong> com.nexenovastudios.piratetileclash.in
+            <strong>Email:</strong> <a href="mailto:support@nexenovastudios.com">support@nexenovastudios.com</a>
+          </p>
+          <p style={{ marginBottom: '0.5rem' }}>
+            <strong>Account Deletion Requests:</strong> To request deletion of your account and personal data, 
+            please email us at <a href="mailto:support@nexenovastudios.com">support@nexenovastudios.com</a> 
+            with the subject line "Account Deletion Request".
           </p>
           <p style={{ marginBottom: '0.5rem' }}>
             <strong>General Inquiries:</strong> For questions about our games, privacy policy, 

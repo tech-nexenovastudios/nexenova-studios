@@ -93,7 +93,7 @@ export default function TermsAndConditions() {
         <p><strong>Contact Us</strong></p>
         <p>
           If you have any questions or suggestions about our Terms and Conditions, do not 
-          hesitate to contact us at com.nexenovastudios.piratetileclash.in.
+          hesitate to contact us at <a href="mailto:support@nexenovastudios.com">support@nexenovastudios.com</a>.
         </p>
       </div>
     </Layout>

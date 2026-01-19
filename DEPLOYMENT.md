@@ -40,22 +40,42 @@ git branch -M main
 git push -u origin main
 ```
 
-### 3. Enable GitHub Pages
+### 3. Enable GitHub Pages ⚠️ IMPORTANT - DO THIS FIRST!
+
+**You MUST enable GitHub Pages BEFORE the workflow can deploy successfully.**
 
 1. Go to your repository on GitHub
 2. Click on **Settings** (top menu)
 3. Scroll down to **Pages** in the left sidebar
-4. Under **Source**, select **GitHub Actions**
-5. The workflow will automatically run and deploy your site
+4. Under **Source**, select **GitHub Actions** (NOT "Deploy from a branch")
+5. Click **Save**
+6. After enabling, you can trigger the workflow manually or push a new commit
 
-### 4. Wait for Deployment
+### 4. Trigger the Deployment
+
+After enabling GitHub Pages, you can trigger the workflow:
+
+**Option A: Manual Trigger**
+1. Go to the **Actions** tab in your repository
+2. Click on "Deploy to GitHub Pages" workflow
+3. Click **Run workflow** button (top right)
+4. Select the branch (usually `main`) and click **Run workflow**
+
+**Option B: Push a New Commit**
+```bash
+# Make a small change or just add an empty commit
+git commit --allow-empty -m "Trigger deployment"
+git push
+```
+
+### 5. Wait for Deployment
 
 1. Go to the **Actions** tab in your repository
 2. You should see a workflow run called "Deploy to GitHub Pages"
 3. Wait for it to complete (usually 2-3 minutes)
 4. Once it shows a green checkmark, your site is deployed!
 
-### 5. Access Your Site
+### 6. Access Your Site
 
 Your website will be available at:
 - `https://YOUR_USERNAME.github.io/nexenova-studios/`
@@ -71,11 +91,24 @@ Every time you push changes to the `main` branch, GitHub Actions will automatica
 
 ## Troubleshooting
 
+### Error: "Get Pages site failed" or "Not Found"
+
+**This error means GitHub Pages is not enabled yet.**
+
+**Solution:**
+1. Go to your repository → **Settings** → **Pages**
+2. Under **Source**, select **GitHub Actions**
+3. Click **Save**
+4. Go to **Actions** tab and click **Re-run all jobs** or push a new commit
+
+**Important:** You must enable GitHub Pages in Settings BEFORE the workflow can deploy. The workflow cannot enable Pages automatically - you need to do it manually in the repository settings.
+
 ### Site Not Loading
 
 - Wait 5-10 minutes after first deployment
 - Check the Actions tab to ensure the workflow completed successfully
 - Verify GitHub Pages is enabled in Settings → Pages
+- Make sure you selected **GitHub Actions** as the source, not "Deploy from a branch"
 
 ### 404 Errors on Game Pages
 

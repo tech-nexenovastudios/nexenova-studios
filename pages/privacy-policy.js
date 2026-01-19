@@ -145,6 +145,33 @@ export default function PrivacyPolicy() {
           be able to do necessary actions.
         </p>
 
+        <p><strong>Account Deletion</strong></p>
+        <p>
+          You have the right to request deletion of your account and associated personal data 
+          at any time. If you wish to delete your account and have your personal information 
+          removed from our systems, please contact us at <a href="mailto:support@nexenovastudios.com">support@nexenovastudios.com</a> 
+          with your account deletion request.
+        </p>
+        <p>
+          When you request account deletion, we will:
+        </p>
+        <ul>
+          <li>Delete your account and associated personal data from our systems</li>
+          <li>Remove your game progress, scores, and save data</li>
+          <li>Process your request within 30 days of receipt</li>
+        </ul>
+        <p>
+          Please note that some information may be retained for legal or legitimate business 
+          purposes, such as transaction records required by law, or anonymized analytics data 
+          that cannot be associated with your account. Additionally, data shared with third-party 
+          service providers may be subject to their own retention policies.
+        </p>
+        <p>
+          To request account deletion, please email us at <a href="mailto:support@nexenovastudios.com">support@nexenovastudios.com</a> 
+          with the subject line "Account Deletion Request" and include your account information 
+          or the email address associated with your account to help us locate and delete your data.
+        </p>
+
         <p><strong>Changes to This Privacy Policy</strong></p>
         <p>
           We may update our Privacy Policy from time to time. Thus, you are advised to review 
@@ -155,8 +182,9 @@ export default function PrivacyPolicy() {
 
         <p><strong>Contact Us</strong></p>
         <p>
-          If you have any questions or suggestions about our Privacy Policy, do not hesitate 
-          to contact us at com.nexenovastudios.piratetileclash.in.
+          If you have any questions or suggestions about our Privacy Policy, or if you wish 
+          to request account deletion, please do not hesitate to contact us at 
+          <a href="mailto:support@nexenovastudios.com"> support@nexenovastudios.com</a>.
         </p>
       </div>
     </Layout>

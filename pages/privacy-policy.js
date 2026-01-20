@@ -47,7 +47,7 @@ export default function PrivacyPolicy() {
         </p>
 
         <p>
-          The games do use third party services that may collect information used to identify you.
+          The games do use third party services and SDKs (including analytics, ads, backend, and crash reporting tools) that may collect information used to identify you. These services help us deliver core functionality (such as multiplayer/back-end via PlayFab), diagnostics, personalization, and monetization.
         </p>
 
         <div>
@@ -73,6 +73,11 @@ export default function PrivacyPolicy() {
             <li>
               <a href="https://unity3d.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer">
                 Unity
+              </a>
+            </li>
+            <li>
+              <a href="https://playfab.com/privacy" target="_blank" rel="noopener noreferrer">
+                PlayFab
               </a>
             </li>
           </ul>

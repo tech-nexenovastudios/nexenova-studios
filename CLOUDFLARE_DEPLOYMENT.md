@@ -24,15 +24,23 @@ This guide will help you deploy the Nexenova Studios website to Cloudflare Pages
 3. **Configure Build Settings**
    - **Framework preset**: Next.js (Static HTML Export)
    - **Build command**: `npm run build`
-   - **Deploy command**: `npx wrangler deploy` (or leave empty for automatic deployment)
-   - **Non-production branch deploy command**: `npx wrangler versions upload` (optional)
+   - **Deploy command**: `npx wrangler pages deploy out --project-name=nexenova-studios`
+     - **⚠️ Important**: Use `wrangler pages deploy`, NOT `wrangler deploy` (which is for Workers only)
+     - If Cloudflare requires a deploy command, use the command above
+     - Replace `nexenova-studios` with your actual project name
+   - **Non-production branch deploy command**: `npx wrangler pages deploy out --project-name=nexenova-studios --branch=$CF_PAGES_BRANCH`
    - **Build output directory**: `out`
    - **Root directory**: `/` (leave empty)
    - **Node.js version**: 18 or higher
+   
+   **Note**: If you see authentication errors, see `CLOUDFLARE_AUTH_FIX.md` for troubleshooting steps.
 
-4. **Environment Variables** (if needed)
-   - Add any environment variables in the build settings
-   - Example: `NODE_ENV=production`
+4. **Environment Variables** (required for deploy command)
+   - Go to **Settings** → **Environment variables**
+   - Add `CLOUDFLARE_API_TOKEN` with your API token value
+   - Select "Production" environment (and "Preview" if needed)
+   - **⚠️ Important**: See `SETUP_API_TOKEN.md` for security best practices
+   - Optional: `NODE_ENV=production` (Cloudflare sets this automatically)
 
 5. **Deploy**
    - Click **Save and Deploy**
@@ -106,8 +114,13 @@ To use a custom domain:
 To add environment variables:
 
 1. Go to your project → **Settings** → **Environment variables**
-2. Add variables for Production, Preview, or both
-3. Variables are available during build time as `process.env.VARIABLE_NAME`
+2. **Required for deploy command**: Add `CLOUDFLARE_API_TOKEN` with your API token
+   - See `SETUP_API_TOKEN.md` for detailed instructions and security best practices
+   - Token needs `Cloudflare Pages:Edit` permission
+3. Add other variables for Production, Preview, or both as needed
+4. Variables are available during build time as `process.env.VARIABLE_NAME`
+
+**⚠️ Security**: Never commit API tokens to Git. Always use Cloudflare Dashboard environment variables.
 
 ## Build Settings Summary
 
@@ -116,14 +129,18 @@ Use these settings in Cloudflare Dashboard:
 ```
 Framework preset: Next.js (Static HTML Export)
 Build command: npm run build
-Deploy command: npx wrangler deploy (or leave empty for auto-deploy)
-Non-production branch deploy command: npx wrangler versions upload (optional)
+Deploy command: (leave empty - recommended for Git-based deployment)
+  OR: npx wrangler pages deploy out (for manual deployment)
+Non-production branch deploy command: (leave empty - Cloudflare handles automatically)
 Build output directory: out
 Root directory: /
 Node.js version: 18
 ```
 
-**Note**: If you're using Git-based deployment, you can leave the deploy commands empty and Cloudflare will handle deployment automatically. The deploy commands are useful for manual CLI deployments.
+**⚠️ Important Notes**:
+- **For Git-based deployment** (recommended): Leave the deploy commands **empty**. Cloudflare will automatically build and deploy on every push.
+- **If you must use a deploy command**: Use `npx wrangler pages deploy out` (NOT `wrangler deploy` which is for Workers)
+- The deploy commands are only needed if you're not using Git-based automatic deployment
 
 ## Troubleshooting
 

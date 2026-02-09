@@ -1,0 +1,7 @@
+# Cloudflare Pages redirects and rewrites
+# Next.js static export generates HTML files for each route,
+# so Cloudflare Pages will serve them directly.
+# This file can be used for custom redirects if needed.
+
+# Example: Redirect old URLs to new ones (uncomment and modify as needed)
+# /old-page    /new-page    301

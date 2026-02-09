@@ -1,0 +1,20 @@
+# Cloudflare Pages Configuration
+# This file is used when deploying via Wrangler CLI
+# For Git-based deployments, configure settings in Cloudflare Dashboard
+
+name = "nexenova-studios"
+compatibility_date = "2024-01-01"
+
+# Pages configuration
+pages_build_output_dir = "./out"
+
+# Build configuration (used by Wrangler CLI)
+# Note: For Git deployments, configure build settings in Cloudflare Dashboard:
+# - Build command: npm run build
+# - Build output directory: out
+# - Node.js version: 18
+
+# Environment variables (if needed)
+# Add these in Cloudflare Dashboard → Settings → Environment variables
+# [vars]
+# NODE_ENV = "production"

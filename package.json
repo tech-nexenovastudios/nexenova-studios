@@ -7,7 +7,9 @@
     "build": "next build",
     "export": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "deploy": "npx wrangler pages deploy out --project-name=nexenova-studios",
+    "deploy:preview": "npx wrangler pages deploy out --project-name=nexenova-studios --branch=preview"
   },
   "dependencies": {
     "next": "^14.0.0",

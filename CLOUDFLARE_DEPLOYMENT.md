@@ -24,6 +24,8 @@ This guide will help you deploy the Nexenova Studios website to Cloudflare Pages
 3. **Configure Build Settings**
    - **Framework preset**: Next.js (Static HTML Export)
    - **Build command**: `npm run build`
+   - **Deploy command**: `npx wrangler deploy` (or leave empty for automatic deployment)
+   - **Non-production branch deploy command**: `npx wrangler versions upload` (optional)
    - **Build output directory**: `out`
    - **Root directory**: `/` (leave empty)
    - **Node.js version**: 18 or higher
@@ -56,7 +58,16 @@ This guide will help you deploy the Nexenova Studios website to Cloudflare Pages
 
 4. **Deploy to Cloudflare Pages**
    ```bash
-   wrangler pages deploy out --project-name=nexenova-studios
+   # Option 1: Using npm script (recommended)
+   npm run deploy
+   
+   # Option 2: Direct Wrangler command
+   npx wrangler pages deploy out --project-name=nexenova-studios
+   
+   # For preview/non-production branches
+   npm run deploy:preview
+   # or
+   npx wrangler versions upload
    ```
 
 ## Build Configuration
@@ -100,13 +111,19 @@ To add environment variables:
 
 ## Build Settings Summary
 
+Use these settings in Cloudflare Dashboard:
+
 ```
 Framework preset: Next.js (Static HTML Export)
 Build command: npm run build
+Deploy command: npx wrangler deploy (or leave empty for auto-deploy)
+Non-production branch deploy command: npx wrangler versions upload (optional)
 Build output directory: out
 Root directory: /
 Node.js version: 18
 ```
+
+**Note**: If you're using Git-based deployment, you can leave the deploy commands empty and Cloudflare will handle deployment automatically. The deploy commands are useful for manual CLI deployments.
 
 ## Troubleshooting
 

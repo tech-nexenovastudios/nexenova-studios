@@ -1,1 +1,42 @@
-{\n  "job_postings": [\n    {\n      "title": "2D Designer",\n      "requirements": [\n        "Proficient in Adobe Creative Suite (Photoshop, Illustrator, etc.)",\n        "Strong understanding of typography, color theory, and layout design",\n        "Ability to create engaging visual content for various platforms",\n        "Experience with motion graphics is a plus",\n        "Strong attention to detail and creativity"\n      ],\n      "responsibilities": [\n        "Create visually appealing designs for digital platforms, including social media, websites, and marketing materials",\n        "Collaborate with marketing and development teams to define design requirements",\n        "Edit and revise designs based on feedback",\n        "Maintain brand consistency across all designs"\n      ],\n      "experience": "2+ years of experience in graphic design or a related field."\n    },\n    {\n      "title": "Sound Engineer",\n      "requirements": [\n        "Proficiency in audio editing software (Pro Tools, Logic Pro, etc.)",\n        "Strong understanding of audio mixing and mastering techniques",\n        "Experience with live sound reinforcement is a plus",\n        "Ability to work under tight deadlines and manage multiple projects simultaneously",\n        "Strong communication and teamwork skills"\n      ],\n      "responsibilities": [\n        "Record, edit, and mix audio for various projects including games, videos, and podcasts",\n        "Collaborate with producers, directors, and other team members to determine sound design needs",\n        "Ensure high-quality sound output and adherence to project timelines",\n        "Maintain and troubleshoot audio equipment"\n      ],\n      "experience": "3+ years of experience in sound engineering or a related field."\n    }\n  ]\n}
+{
+  "job_postings": [
+    {
+      "position": "2D Designer",
+      "experience": "3-5 years",
+      "type": "onsite",
+      "requirements": {
+        "published_games": 1,
+        "focus": "casual/hyper-casual"
+      },
+      "responsibilities": [
+        "Create engaging 2D assets for games.",
+        "Collaborate with game designers and developers to conceptualize and implement designs.",
+        "Assist in the creation of UI/UX assets."
+      ],
+      "nice_to_have": [
+        "Experience with animation software.",
+        "Familiarity with game development processes.",
+        "Portfolio showcasing previous work."
+      ]
+    },
+    {
+      "position": "Sound Engineer",
+      "experience": "3-5 years",
+      "type": "contract/freelance",
+      "requirements": {
+        "game_industry_experience": true,
+        "published_games": 1
+      },
+      "responsibilities": [
+        "Design and implement sound effects and music for games.",
+        "Work closely with game designers to achieve the desired audio experience.",
+        "Edit and enhance audio from various sources."
+      ],
+      "nice_to_have": [
+        "Experience in audio software like Pro Tools or Logic Pro.",
+        "Understanding of game design and the role of sound in gameplay.",
+        "Portfolio with samples of previous work in audio."
+      ]
+    }
+  ]
+}

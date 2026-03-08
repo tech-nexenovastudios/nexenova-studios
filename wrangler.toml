@@ -1,5 +1,6 @@
 # Cloudflare Pages Configuration
-name = "nexenova-studios"
+# wrangler.toml
+name = 'nexenova-studios-prod'
 compatibility_date = "2024-01-01"
 
 # Pages configuration

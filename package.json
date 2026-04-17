@@ -8,7 +8,7 @@
     "export": "next build",
     "start": "next start",
     "lint": "next lint",
-    "deploy": "npx wrangler pages deploy out --project-name=nexenova-studios",
+    "deploy": "npx wrangler pages project create nexenova-studios --production-branch=main || true && npx wrangler pages deploy out --project-name=nexenova-studios",
     "deploy:preview": "npx wrangler pages deploy out --project-name=nexenova-studios --branch=preview"
   },
   "dependencies": {

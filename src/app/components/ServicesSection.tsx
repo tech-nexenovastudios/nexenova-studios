@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { motion } from 'motion/react'
 import { Lightbulb, Hammer, Rocket, Sparkles, ArrowRight, Skull } from 'lucide-react'
 import { Card } from './ui/card'
@@ -87,6 +88,41 @@ export function ServicesSection({ onGameSelect }: ServicesSectionProps) {
     if (stage) groupedByStage[stage].push(g)
   }
 
+  // Mobile shows one stage at a time via a tab strip (the 4-column board
+  // doesn't translate to a tall vertical stack on small screens).
+  const [activeStage, setActiveStage] = useState<Stage>('ideation')
+
+  const renderCard = (g: SeedGame) => (
+    <motion.button
+      key={g.id}
+      type="button"
+      onClick={() => onGameSelect?.(g.id)}
+      whileHover={{ y: -2 }}
+      transition={{ duration: 0.2 }}
+      className="w-full text-left group focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background rounded-xl"
+    >
+      <Card className="border-border/50 hover:border-primary/40 hover:shadow-sm transition-all bg-background/60 p-4">
+        <div className="flex items-start justify-between gap-2 mb-2">
+          <h3 className="font-semibold text-sm leading-tight flex-1">{g.title}</h3>
+          <ArrowRight className="h-3.5 w-3.5 text-muted-foreground opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all flex-shrink-0 mt-0.5" />
+        </div>
+        {g.tagline && (
+          <p className="text-xs text-muted-foreground leading-snug mb-2 line-clamp-2">{g.tagline}</p>
+        )}
+        <Badge variant="secondary" className="text-[10px] uppercase tracking-wider font-medium">
+          {g.genre}
+        </Badge>
+      </Card>
+    </motion.button>
+  )
+
+  const emptyState = (
+    <div className="text-center py-8 text-sm text-muted-foreground italic">
+      <Skull className="h-4 w-4 mx-auto mb-2 opacity-50" />
+      Nothing here yet.
+    </div>
+  )
+
   return (
     <section id="services" className="py-20">
       <div className="container mx-auto px-4">
@@ -120,8 +156,8 @@ export function ServicesSection({ onGameSelect }: ServicesSectionProps) {
           </motion.p>
         </AnimatedSection>
 
-        {/* Pipeline */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        {/* Pipeline — desktop board (sm and up) */}
+        <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {LANES.map((lane, laneIdx) => {
             const laneGames = groupedByStage[lane.id]
             return (
@@ -141,41 +177,58 @@ export function ServicesSection({ onGameSelect }: ServicesSectionProps) {
                   </div>
 
                   <div className="p-3 space-y-2 flex-1">
-                    {laneGames.length === 0 ? (
-                      <div className="text-center py-8 text-sm text-muted-foreground italic">
-                        <Skull className="h-4 w-4 mx-auto mb-2 opacity-50" />
-                        Nothing here yet.
-                      </div>
-                    ) : (
-                      laneGames.map((g) => (
-                        <motion.button
-                          key={g.id}
-                          type="button"
-                          onClick={() => onGameSelect?.(g.id)}
-                          whileHover={{ y: -2 }}
-                          transition={{ duration: 0.2 }}
-                          className="w-full text-left group focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background rounded-xl"
-                        >
-                          <Card className="border-border/50 hover:border-primary/40 hover:shadow-sm transition-all bg-background/60 p-4">
-                            <div className="flex items-start justify-between gap-2 mb-2">
-                              <h3 className="font-semibold text-sm leading-tight flex-1">{g.title}</h3>
-                              <ArrowRight className="h-3.5 w-3.5 text-muted-foreground opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all flex-shrink-0 mt-0.5" />
-                            </div>
-                            {g.tagline && (
-                              <p className="text-xs text-muted-foreground leading-snug mb-2 line-clamp-2">
-                                {g.tagline}
-                              </p>
-                            )}
-                            <Badge variant="secondary" className="text-[10px] uppercase tracking-wider font-medium">
-                              {g.genre}
-                            </Badge>
-                          </Card>
-                        </motion.button>
-                      ))
-                    )}
+                    {laneGames.length === 0 ? emptyState : laneGames.map(renderCard)}
                   </div>
                 </div>
               </AnimatedSection>
+            )
+          })}
+        </div>
+
+        {/* Pipeline — mobile tabs (below sm) */}
+        <div className="sm:hidden">
+          {/* Stage tab strip — horizontally scrollable */}
+          <div className="flex gap-2 overflow-x-auto pb-3 -mx-4 px-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {LANES.map((lane) => {
+              const count = groupedByStage[lane.id].length
+              const isActive = activeStage === lane.id
+              return (
+                <button
+                  key={lane.id}
+                  type="button"
+                  onClick={() => setActiveStage(lane.id)}
+                  className={`flex-shrink-0 inline-flex items-center gap-2 px-4 py-2.5 rounded-full border text-sm font-medium transition-colors ${
+                    isActive
+                      ? 'border-primary bg-primary/10 text-primary'
+                      : 'border-border bg-background text-muted-foreground'
+                  }`}
+                >
+                  <lane.icon className="h-4 w-4" />
+                  {lane.label}
+                  <span
+                    className={`inline-flex items-center justify-center min-w-[1.25rem] h-5 px-1.5 rounded-full text-[11px] font-semibold ${
+                      isActive ? 'bg-primary/20 text-primary' : 'bg-muted text-foreground/70'
+                    }`}
+                  >
+                    {count}
+                  </span>
+                </button>
+              )
+            })}
+          </div>
+
+          {/* Active stage panel */}
+          {LANES.filter((l) => l.id === activeStage).map((lane) => {
+            const laneGames = groupedByStage[lane.id]
+            return (
+              <div key={lane.id} className="mt-4 rounded-2xl border border-border/60 bg-card/60 overflow-hidden">
+                <div className={`px-5 py-4 bg-gradient-to-b ${lane.accent} border-b border-border/40`}>
+                  <p className="text-xs text-muted-foreground leading-relaxed">{lane.blurb}</p>
+                </div>
+                <div className="p-3 space-y-2">
+                  {laneGames.length === 0 ? emptyState : laneGames.map(renderCard)}
+                </div>
+              </div>
             )
           })}
         </div>

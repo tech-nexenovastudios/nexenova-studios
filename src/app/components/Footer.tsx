@@ -13,13 +13,15 @@ interface FooterProps {
   onNavigateToPrivacy?: () => void
   onNavigateToTerms?: () => void
   onNavigateToCookies?: () => void
+  onNavigateToCareers?: () => void
 }
 
-export function Footer({ 
+export function Footer({
   companyInfo,
   onNavigateToPrivacy,
   onNavigateToTerms,
-  onNavigateToCookies
+  onNavigateToCookies,
+  onNavigateToCareers
 }: FooterProps) {
   const currentYear = new Date().getFullYear()
 
@@ -124,6 +126,16 @@ export function Footer({
                   </button>
                 </li>
               ))}
+              {onNavigateToCareers && (
+                <li>
+                  <button
+                    onClick={onNavigateToCareers}
+                    className="text-muted-foreground hover:text-primary transition-colors text-sm"
+                  >
+                    Careers
+                  </button>
+                </li>
+              )}
             </ul>
           </div>
 

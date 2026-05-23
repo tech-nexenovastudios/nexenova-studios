@@ -14,6 +14,7 @@ interface TeamMember {
 
 interface TeamSectionProps {
   teamMembers?: TeamMember[]
+  onNavigateToCareers?: () => void
 }
 
 type TeamCard = {
@@ -74,7 +75,7 @@ function getRoleIcon(role: string) {
   return <Gamepad2 className="h-6 w-6" />
 }
 
-export function TeamSection({ teamMembers = [] }: TeamSectionProps) {
+export function TeamSection({ teamMembers = [], onNavigateToCareers }: TeamSectionProps) {
   const team: TeamCard[] =
     teamMembers.length > 0
       ? teamMembers.map((m) => ({
@@ -181,13 +182,23 @@ export function TeamSection({ teamMembers = [] }: TeamSectionProps) {
 
         <AnimatedSection delay={0.3} className="mt-12 text-center">
           <p className="text-sm text-muted-foreground">
-            Not hiring right now &mdash; but if our work pulls you, drop a hello at{' '}
-            <a
-              href="mailto:tech@nexenovastudios.com"
-              className="font-medium text-primary hover:underline underline-offset-4"
-            >
-              tech@nexenovastudios.com
-            </a>.
+            We&rsquo;re hiring craft we believe in.{' '}
+            {onNavigateToCareers ? (
+              <button
+                type="button"
+                onClick={onNavigateToCareers}
+                className="font-medium text-primary hover:underline underline-offset-4"
+              >
+                See open roles &rarr;
+              </button>
+            ) : (
+              <a
+                href="/careers"
+                className="font-medium text-primary hover:underline underline-offset-4"
+              >
+                See open roles &rarr;
+              </a>
+            )}
           </p>
         </AnimatedSection>
       </div>

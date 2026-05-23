@@ -14,6 +14,8 @@ import { CookiePolicyPage } from './legal/CookiePolicyPage'
 import { DevlogIndexPage } from './devlog/DevlogIndexPage'
 import { DevlogPostPage } from './devlog/DevlogPostPage'
 import { DevlogSection } from './DevlogSection'
+import { CareersIndexPage } from './careers/CareersIndexPage'
+import { CareerDetailPage } from './careers/CareerDetailPage'
 import { NotFoundPage } from './NotFoundPage'
 import { AnimatedSection } from './AnimatedSection'
 import { fetchGames, fetchSiteContent, initializeDatabase, type Game, type SiteContent } from '../data/dataManager'
@@ -21,7 +23,7 @@ import gamesSeed from '../data/games.seed.json'
 
 const seedGames = gamesSeed as Game[]
 
-type Route = 'home' | 'game' | 'privacy' | 'terms' | 'cookies' | 'devlog' | 'devlog-post' | 'not-found'
+type Route = 'home' | 'game' | 'privacy' | 'terms' | 'cookies' | 'devlog' | 'devlog-post' | 'careers' | 'career-detail' | 'not-found'
 
 const scrollToTop = (smooth: boolean = true) => {
   window.scrollTo({
@@ -35,6 +37,7 @@ export function Router() {
   const [currentRoute, setCurrentRoute] = useState<Route>('home')
   const [gameId, setGameId] = useState<string>('')
   const [postSlug, setPostSlug] = useState<string>('')
+  const [careerSlug, setCareerSlug] = useState<string>('')
   const [games, setGames] = useState<Game[]>([])
   const [siteContent, setSiteContent] = useState<SiteContent | null>(null)
   const [loading, setLoading] = useState(true)
@@ -68,6 +71,15 @@ export function Router() {
         }
       } else if (path === '/devlog' || hash === 'devlog') {
         setCurrentRoute('devlog')
+      } else if (path.indexOf('/careers/') === 0 || hash.indexOf('careers/') === 0) {
+        const slug =
+          path.indexOf('/careers/') === 0 ? path.split('/')[2] : hash.split('/')[1]
+        if (slug) {
+          setCareerSlug(slug)
+          setCurrentRoute('career-detail')
+        }
+      } else if (path === '/careers' || hash === 'careers') {
+        setCurrentRoute('careers')
       } else if (path === '/privacy' || hash === 'privacy') {
         setCurrentRoute('privacy')
       } else if (path === '/terms' || hash === 'terms') {
@@ -151,6 +163,17 @@ export function Router() {
     window.history.pushState({}, '', `/devlog/${slug}`)
   }
 
+  const navigateToCareers = () => {
+    setCurrentRoute('careers')
+    window.history.pushState({}, '', '/careers')
+  }
+
+  const navigateToCareer = (slug: string) => {
+    setCareerSlug(slug)
+    setCurrentRoute('career-detail')
+    window.history.pushState({}, '', `/careers/${slug}`)
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -232,6 +255,27 @@ export function Router() {
         </MainLayout>
       )
 
+    case 'careers':
+      return (
+        <MainLayout>
+          <CareersIndexPage
+            onNavigateHome={navigateToHome}
+            onNavigateToRole={navigateToCareer}
+          />
+        </MainLayout>
+      )
+
+    case 'career-detail':
+      return (
+        <MainLayout>
+          <CareerDetailPage
+            slug={careerSlug}
+            onNavigateHome={navigateToHome}
+            onNavigateToCareers={navigateToCareers}
+          />
+        </MainLayout>
+      )
+
     case 'home':
     default:
       const defaultContent = siteContent || {
@@ -292,7 +336,10 @@ export function Router() {
             </AnimatedSection>
             
             <AnimatedSection>
-              <TeamSection teamMembers={defaultContent.teamMembers} />
+              <TeamSection
+                teamMembers={defaultContent.teamMembers}
+                onNavigateToCareers={navigateToCareers}
+              />
             </AnimatedSection>
 
             <AnimatedSection>
@@ -311,11 +358,12 @@ export function Router() {
             </AnimatedSection>
           </main>
           
-          <Footer 
+          <Footer
             companyInfo={defaultContent.companyInfo}
             onNavigateToPrivacy={navigateToPrivacy}
             onNavigateToTerms={navigateToTerms}
             onNavigateToCookies={navigateToCookies}
+            onNavigateToCareers={navigateToCareers}
           />
         </>
       )

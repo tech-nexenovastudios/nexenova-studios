@@ -631,9 +631,99 @@ app.post("/make-server-dff5028d/contact", async (c) => {
 
   } catch (error) {
     console.log('Error processing contact form:', error);
-    return c.json({ 
-      success: false, 
-      error: 'Failed to process your message. Please try again.' 
+    return c.json({
+      success: false,
+      error: 'Failed to process your message. Please try again.'
+    }, 500);
+  }
+});
+
+// Job application endpoint — accepts metadata + the storage path of an
+// already-uploaded resume, generates a signed download URL, and emails the
+// studio. Resume itself stays in the private career-applications bucket.
+app.post("/make-server-dff5028d/apply", async (c) => {
+  try {
+    const body = await c.req.json();
+    const {
+      name,
+      email,
+      portfolio,
+      cover_letter,
+      role_slug,
+      role_title,
+      resume_path,
+      resume_filename,
+    } = body;
+
+    if (!name || !email || !cover_letter || !role_slug || !role_title || !resume_path) {
+      return c.json({
+        success: false,
+        error: 'Name, email, role, cover letter, and resume are all required.',
+      }, 400);
+    }
+    if (!isValidEmail(email)) {
+      return c.json({ success: false, error: 'Invalid email format' }, 400);
+    }
+
+    // Generate a signed URL for the resume (14 days)
+    let resumeUrl = '';
+    try {
+      const { data, error } = await supabase.storage
+        .from('career-applications')
+        .createSignedUrl(resume_path, 60 * 60 * 24 * 14);
+      if (error) throw error;
+      resumeUrl = data?.signedUrl || '';
+    } catch (err) {
+      console.log('Failed to sign resume URL:', err);
+    }
+
+    const safe = (s: string) => String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+    const ts = new Date().toISOString();
+    const emailHTML = `
+      <table style="font-family:-apple-system,Segoe UI,Roboto,sans-serif;color:#1f2937;font-size:14px;line-height:1.6;width:100%;border-collapse:collapse">
+        <tr><td style="padding:6px 0;color:#6b7280;width:140px">Role</td><td style="padding:6px 0"><strong>${safe(role_title)}</strong> <span style="color:#9ca3af">(${safe(role_slug)})</span></td></tr>
+        <tr><td style="padding:6px 0;color:#6b7280">Applicant</td><td style="padding:6px 0"><strong>${safe(name)}</strong></td></tr>
+        <tr><td style="padding:6px 0;color:#6b7280">Email</td><td style="padding:6px 0"><a href="mailto:${safe(email)}">${safe(email)}</a></td></tr>
+        ${portfolio ? `<tr><td style="padding:6px 0;color:#6b7280">Portfolio</td><td style="padding:6px 0"><a href="${safe(portfolio)}">${safe(portfolio)}</a></td></tr>` : ''}
+        <tr><td style="padding:6px 0;color:#6b7280">Submitted</td><td style="padding:6px 0">${ts}</td></tr>
+        <tr><td style="padding:6px 0;color:#6b7280;vertical-align:top">Resume</td><td style="padding:6px 0">${
+          resumeUrl
+            ? `<a href="${resumeUrl}"><strong>Download ${safe(resume_filename || 'resume')}</strong></a> <span style="color:#9ca3af">(link valid 14 days; original at <code>${safe(resume_path)}</code>)</span>`
+            : `Storage path: <code>${safe(resume_path)}</code> (signed URL generation failed; fetch via Supabase Studio)`
+        }</td></tr>
+      </table>
+      <div style="margin-top:24px;padding-top:16px;border-top:1px solid #e5e7eb">
+        <div style="color:#6b7280;font-size:12px;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.08em">Cover letter</div>
+        <div style="white-space:pre-wrap;font-family:-apple-system,Segoe UI,Roboto,sans-serif;font-size:14px;line-height:1.7;color:#1f2937">${safe(cover_letter)}</div>
+      </div>
+    `;
+
+    const emailSent = await sendEmail(
+      'tech@nexenovastudios.com',
+      `Application: ${role_title} — ${name}`,
+      emailHTML,
+    );
+
+    if (!emailSent) {
+      console.warn('Application email failed to send');
+      return c.json({
+        success: false,
+        error: 'Could not deliver your application. Please email tech@nexenovastudios.com directly.',
+      }, 500);
+    }
+
+    return c.json({
+      success: true,
+      message: "Application received. We'll be in touch.",
+    });
+  } catch (error) {
+    console.log('Error processing application:', error);
+    return c.json({
+      success: false,
+      error: 'Failed to process your application. Please try again.',
     }, 500);
   }
 });

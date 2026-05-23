@@ -166,11 +166,11 @@ async function signHMAC(message: string, secret: string): Promise<string> {
 // Функция отправки email
 async function sendEmail(to: string, subject: string, htmlContent: string): Promise<boolean> {
   try {
-    // Используем EmailJS API для отправки email
-    const emailData = {
+    const privateKey = Deno.env.get('EMAILJS_PRIVATE_KEY');
+    const emailData: Record<string, unknown> = {
       service_id: 'service_nexenova',
       template_id: 'template_contact',
-      user_id: 'user_nexenova_public',
+      user_id: 'VEzch7gQ3cskUG4Mk',
       template_params: {
         to_email: to,
         from_name: 'Nexenova Studios Contact Form',
@@ -179,8 +179,9 @@ async function sendEmail(to: string, subject: string, htmlContent: string): Prom
         reply_to: 'noreply@nexenovastudios.com'
       }
     };
+    // EmailJS strict mode requires the private key as accessToken.
+    if (privateKey) emailData.accessToken = privateKey;
 
-    // Альтернативно, используем простую SMTP отправку через внешний API
     const response = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
       method: 'POST',
       headers: {
@@ -189,6 +190,10 @@ async function sendEmail(to: string, subject: string, htmlContent: string): Prom
       body: JSON.stringify(emailData)
     });
 
+    if (!response.ok) {
+      const errText = await response.text().catch(() => '');
+      console.log('EmailJS rejected:', response.status, errText);
+    }
     return response.ok;
   } catch (error) {
     console.log('Error sending email:', error);
@@ -590,7 +595,7 @@ app.post("/make-server-dff5028d/contact", async (c) => {
     
     // Send the email to Nexenova's support inbox
     const emailSent = await sendEmail(
-      'support@nexenovastudios.com',
+      'tech@nexenovastudios.com',
       emailSubject,
       emailHTML
     );
@@ -991,7 +996,7 @@ app.get("/make-server-dff5028d/content", async (c) => {
       companyInfo: {
         name: "Nexenova Studios",
         description: "We are a passionate team of mobile game developers dedicated to crafting memorable gaming experiences.",
-        email: "support@nexenovastudios.com",
+        email: "tech@nexenovastudios.com",
         phone: "",
         address: "India"
       }

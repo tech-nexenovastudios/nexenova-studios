@@ -368,7 +368,7 @@ const fallbackSiteContent: SiteContent = {
     {
       id: 3,
       name: "2D Artist",
-      role: "Art & Animation",
+      role: "Art & Animation",  
       image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face",
       bio: "Creating the look and feel of every Nexenova Studios title."
     }

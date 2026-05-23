@@ -125,7 +125,7 @@ export function HeroSection({ onGameSelect }: HeroSectionProps) {
                 <div className="text-muted-foreground">Currently in soft-launch prep</div>
               </div>
               <div>
-                <div className="text-2xl font-bold text-foreground">Puzzle / Action</div>
+                <div className="text-2xl font-bold text-foreground">Action / Multiplayer</div>
                 <div className="text-muted-foreground">Our home genres</div>
               </div>
             </div>

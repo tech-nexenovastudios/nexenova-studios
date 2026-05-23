@@ -14,6 +14,9 @@ import { CookiePolicyPage } from './legal/CookiePolicyPage'
 import { NotFoundPage } from './NotFoundPage'
 import { AnimatedSection } from './AnimatedSection'
 import { fetchGames, fetchSiteContent, initializeDatabase, type Game, type SiteContent } from '../data/dataManager'
+import gamesSeed from '../data/games.seed.json'
+
+const seedGames = gamesSeed as Game[]
 
 type Route = 'home' | 'game' | 'privacy' | 'terms' | 'cookies' | 'not-found'
 
@@ -144,7 +147,7 @@ export function Router() {
 
   switch (currentRoute) {
     case 'game':
-      const game = games.find(g => g.id === gameId)
+      const game = seedGames.find(g => g.id === gameId)
       if (!game) {
         return (
           <MainLayout>
@@ -154,11 +157,11 @@ export function Router() {
       }
       return (
         <MainLayout>
-          <GamePage 
-            game={game} 
+          <GamePage
+            game={game}
             onNavigateHome={navigateToHome}
             onNavigateToGame={navigateToGame}
-            relatedGames={games.filter(g => g.id !== gameId).slice(0, 3)}
+            relatedGames={seedGames.filter(g => g.id !== gameId).slice(0, 3)}
           />
         </MainLayout>
       )
@@ -240,10 +243,7 @@ export function Router() {
             </AnimatedSection>
             
             <AnimatedSection>
-              <PortfolioSection 
-                games={games} 
-                onGameSelect={navigateToGame}
-              />
+              <PortfolioSection onGameSelect={navigateToGame} />
             </AnimatedSection>
             
             <AnimatedSection>

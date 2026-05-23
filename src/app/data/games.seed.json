@@ -1,11 +1,43 @@
 [
   {
+    "id": "2048-no-limit",
+    "title": "2048 No Limit",
+    "description": "A captivating puzzle game that will keep you hooked for hours. Combine tiles to reach the highest number possible in this endless challenge.",
+    "fullDescription": "2048 No Limit is the classic merge puzzle, unshackled. Swipe to slide every tile in a direction, fuse equal numbers, and watch the board climb past 2048 into territory the original never let you reach. Endless, leaderboard-driven, and built for that one-more-run pull.",
+    "image": "https://picsum.photos/seed/2048-no-limit-cover/1200/800",
+    "screenshots": [
+      "https://picsum.photos/seed/2048-no-limit-shot-1/1600/900",
+      "https://picsum.photos/seed/2048-no-limit-shot-2/1600/900",
+      "https://picsum.photos/seed/2048-no-limit-shot-3/1600/900"
+    ],
+    "tags": [
+      "Puzzle",
+      "Released"
+    ],
+    "genre": "Puzzle",
+    "platform": [
+      "Android",
+      "iOS"
+    ],
+    "status": "Released",
+    "rating": 0,
+    "downloads": "",
+    "releaseDate": "",
+    "videoUrl": "https://youtu.be/AsqQOu1qJ8Y",
+    "createdAt": "2026-05-23T00:00:00.000Z",
+    "updatedAt": "2026-05-23T00:00:00.000Z"
+  },
+  {
     "id": "bird-hunter",
     "title": "Bird Hunter",
     "description": "Bird Hunter isn't your average mobile game. The sky above you is alive — birds are closing in, eggs are dropping fast, and the chaos keeps building with every second you wait. You have a cannon. You have one job. Blast as many eggs as you can before they hit the ground and damage your cannon. Simple to understand, brutally hard to master — and impossible to put down.",
     "fullDescription": "Most games ask you to survive. Bird Hunter dares you to stay in control.\n\nThe arena is yours — until the birds show up. They come in waves, they come in numbers, and they come with one goal: overwhelm you. As they swoop across the sky, they drop eggs that fall straight toward the ground. Your job is to shoot them down before they break through your defense. Miss too many and the pressure builds. Every egg that slips through damages your cannon — and if it takes too many hits, it won't survive.\n\nWhat makes it electric is what happens when you hit. Bigger eggs don't just disappear — they crack open and split into smaller ones, scattering across the screen and multiplying the chaos in an instant. One well-placed shot can set off a chain reaction that clears the board. A badly-timed one can bury you under a storm of shells you never saw coming.\n\nBird Hunter is built around that tension — the thrill of keeping everything under control while the screen fills up and the pressure climbs. Chain your shots into combos, manage what's falling, choose the right cannon for the moment, and push through 30 chapters and 20 levels each — 600 levels total — that keep getting sharper, faster, and more satisfying the deeper you go.\n\nEvery few levels, you earn a spin. Every spin brings something new — a power-up, a weapon, a boost that shifts how you play. That's Bird Hunter. Fast. Focused. Relentless.\n\n## Core Mechanics\n\n**The Egg System** — Eggs come in four sizes — small, medium, large, and massive. When you shoot a large egg, it doesn't vanish. It breaks into two medium eggs. Shoot those and you get four small ones. Shoot a massive egg and the whole thing cascades — one well-placed bullet can eventually turn into eight falling targets. A miss on a big egg doesn't just mean you wasted a shot — it means that egg is getting closer to the ground and it's about to multiply.\n\n**Pressure System** — Every egg carries a weight value — bigger eggs carry more. When the total weight of everything falling at once crosses the level's limit, birds temporarily stop releasing new eggs, giving you a moment to breathe. But it's a short window. The pressure system isn't a safety net — it's the game telling you you're already behind.\n\n**Scoring and Combos** — Chaining shots together — hitting egg after egg without missing — builds a combo multiplier that bumps your score significantly and drops coin bonuses along the way. Accuracy isn't just satisfying, it's mechanically rewarded. Each level has a target score you need to hit within a specific time window.\n\n**How Difficulty Grows** — Bird Hunter doesn't just get harder in one direction. Difficulty climbs two ways at the same time. The further you progress across all 30 chapters, the challenge steadily increases. Within each chapter's 20 levels, difficulty builds progressively, with spikes at key levels. The game also includes an adaptive relief system that temporarily adjusts spawn rates after sustained struggle.\n\n## Cannons\n\n**Single Cannon** — Fires a single projectile per attack cycle. The baseline weapon for performance balancing across other cannon types.\n\n**Rapid Cannon** — Fires 1 bullet per attack cycle with higher firing speed. Generates consistent sustained damage output.\n\n**Spread Cannon** — Fires wide, covering ground that a focused shot never could — perfect for moments when the screen is filling faster than you can track.\n\n**Explosive Cannon** — Deals area damage on impact and can clear clusters that would take a focused shot twice as long to handle.\n\n**Critical Cannon** — Hits harder on key strikes, rewarding accuracy with damage spikes that cut through tougher egg tiers.\n\n**Dual Cannon** — Fires two shots at once — chaotic in the best possible way, and genuinely powerful in the right hands.\n\n**Tri Cannon** — Fires three shots at once — maximum firepower for players who know how to use it.\n\n## Upgrade System\n\nEvery cannon in Bird Hunter has ten upgrade levels — and the difference between a level one cannon and a fully upgraded one is not subtle. Upgrades are built around two resources: coins and materials. Coins you earn naturally as you play — by destroying eggs, chaining combos, and clearing levels. Materials come through gameplay milestones and spin rewards. There is no single cannon that outperforms everything else at every upgrade level. You are building a collection of tools and learning when to use each one.",
-    "image": "",
-    "screenshots": [],
+    "image": "https://picsum.photos/seed/bird-hunter-cover/1200/800",
+    "screenshots": [
+      "https://picsum.photos/seed/bird-hunter-shot-1/1600/900",
+      "https://picsum.photos/seed/bird-hunter-shot-2/1600/900",
+      "https://picsum.photos/seed/bird-hunter-shot-3/1600/900"
+    ],
     "tags": [
       "Action",
       "Coming Soon"
@@ -29,8 +61,12 @@
     "title": "Smashy Qube",
     "description": "Plan your path, time your swipes, and detonate every target in one continuous chain. A swipe-and-destroy puzzle where every move counts.",
     "fullDescription": "Smashy Qube is a swipe puzzle built around one feeling — the satisfying click of a perfectly planned chain. You swipe in any of four directions, the cube slides until it hits something, and every target it crosses gets destroyed on contact. When your moves run out, the cube explodes.\n\nThe twist is the limit. You only get so many swipes per level. That makes every direction a decision: a wrong slide leaves a target untouched, and the explosion at the end won't save you. Levels reward path optimization — the same puzzle often has two or three valid solutions, and finding the cleanest one is where the depth lives.\n\nLater levels introduce level elements that change the rules: moving blocks that carry you across the grid, rotating bars with timing windows, portals that teleport with momentum, mirror cubes that copy your movement. Each one layers on top of the swipe-slide-destroy loop without diluting it.\n\n## Core Mechanics\n\n**Swipe and Slide** — Four-directional swipe input. The cube slides until it hits a wall or block — no mid-path stops, no in-between positions. Every move resolves fully before the next input is accepted.\n\n**Destroy on Contact** — Any target the cube passes through is destroyed instantly. Combo your destruction by lining up targets in a straight line — a single swipe can clear half a level if the geometry's right.\n\n**Final Explosion** — When you run out of moves, the cube detonates. Any target still standing fails the level. The explosion is both the timer and the resolution — it forces every level to end on a beat.\n\n**Level Elements** — Moving blocks, rotating bars, spike traps, push blocks, portals, disappearing tiles, and a mirror player cube that copies your every move. Designers toggle these per level to keep the core loop fresh across hundreds of stages.",
-    "image": "",
-    "screenshots": [],
+    "image": "https://picsum.photos/seed/smashy-qube-cover/1200/800",
+    "screenshots": [
+      "https://picsum.photos/seed/smashy-qube-shot-1/1600/900",
+      "https://picsum.photos/seed/smashy-qube-shot-2/1600/900",
+      "https://picsum.photos/seed/smashy-qube-shot-3/1600/900"
+    ],
     "tags": [
       "Puzzle",
       "Coming Soon"
@@ -54,8 +90,12 @@
     "title": "2048: Striker",
     "description": "A physics-based take on the classic merge puzzle. Drag, release, and bank shots off walls to chain merges and climb the leaderboard.",
     "fullDescription": "2048: Striker reinvents the merge puzzle with skill-based physics. Instead of swiping rows, you aim a striker, set your force, and let it loose. Same-value blocks fuse on controlled collision — chain a clean shot through three or four and the whole board cascades.\n\nThe arena is bounded, the blocks are physical, and the board gets messier the longer you play. Bumper walls let you bank shots into hard angles, sticky blocks reduce momentum, and unstable blocks add just enough randomness that no two runs play the same. It's an endless score format — the leaderboard is the goal.\n\nDepth comes from precision and chain planning. Anyone can fire a striker. Reading the board, picking the bank shot that triggers a five-merge cascade, and keeping the arena from collapsing — that's the skill curve.\n\n## Core Mechanics\n\n**Aim and Release** — Drag back to aim and set force, release to shoot. The striker travels with full physics — angle, speed, and rebound all matter. A trajectory preview helps you commit to the right line.\n\n**Collision Merge** — Two blocks of the same value fuse when they collide above a velocity threshold. Chain reactions are the heart of the game — one striker can trigger a sequence of merges that cascade across the board.\n\n**Board Pressure** — The play area is bounded and gets more crowded as values climb. Cross the boundary or run out of room and the run ends. Heavy blocks resist motion, sticky blocks dampen flow, and unstable blocks add chaos.\n\n**Endless Score Run** — No level cap, no defined ending. You're chasing a score against the global leaderboard. Cosmetic skins, board themes, and striker variants let you personalize the run.",
-    "image": "",
-    "screenshots": [],
+    "image": "https://picsum.photos/seed/2048-striker-cover/1200/800",
+    "screenshots": [
+      "https://picsum.photos/seed/2048-striker-shot-1/1600/900",
+      "https://picsum.photos/seed/2048-striker-shot-2/1600/900",
+      "https://picsum.photos/seed/2048-striker-shot-3/1600/900"
+    ],
     "tags": [
       "Puzzle",
       "Coming Soon"
@@ -79,8 +119,12 @@
     "title": "Flip Trace",
     "description": "Rotate tiles to guide an auto-walking character to the goal. Indirect control, pre-planning, and a fresh take on path puzzles.",
     "fullDescription": "Flip Trace puts you one step removed from the action. The character moves on their own, following whatever direction the tile under their feet is pointing. Your job is to tap and rotate tiles before they get there — straights, left turns, right turns, blocks, and goal tiles.\n\nThe satisfaction comes from pre-planning. You see the path before the character takes it, and you have a limited number of rotations to make it work. Tapping the wrong tile too late wastes a move and might send them off a ledge. Tapping the right one at the right moment opens a path that wasn't there a second ago.\n\nIt's a fresh angle on the tile-manipulation puzzle — you're shaping the environment, not steering the player. Onboarding matters a lot here, so early levels are deliberately small and visually clear; complexity ramps as players internalize the rhythm.\n\n## Core Mechanics\n\n**Indirect Control** — Tap a tile to rotate it. The character moves automatically and follows whatever the tile points to. You never directly control the character — only their environment.\n\n**Tile Vocabulary** — Straight tiles continue direction, turn tiles redirect left or right, block tiles stop movement, and goal tiles complete the level. Designers mix them to build paths with multiple valid solutions.\n\n**Limited Rotations** — Each level caps the number of rotations you can use. The puzzle is figuring out the minimum-rotation path — and recovering when you've misread the geometry.\n\n**Pre-Planning Window** — The character's auto-move speed is tuned to let you think ahead by one or two tiles, not five. Decisions happen in real time but with enough breathing room to make them deliberately.",
-    "image": "",
-    "screenshots": [],
+    "image": "https://picsum.photos/seed/flip-trace-cover/1200/800",
+    "screenshots": [
+      "https://picsum.photos/seed/flip-trace-shot-1/1600/900",
+      "https://picsum.photos/seed/flip-trace-shot-2/1600/900",
+      "https://picsum.photos/seed/flip-trace-shot-3/1600/900"
+    ],
     "tags": [
       "Puzzle",
       "Coming Soon"
@@ -104,8 +148,12 @@
     "title": "Echo Loop",
     "description": "Every attempt leaves a clone behind. Cooperate with your past selves to solve puzzles only multiple players could clear.",
     "fullDescription": "Echo Loop is a time-layered puzzle. You swipe to move on a grid, and when your attempt ends, the game records every move you made. The next attempt, your past self replays those moves as a clone — and now you're playing alongside it.\n\nSolutions require coordination across time. One clone holds a switch open while present-you crosses through. Two clones stand on pressure plates while a third you opens the door. The puzzles get richer the more clones the game allows, and the depth comes from learning to plan a sequence of attempts that combine into one solved level.\n\nIt starts simple — a single clone, a single objective — and builds carefully. Cognitive overload is the real risk here, so early levels are designed to teach the language of cooperation before stacking complexity.\n\n## Core Mechanics\n\n**Move and Record** — Swipe to move on a grid. Every move is recorded. When the attempt ends, the recording becomes a clone that replays those exact moves on the next attempt.\n\n**Multi-Self Cooperation** — Past clones interact with the world — they trigger switches, hold doors, block enemies. Solving a level means planning a sequence of attempts whose recordings combine into one coordinated solution.\n\n**Attempt Budget** — Each level caps the number of attempts you have to record clones. Use one badly and you've burned a slot. The constraint forces deliberate, plan-first play.\n\n**Temporal Planning** — The puzzle isn't just spatial — it's temporal. Where you stand at second 3 of one attempt has to match where the door needs to be open at second 3 of the next. That's the depth source.",
-    "image": "",
-    "screenshots": [],
+    "image": "https://picsum.photos/seed/echo-loop-cover/1200/800",
+    "screenshots": [
+      "https://picsum.photos/seed/echo-loop-shot-1/1600/900",
+      "https://picsum.photos/seed/echo-loop-shot-2/1600/900",
+      "https://picsum.photos/seed/echo-loop-shot-3/1600/900"
+    ],
     "tags": [
       "Puzzle",
       "Coming Soon"
@@ -129,8 +177,12 @@
     "title": "Chain Architect",
     "description": "Place triggers across a structure and ignite a single chain reaction that clears everything. Spatial planning meets satisfying destruction.",
     "fullDescription": "Chain Architect is a chain reaction builder. You're given a structure — clusters of reactive blocks, connectors, and obstacles — and a limited number of triggers to place. Tap to set a trigger, then ignite. If your placements were right, the whole structure clears in one cascading chain.\n\nThe joy is in the explosion. Watching a single tap propagate across the board, knocking down everything in sequence, is the entire point. The skill is in the placement — too many triggers and you've over-budgeted, too few and the chain dies halfway through.\n\nLevels reward both completion and economy. Clearing a structure with the minimum triggers earns the top tier, which feeds into the replay loop. Strong VFX is critical to keep the satisfaction high across hundreds of stages without the visuals feeling repetitive.\n\n## Core Mechanics\n\n**Place and Ignite** — Tap to place triggers anywhere on the board. When you're ready, ignite — the chain plays out automatically, propagating through connected reactive blocks until it dies.\n\n**Limited Placements** — Every level caps how many triggers you can place. The puzzle is figuring out the smallest possible set that still clears the whole structure.\n\n**Spatial Planning** — Triggers chain through adjacency and connection. Reading the structure, predicting where the reaction will travel, and placing triggers at the right junctions is the depth source.\n\n**Replay Optimization** — Cleared a level? You can retry to beat it with fewer triggers. The top tier requires the minimum-trigger solution, which keeps each level alive long past the first completion.",
-    "image": "",
-    "screenshots": [],
+    "image": "https://picsum.photos/seed/chain-architect-cover/1200/800",
+    "screenshots": [
+      "https://picsum.photos/seed/chain-architect-shot-1/1600/900",
+      "https://picsum.photos/seed/chain-architect-shot-2/1600/900",
+      "https://picsum.photos/seed/chain-architect-shot-3/1600/900"
+    ],
     "tags": [
       "Puzzle",
       "Coming Soon"
@@ -154,8 +206,12 @@
     "title": "Phase Shift Runner",
     "description": "Auto-run forward and tap to switch between two parallel dimensions. Plan ahead across both worlds to reach the end.",
     "fullDescription": "Phase Shift Runner is an auto-runner with a twist — two worlds overlap, and you can shift between them with a single tap. Obstacles in one dimension are paths in the other. Read both layers fast enough and you flow through; misread and you crash.\n\nThe input is just tap. The depth is in dual-layer planning — your eyes have to track both dimensions at once, and you have to commit to the shift early enough that the runner doesn't smash into the wall you didn't see coming. Switches are limited per level, which adds resource management on top of the reflex challenge.\n\nColor-coded worlds keep things readable even when the action gets fast. The dual-dimension hook is the kind of mechanic that demos well in two seconds and reveals depth over hundreds of runs — a strong fit for the platform.\n\n## Core Mechanics\n\n**Auto-Run, Tap to Shift** — The runner moves forward on their own. Your only input is a tap, which swaps the runner between two parallel dimensions instantly.\n\n**Dual-Layer Reading** — Obstacles in one world are paths in the other. You're always reading two layers at once, planning your next shift two or three steps ahead of where the runner actually is.\n\n**Switch Budget** — Each level limits how many times you can shift. The constraint turns a reflex game into a planning game — every shift has to count.\n\n**Color-Coded Worlds** — The two dimensions are visually distinct from a single glance. Even at high speeds, you can tell which world you're in and what's coming in the other one.",
-    "image": "",
-    "screenshots": [],
+    "image": "https://picsum.photos/seed/phase-shift-runner-cover/1200/800",
+    "screenshots": [
+      "https://picsum.photos/seed/phase-shift-runner-shot-1/1600/900",
+      "https://picsum.photos/seed/phase-shift-runner-shot-2/1600/900",
+      "https://picsum.photos/seed/phase-shift-runner-shot-3/1600/900"
+    ],
     "tags": [
       "Puzzle",
       "Coming Soon"
@@ -179,8 +235,12 @@
     "title": "Pressure Grid",
     "description": "Move across tiles that gain pressure as you cross them. Balance the grid without crossing any tile's pressure limit.",
     "fullDescription": "Pressure Grid is a balance puzzle. You swipe to move across a grid, and every tile you cross gains pressure. Each tile has a pressure limit — cross it too many times and it breaks. Win the level by balancing the grid into a stable state without overloading any single tile.\n\nThe depth comes from system interaction. The grid is alive — pressure spreads, decays, and interacts with neighboring tiles in ways that create emergent puzzles. Two players can solve the same level with completely different routes, and the optimal solution is rarely the obvious one.\n\nThe core risk is that pressure is abstract — players need crystal-clear visual feedback to feel the mechanic. Strong color states, animated pressure indicators, and instant feedback on every move are non-negotiable for this concept to land.\n\n## Core Mechanics\n\n**Swipe to Move** — Standard swipe input moves your token one tile in any cardinal direction. Each tile crossed gains a unit of pressure.\n\n**Pressure Limits** — Every tile has a cap. Exceed it and the tile breaks — usually a fail state. Different tile types have different limits, telegraphed clearly through color and visual weight.\n\n**Balance to Win** — Levels are won by reaching a balanced grid state — all tiles within their pressure limits, often with specific tiles hitting target values. Under-pressure can fail you just as easily as over-pressure.\n\n**System-Driven Depth** — Pressure interacts across tiles. Some types drain, others amplify, others propagate. The grid responds to your route in ways that reward experimentation and route optimization.",
-    "image": "",
-    "screenshots": [],
+    "image": "https://picsum.photos/seed/pressure-grid-cover/1200/800",
+    "screenshots": [
+      "https://picsum.photos/seed/pressure-grid-shot-1/1600/900",
+      "https://picsum.photos/seed/pressure-grid-shot-2/1600/900",
+      "https://picsum.photos/seed/pressure-grid-shot-3/1600/900"
+    ],
     "tags": [
       "Puzzle",
       "Coming Soon"
@@ -204,8 +264,12 @@
     "title": "Split Control",
     "description": "Control multiple units simultaneously with a single swipe. Coordinate every unit to their goal — if any one fails, you all fail.",
     "fullDescription": "Split Control is a multi-agent puzzle. One swipe moves every unit on the board at the same time, in the same direction. Walls, gaps, and obstacles affect each unit differently — what frees one might trap another. Win the level by getting every unit to its goal. Lose any one of them, and the level fails.\n\nThe complexity scales with the unit count. Two units is easy. Four is challenging. Six and the level is a coordination puzzle that requires careful sequencing. The mastery curve is steep — and that's the appeal. Solving a tough level feels like solving five puzzles at once.\n\nThe core risk is complexity spikes. Adding a fourth unit can multiply difficulty in ways that frustrate rather than challenge. Level design has to scale gradually and ration new unit slots carefully.\n\n## Core Mechanics\n\n**Shared Input** — Swipe in any direction. Every unit on the board moves that direction simultaneously, sliding until they hit a wall or obstacle.\n\n**All-or-Nothing Goals** — Each unit has its own goal tile. Win the level only when every unit is on its goal at the same time. If any unit ends up stuck or wrong, the level fails.\n\n**Scaling Unit Count** — Levels start with two units and gradually scale. Each added unit multiplies the coordination challenge geometrically, not linearly.\n\n**Coordination Depth** — Walls, doors, and hazards affect each unit based on position. The puzzle is finding a sequence of shared moves that separates and rejoins the units exactly when needed.",
-    "image": "",
-    "screenshots": [],
+    "image": "https://picsum.photos/seed/split-control-cover/1200/800",
+    "screenshots": [
+      "https://picsum.photos/seed/split-control-shot-1/1600/900",
+      "https://picsum.photos/seed/split-control-shot-2/1600/900",
+      "https://picsum.photos/seed/split-control-shot-3/1600/900"
+    ],
     "tags": [
       "Puzzle",
       "Coming Soon"
@@ -229,8 +293,12 @@
     "title": "Reality Fold",
     "description": "Fold the grid in on itself to create paths between distant points. Spatial reasoning at its most satisfying.",
     "fullDescription": "Reality Fold gives you a god's-eye view of a grid and asks you to do something simple-sounding and brain-bending — fold it. Swipe to fold the world along an axis, bringing two distant points together and creating a path that didn't exist a second ago. Reach the destination and you win.\n\nThe depth is spatial reasoning. You're not solving a maze, you're reshaping the maze. Each fold uses one of your limited folds, so over-folding to brute-force a path will run you out before you reach the goal. The puzzle is finding the minimum-fold sequence that connects start to end.\n\nThe mechanic is unusual and visually striking — when it clicks, it's deeply satisfying. The risk is complexity: folding 3D geometry in your head is a real cognitive load, so early levels stay flat and simple, and complexity ramps slowly as players build intuition.\n\n## Core Mechanics\n\n**Swipe to Fold** — Swipe across the grid to fold it along that axis. The world physically bends, bringing distant tiles into contact and opening new path possibilities.\n\n**Spatial Transformation** — Folds permanently transform the grid until you reset. Multiple folds can stack — a vertical fold followed by a horizontal one creates geometries that wouldn't be reachable from any single fold.\n\n**Limited Folds** — Each level caps fold count. Reaching the destination with fewer folds is the optimization metric, which gives every level multiple difficulty tiers.\n\n**Path Creation** — Win by reaching the destination tile. Fail by running out of folds without a valid path. The puzzle is purely topological — no enemies, no timing, just geometry.",
-    "image": "",
-    "screenshots": [],
+    "image": "https://picsum.photos/seed/reality-fold-cover/1200/800",
+    "screenshots": [
+      "https://picsum.photos/seed/reality-fold-shot-1/1600/900",
+      "https://picsum.photos/seed/reality-fold-shot-2/1600/900",
+      "https://picsum.photos/seed/reality-fold-shot-3/1600/900"
+    ],
     "tags": [
       "Puzzle",
       "Coming Soon"
@@ -254,8 +322,12 @@
     "title": "Momentum Painter",
     "description": "Move continuously and leave trails behind you. Reuse your own trails to solve puzzles only your past path could have made possible.",
     "fullDescription": "Momentum Painter takes inspiration from paper.io but turns it inward. You move continuously across an open space, leaving a trail behind you. That trail isn't decorative — it's terrain. You can cross your own trails, ride them, and use them as scaffolding to reach places you couldn't reach with a single stroke.\n\nLevels are about trail economy. You have a maximum trail length per attempt, and the puzzle is figuring out a route that uses your own past trails as bridges. Dead-end on a path you can't get out of and the run fails. Plot a route that loops back through itself efficiently and you reveal a solution that looked impossible at first glance.\n\nThe concept is unique but risky — visual clutter is a real concern when trails accumulate, and onboarding will need to teach the trail-as-tool concept carefully. Early levels stay simple and short to let the mechanic breathe.\n\n## Core Mechanics\n\n**Continuous Motion** — Hold to move, release to stop. The character travels continuously and the trail builds behind them in real time.\n\n**Trails as Terrain** — Your past trails aren't walls — they're walkable. Cross your own path, ride it across a gap, or use it as a platform to reach the next objective.\n\n**Trail Budget** — Each attempt caps your total trail length. Spend it badly and you've stranded yourself. The puzzle is finding the most economical route that still chains every objective.\n\n**Self-Generated Levels** — Because you build the terrain you walk on, every level feels co-created. The solution isn't laid out for you — you draw it.",
-    "image": "",
-    "screenshots": [],
+    "image": "https://picsum.photos/seed/momentum-painter-cover/1200/800",
+    "screenshots": [
+      "https://picsum.photos/seed/momentum-painter-shot-1/1600/900",
+      "https://picsum.photos/seed/momentum-painter-shot-2/1600/900",
+      "https://picsum.photos/seed/momentum-painter-shot-3/1600/900"
+    ],
     "tags": [
       "Puzzle",
       "Coming Soon"
@@ -279,8 +351,12 @@
     "title": "Signal Sync",
     "description": "Send signals through a network and time them so every system fires in sync. A timing puzzle for players who love rhythm.",
     "fullDescription": "Signal Sync is a timing puzzle. You tap to send signals through a network of nodes, and each signal takes a measurable amount of time to propagate. Win the level by timing your taps so that every signal arrives at its destination inside the same sync window. Miss the window and the whole network desyncs.\n\nThe depth is in the timing — short paths fire fast, long paths fire slow, and you have to stagger your taps so they all converge. Some networks have branches, loops, and delays that complicate the puzzle. The satisfaction is in the moment everything snaps into sync.\n\nThe concept is functional but visually quieter than the others — it leans on audio and haptics for the dopamine hit. It needs strong polish to land, and is flagged as ideation-required because the visual presentation hasn't fully crystallized yet.\n\n## Core Mechanics\n\n**Tap to Send** — Tap any input node to fire a signal. The signal travels through connected nodes at a measured speed, visible as a moving pulse along the network.\n\n**Sync Windows** — Each level has one or more sync targets — points where multiple signals must arrive within the same narrow window of time. Miss it and the run fails.\n\n**Network Variety** — Branches, loops, delay nodes, and amplifiers shape how signals propagate. Reading the network and predicting timing is the core skill.\n\n**Audio-Forward Feedback** — Successful syncs are scored with audio and haptic hits, not just visuals. The format leans on rhythm-game sensibility to make timing feel satisfying.",
-    "image": "",
-    "screenshots": [],
+    "image": "https://picsum.photos/seed/signal-sync-cover/1200/800",
+    "screenshots": [
+      "https://picsum.photos/seed/signal-sync-shot-1/1600/900",
+      "https://picsum.photos/seed/signal-sync-shot-2/1600/900",
+      "https://picsum.photos/seed/signal-sync-shot-3/1600/900"
+    ],
     "tags": [
       "Puzzle",
       "Coming Soon"

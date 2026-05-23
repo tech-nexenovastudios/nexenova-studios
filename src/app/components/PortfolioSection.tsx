@@ -11,8 +11,10 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from './ui/pagination'
+import gamesSeed from '../data/games.seed.json'
 
 const PAGE_SIZE = 6
+const FEATURED_IDS = ['2048-no-limit', 'bird-hunter']
 
 interface Game {
   id: string
@@ -26,13 +28,19 @@ interface Game {
 }
 
 interface PortfolioSectionProps {
-  games?: Game[]
   onGameSelect?: (gameId: string) => void
 }
 
-export function PortfolioSection({ games = [], onGameSelect }: PortfolioSectionProps) {
+export function PortfolioSection({ onGameSelect }: PortfolioSectionProps) {
+  // Featured portfolio sourced from the seed (single source of truth shared
+  // with Hero reel + Pipeline). Order follows FEATURED_IDS, not the seed.
+  const seed = gamesSeed as Game[]
+  const featured = FEATURED_IDS
+    .map(id => seed.find(g => g.id === id))
+    .filter((g): g is Game => Boolean(g))
+
   // Map the games to the format expected by the component
-  const projects = games.map(game => ({
+  const projects = featured.map(game => ({
     id: game.id,
     gameId: game.id,
     title: game.title,

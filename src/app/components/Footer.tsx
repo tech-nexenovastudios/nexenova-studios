@@ -69,7 +69,7 @@ export function Footer({
               <img
                 src="/logo.svg"
                 alt=""
-                className="h-9 w-9"
+                className="h-9 w-9 invert dark:invert-0"
                 aria-hidden="true"
               />
               <div className="flex items-baseline gap-1.5">

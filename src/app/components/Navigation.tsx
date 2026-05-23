@@ -114,7 +114,7 @@ export function Navigation({ onNavigateHome }: NavigationProps) {
               <img
                 src="/logo.svg"
                 alt=""
-                className="h-8 w-8"
+                className="h-8 w-8 invert dark:invert-0"
                 aria-hidden="true"
               />
               <span className="flex items-baseline gap-1.5">

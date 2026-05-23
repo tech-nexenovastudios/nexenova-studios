@@ -34,7 +34,7 @@ export function DevlogSection({ onNavigateToDevlog, onNavigateToPost }: DevlogSe
   if (loaded && posts.length === 0) return null
 
   return (
-    <section id="devlog" className="py-20">
+    <section id="devlog" className="py-20 bg-secondary/10">
       <div className="container mx-auto px-4">
         <AnimatedSection className="text-center mb-14">
           <motion.span

@@ -10,3 +10,8 @@ dist
 .cache
 .wrangler
 .claude
+
+# Visual-review artifacts (local-only)
+.screenshots/
+_screenshot.mjs
+_team-shot.mjs

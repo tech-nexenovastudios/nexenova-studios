@@ -1,7 +1,7 @@
 import { motion } from 'motion/react'
 import { Card, CardContent } from './ui/card'
 import { Badge } from './ui/badge'
-import { Github, Linkedin, Twitter, Code, Gamepad2, Palette, Sparkles } from 'lucide-react'
+import { Github, Linkedin, Twitter, Code, Gamepad2, Palette, Sparkles, Bug } from 'lucide-react'
 import { AnimatedSection } from './AnimatedSection'
 
 interface TeamMember {
@@ -53,14 +53,20 @@ function getSkillsForRole(role: string): string[] {
   const map: Record<string, string[]> = {
     CEO: ['Studio Direction', 'Pipeline', 'Strategy'],
     Founder: ['Studio Direction', 'Pipeline', 'Strategy'],
+    'Technical Lead': ['Architecture', 'Backend', 'Build Pipeline'],
     'Game Designer': ['Core Loops', 'Level Design', 'Playtesting'],
     'Lead Developer': ['Unity', 'C#', 'Mobile Performance'],
     'Unity Developer': ['Unity', 'C#', 'Mobile Performance'],
     'Unreal Engine Developer': ['Unreal', 'C++', 'Tools'],
     Engineer: ['Unity', 'C#', 'Mobile Performance'],
     'Game Artist': ['2D Art', 'Animation', 'Concept'],
+    'Senior 2D Artist': ['2D Art', 'Direction', 'Concept'],
     '2D Artist': ['2D Art', 'Animation', 'Concept'],
     '3D Artist': ['3D Modeling', 'Texturing', 'Animation'],
+    '3D / 2D Animator': ['Rigging', 'Animation', 'Juice'],
+    Animator: ['Rigging', 'Animation', 'Juice'],
+    'QA Tester': ['Edge Cases', 'Repro Cases', 'Device Coverage'],
+    QA: ['Edge Cases', 'Repro Cases', 'Device Coverage'],
     'Sound Engineer': ['SFX', 'Music', 'Mixing'],
   }
   return map[role] || ['Game Development']
@@ -69,6 +75,8 @@ function getSkillsForRole(role: string): string[] {
 function getRoleIcon(role: string) {
   const r = role.toLowerCase()
   const has = (term: string) => r.indexOf(term) !== -1
+  if (has('qa') || has('test')) return <Bug className="h-6 w-6" />
+  if (has('animator')) return <Sparkles className="h-6 w-6" />
   if (has('art') || has('design')) return <Palette className="h-6 w-6" />
   if (has('developer') || has('engineer')) return <Code className="h-6 w-6" />
   if (has('juice') || has('vfx') || has('sound')) return <Sparkles className="h-6 w-6" />
@@ -88,7 +96,7 @@ export function TeamSection({ teamMembers = [], onNavigateToCareers }: TeamSecti
       : FALLBACK_TEAM
 
   return (
-    <section id="team" className="py-20 bg-secondary/10">
+    <section id="team" className="py-20">
       <div className="container mx-auto px-4">
         <AnimatedSection className="text-center mb-14">
           <motion.span

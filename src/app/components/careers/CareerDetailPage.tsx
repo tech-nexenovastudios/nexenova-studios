@@ -81,6 +81,16 @@ export function CareerDetailPage({ slug, onNavigateHome, onNavigateToCareers }: 
                 </span>
               )}
             </div>
+            <div className="mt-8">
+              <Button
+                size="lg"
+                onClick={() => {
+                  document.getElementById('apply')?.scrollIntoView({ behavior: 'smooth' })
+                }}
+              >
+                Apply for this role
+              </Button>
+            </div>
           </motion.div>
         </div>
       </section>

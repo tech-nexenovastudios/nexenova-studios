@@ -350,33 +350,14 @@ const fallbackSiteContent: SiteContent = {
     happyClients: 100,
     downloads: 100000
   },
-  teamMembers: [
-    {
-      id: 1,
-      name: "Lead Developer",
-      role: "Engineering",
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face",
-      bio: "Driving the technical vision behind our mobile games and live-ops."
-    },
-    {
-      id: 2,
-      name: "Game Designer",
-      role: "Design",
-      image: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=400&h=400&fit=crop&crop=face",
-      bio: "Designing core gameplay loops across our puzzle, casual, and arcade titles."
-    },
-    {
-      id: 3,
-      name: "2D Artist",
-      role: "Art & Animation",  
-      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face",
-      bio: "Creating the look and feel of every Nexenova Studios title."
-    }
-  ],
+  // Empty by default so the TeamSection falls through to its own role-based
+  // fallback (Founder & Game Designer / Engineering Lead / Art & Juice)
+  // rather than these generic stock placeholders.
+  teamMembers: [],
   companyInfo: {
     name: "Nexenova Studios",
-    description: "We are a passionate team of mobile game developers dedicated to crafting memorable gaming experiences.",
-    email: "support@nexenovastudios.com",
+    description: "Independent mobile game studio crafting puzzle and action titles for global audiences.",
+    email: "tech@nexenovastudios.com",
     phone: "",
     address: "India"
   },

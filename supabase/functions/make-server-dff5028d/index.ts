@@ -1066,26 +1066,68 @@ app.get("/make-server-dff5028d/content", async (c) => {
       teamMembers: [
         {
           id: 1,
-          name: "Lead Developer",
-          role: "Engineering",
-          bio: "Driving the technical vision behind our mobile games and live-ops."
+          name: "Karishma Patel",
+          role: "Founder",
+          bio: "Sets the vision and the bar. Decides what we make, what we kill, and what ships."
         },
         {
           id: 2,
-          name: "Game Designer",
-          role: "Design",
-          bio: "Designing core gameplay loops across our puzzle, casual, and arcade titles."
+          name: "Manish Jha",
+          role: "Technical Lead",
+          bio: "Owns the stack end-to-end — engine, backend, build pipeline. Keeps the shipping rails greased."
         },
         {
           id: 3,
-          name: "2D Artist",
-          role: "Art & Animation",
-          bio: "Creating the look and feel of every Nexenova Studios title."
+          name: "Shweta Dhawan",
+          role: "Senior 2D Artist",
+          bio: "Drives the visual identity across our titles. From mood boards to final pixels."
+        },
+        {
+          id: 4,
+          name: "Prabhat",
+          role: "Unity Developer",
+          bio: "Ships gameplay systems and lives in C#. Turns mechanics into something you can tap."
+        },
+        {
+          id: 5,
+          name: "Ashutosh",
+          role: "Unity Developer",
+          bio: "Builds tools, optimizes for mobile, and fixes the bugs nobody else wants to touch."
+        },
+        {
+          id: 6,
+          name: "Vaishnavi",
+          role: "2D Artist",
+          bio: "UI art, icons, and the small polish you notice before you notice anything else."
+        },
+        {
+          id: 7,
+          name: "Rohit",
+          role: "2D Artist",
+          bio: "Character and environment art. Frames the worlds our games live in."
+        },
+        {
+          id: 8,
+          name: "Kunal",
+          role: "3D Artist",
+          bio: "Models, textures, low-poly mobile assets that hold their shape on a 60fps budget."
+        },
+        {
+          id: 9,
+          name: "Prodipta",
+          role: "3D / 2D Animator",
+          bio: "Rigs, keyframes, and screen-shake. Makes the moments feel like moments."
+        },
+        {
+          id: 10,
+          name: "Vikas",
+          role: "QA Tester",
+          bio: "Breaks the build before players can. Catches the edge cases nobody else sees."
         }
       ],
       companyInfo: {
         name: "Nexenova Studios",
-        description: "We are a passionate team of mobile game developers dedicated to crafting memorable gaming experiences.",
+        description: "Independent mobile game studio crafting puzzle and action titles for global audiences.",
         email: "tech@nexenovastudios.com",
         phone: "",
         address: "India"

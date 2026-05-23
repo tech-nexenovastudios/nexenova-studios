@@ -189,6 +189,13 @@ export function Router() {
     <>
       <Navigation onNavigateHome={navigateToHome} />
       {children}
+      <Footer
+        companyInfo={siteContent?.companyInfo}
+        onNavigateToPrivacy={navigateToPrivacy}
+        onNavigateToTerms={navigateToTerms}
+        onNavigateToCookies={navigateToCookies}
+        onNavigateToCareers={navigateToCareers}
+      />
     </>
   )
 
@@ -285,30 +292,14 @@ export function Router() {
           happyClients: 100,
           downloads: 100000
         },
-        teamMembers: [
-          {
-            id: 1,
-            name: "Lead Developer",
-            role: "Engineering",
-            bio: "Driving the technical vision behind our mobile games and live-ops."
-          },
-          {
-            id: 2,
-            name: "Game Designer",
-            role: "Design",
-            bio: "Designing core gameplay loops across our puzzle, casual, and arcade titles."
-          },
-          {
-            id: 3,
-            name: "2D Artist",
-            role: "Art & Animation",
-            bio: "Creating the look and feel of every Nexenova Studios title."
-          }
-        ],
+        // teamMembers intentionally omitted — when siteContent is null, the
+        // TeamSection falls back to its own role-based card set instead of
+        // these generic placeholders.
+        teamMembers: [],
         companyInfo: {
           name: "Nexenova Studios",
-          description: "We are a passionate team of mobile game developers dedicated to crafting memorable gaming experiences.",
-          email: "support@nexenovastudios.com",
+          description: "Independent mobile game studio crafting puzzle and action titles for global audiences.",
+          email: "tech@nexenovastudios.com",
           phone: "",
           address: "India"
         }
@@ -337,7 +328,7 @@ export function Router() {
             
             <AnimatedSection>
               <TeamSection
-                teamMembers={defaultContent.teamMembers}
+                teamMembers={siteContent?.teamMembers}
                 onNavigateToCareers={navigateToCareers}
               />
             </AnimatedSection>

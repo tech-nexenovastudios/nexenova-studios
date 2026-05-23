@@ -11,6 +11,9 @@ import { GamePage } from './games/GamePage'
 import { PrivacyPolicyPage } from './legal/PrivacyPolicyPage'
 import { TermsOfServicePage } from './legal/TermsOfServicePage'
 import { CookiePolicyPage } from './legal/CookiePolicyPage'
+import { DevlogIndexPage } from './devlog/DevlogIndexPage'
+import { DevlogPostPage } from './devlog/DevlogPostPage'
+import { DevlogSection } from './DevlogSection'
 import { NotFoundPage } from './NotFoundPage'
 import { AnimatedSection } from './AnimatedSection'
 import { fetchGames, fetchSiteContent, initializeDatabase, type Game, type SiteContent } from '../data/dataManager'
@@ -18,7 +21,7 @@ import gamesSeed from '../data/games.seed.json'
 
 const seedGames = gamesSeed as Game[]
 
-type Route = 'home' | 'game' | 'privacy' | 'terms' | 'cookies' | 'not-found'
+type Route = 'home' | 'game' | 'privacy' | 'terms' | 'cookies' | 'devlog' | 'devlog-post' | 'not-found'
 
 const scrollToTop = (smooth: boolean = true) => {
   window.scrollTo({
@@ -31,6 +34,7 @@ const scrollToTop = (smooth: boolean = true) => {
 export function Router() {
   const [currentRoute, setCurrentRoute] = useState<Route>('home')
   const [gameId, setGameId] = useState<string>('')
+  const [postSlug, setPostSlug] = useState<string>('')
   const [games, setGames] = useState<Game[]>([])
   const [siteContent, setSiteContent] = useState<SiteContent | null>(null)
   const [loading, setLoading] = useState(true)
@@ -55,6 +59,15 @@ export function Router() {
           setGameId(id)
           setCurrentRoute('game')
         }
+      } else if (path.indexOf('/devlog/') === 0 || hash.indexOf('devlog/') === 0) {
+        const slug =
+          path.indexOf('/devlog/') === 0 ? path.split('/')[2] : hash.split('/')[1]
+        if (slug) {
+          setPostSlug(slug)
+          setCurrentRoute('devlog-post')
+        }
+      } else if (path === '/devlog' || hash === 'devlog') {
+        setCurrentRoute('devlog')
       } else if (path === '/privacy' || hash === 'privacy') {
         setCurrentRoute('privacy')
       } else if (path === '/terms' || hash === 'terms') {
@@ -127,6 +140,17 @@ export function Router() {
     window.history.pushState({}, '', '/cookies')
   }
 
+  const navigateToDevlog = () => {
+    setCurrentRoute('devlog')
+    window.history.pushState({}, '', '/devlog')
+  }
+
+  const navigateToDevlogPost = (slug: string) => {
+    setPostSlug(slug)
+    setCurrentRoute('devlog-post')
+    window.history.pushState({}, '', `/devlog/${slug}`)
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -184,6 +208,27 @@ export function Router() {
       return (
         <MainLayout>
           <CookiePolicyPage onNavigateHome={navigateToHome} />
+        </MainLayout>
+      )
+
+    case 'devlog':
+      return (
+        <MainLayout>
+          <DevlogIndexPage
+            onNavigateHome={navigateToHome}
+            onNavigateToPost={navigateToDevlogPost}
+          />
+        </MainLayout>
+      )
+
+    case 'devlog-post':
+      return (
+        <MainLayout>
+          <DevlogPostPage
+            slug={postSlug}
+            onNavigateHome={navigateToHome}
+            onNavigateToDevlog={navigateToDevlog}
+          />
         </MainLayout>
       )
 
@@ -249,7 +294,14 @@ export function Router() {
             <AnimatedSection>
               <TeamSection teamMembers={defaultContent.teamMembers} />
             </AnimatedSection>
-            
+
+            <AnimatedSection>
+              <DevlogSection
+                onNavigateToDevlog={navigateToDevlog}
+                onNavigateToPost={navigateToDevlogPost}
+              />
+            </AnimatedSection>
+
             <AnimatedSection>
               <ContactSection
                 companyInfo={defaultContent.companyInfo}

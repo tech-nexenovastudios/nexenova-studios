@@ -52,6 +52,7 @@ export function Navigation({ onNavigateHome }: NavigationProps) {
     { label: 'Pipeline', href: '#services' },
     { label: 'Games', href: '#portfolio' },
     { label: 'Team', href: '#team' },
+    { label: 'Devlog', href: '#devlog' },
     { label: 'Contact', href: '#contact' }
   ]
 

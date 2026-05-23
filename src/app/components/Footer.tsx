@@ -36,6 +36,7 @@ export function Footer({
     { label: 'The Studio', href: '#about' },
     { label: 'The Pipeline', href: '#services' },
     { label: 'Games', href: '#portfolio' },
+    { label: 'Devlog', href: '#devlog' },
     { label: 'Say Hello', href: '#contact' }
   ]
 

@@ -62,9 +62,9 @@ export function Footer({
   return (
     <footer className="bg-card border-t border-border">
       <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           {/* Company Info */}
-          <div className="space-y-4">
+          <div className="space-y-4 col-span-2 md:col-span-1">
             <div className="flex items-center gap-2">
               <img
                 src="/logo.svg"
@@ -157,7 +157,7 @@ export function Footer({
           </div>
 
           {/* Follow */}
-          <div>
+          <div className="col-span-2 md:col-span-1">
             <div>
               <h3 className="font-semibold mb-4">Follow the studio</h3>
               <p className="text-sm text-muted-foreground mb-4">

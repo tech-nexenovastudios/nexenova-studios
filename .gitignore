@@ -13,5 +13,4 @@ dist
 
 # Visual-review artifacts (local-only)
 .screenshots/
-_screenshot.mjs
-_team-shot.mjs
+_*.mjs

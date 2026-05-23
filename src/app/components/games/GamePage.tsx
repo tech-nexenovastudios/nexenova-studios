@@ -1,5 +1,6 @@
-import { ArrowLeft, ExternalLink, Mail, MapPin } from 'lucide-react'
+import { ArrowLeft, ChevronDown, ChevronUp, ExternalLink } from 'lucide-react'
 import { motion } from 'motion/react'
+import ReactMarkdown from 'react-markdown'
 import { Button } from '../ui/button'
 import { Badge } from '../ui/badge'
 import { Card, CardContent } from '../ui/card'
@@ -39,6 +40,7 @@ function extractVideoId(url: string): string {
 
 export function GamePage({ game, onNavigateHome, onNavigateToGame, relatedGames = [] }: GamePageProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const [aboutExpanded, setAboutExpanded] = useState(false)
 
   if (!game) {
     return (
@@ -94,22 +96,32 @@ export function GamePage({ game, onNavigateHome, onNavigateToGame, relatedGames 
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl md:text-6xl font-bold mb-6">{transformedGame.title}</h1>
-            <div className="flex flex-wrap justify-center gap-2 mb-8">
+            <div className="flex flex-wrap justify-center gap-2 mb-6">
               {transformedGame.tags?.map((tag, index) => (
                 <Badge key={index} variant="secondary" className="text-sm">
                   {tag}
                 </Badge>
               ))}
             </div>
+            {transformedGame.features.length > 0 && (
+              <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-muted-foreground mb-8">
+                {transformedGame.features.map((feature, i) => (
+                  <span key={i} className="inline-flex items-center gap-2">
+                    <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+                    {feature}
+                  </span>
+                ))}
+              </div>
+            )}
             {transformedGame.steamUrl && (
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button 
-                  size="lg" 
+                <Button
+                  size="lg"
                   onClick={() => window.open(transformedGame.steamUrl, '_blank')}
                   className="flex items-center space-x-2"
                 >
                   <ExternalLink className="h-5 w-5" />
-                  <span>View on Steam</span>
+                  <span>View on Store</span>
                 </Button>
               </div>
             )}
@@ -117,13 +129,85 @@ export function GamePage({ game, onNavigateHome, onNavigateToGame, relatedGames 
         </div>
       </motion.section>
 
-      {/* Gallery Section */}
-      {transformedGame.images && transformedGame.images.length > 0 && (
-        <motion.section 
+      {/* Video Section - Only show if there's a video */}
+      {transformedGame.videoId && transformedGame.videoId !== 'dQw4w9WgXcQ' && (
+        <motion.section
           className="py-20"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2, duration: 0.4 }}
+          transition={{ delay: 0.3, duration: 0.4 }}
+        >
+          <div className="container mx-auto px-4">
+            <h2 className="text-3xl font-bold text-center mb-12">Gameplay Video</h2>
+            <div className="max-w-4xl mx-auto">
+              <div className="aspect-video rounded-lg overflow-hidden bg-muted shadow-lg">
+                <iframe
+                  src={`https://www.youtube.com/embed/${transformedGame.videoId}`}
+                  title={`${transformedGame.title} Gameplay Video`}
+                  className="w-full h-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+            </div>
+          </div>
+        </motion.section>
+      )}
+
+      {/* Description Section */}
+      <motion.section
+        className="py-20 bg-secondary/10"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4, duration: 0.4 }}
+      >
+        <div className="container mx-auto px-4">
+          <div className="max-w-3xl mx-auto">
+            <h2 className="text-3xl font-bold mb-6">About the Game</h2>
+            {transformedGame.description ? (
+              <div className="relative">
+                <div
+                  className={`prose prose-neutral dark:prose-invert max-w-none prose-headings:font-semibold prose-headings:tracking-tight prose-p:leading-relaxed prose-li:leading-relaxed prose-a:text-primary overflow-hidden transition-[max-height] duration-500 ${
+                    aboutExpanded ? 'max-h-[12000px]' : 'max-h-80'
+                  }`}
+                >
+                  <ReactMarkdown>{transformedGame.description}</ReactMarkdown>
+                </div>
+                {!aboutExpanded && (
+                  <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-secondary/10 to-transparent" />
+                )}
+                <button
+                  type="button"
+                  onClick={() => setAboutExpanded((v) => !v)}
+                  className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline underline-offset-4"
+                >
+                  {aboutExpanded ? (
+                    <>
+                      Show less
+                      <ChevronUp className="h-4 w-4" />
+                    </>
+                  ) : (
+                    <>
+                      Read more
+                      <ChevronDown className="h-4 w-4" />
+                    </>
+                  )}
+                </button>
+              </div>
+            ) : (
+              <p>No description available.</p>
+            )}
+          </div>
+        </div>
+      </motion.section>
+
+      {/* Gallery Section */}
+      {transformedGame.images && transformedGame.images.length > 0 && (
+        <motion.section
+          className="py-20"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4, duration: 0.4 }}
         >
           <div className="container mx-auto px-4">
             <h2 className="text-3xl font-bold text-center mb-12">Gallery</h2>
@@ -136,7 +220,7 @@ export function GamePage({ game, onNavigateHome, onNavigateToGame, relatedGames 
                     className="w-full h-full object-cover"
                   />
                 </div>
-                
+
                 {/* Navigation arrows */}
                 {transformedGame.images.length > 1 && (
                   <>
@@ -154,7 +238,7 @@ export function GamePage({ game, onNavigateHome, onNavigateToGame, relatedGames 
                     </button>
                   </>
                 )}
-                
+
                 {/* Dots indicator */}
                 <div className="flex justify-center mt-4 space-x-2">
                   {transformedGame.images.map((_, index) => (
@@ -167,70 +251,6 @@ export function GamePage({ game, onNavigateHome, onNavigateToGame, relatedGames 
                     />
                   ))}
                 </div>
-              </div>
-            </div>
-          </div>
-        </motion.section>
-      )}
-
-      {/* Description Section */}
-      <motion.section 
-        className="py-20 bg-secondary/10"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3, duration: 0.4 }}
-      >
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <div className="grid md:grid-cols-2 gap-12">
-              <div>
-                <h2 className="text-3xl font-bold mb-6">About the Game</h2>
-                <div className="prose prose-lg dark:prose-invert max-w-none">
-                  {transformedGame.description ? (
-                    transformedGame.description.split('\n\n').map((paragraph, index) => (
-                      <p key={index} className="mb-4">{paragraph}</p>
-                    ))
-                  ) : (
-                    <p>No description available.</p>
-                  )}
-                </div>
-              </div>
-              
-              <div>
-                <h3 className="text-2xl font-semibold mb-6">Key Features</h3>
-                <ul className="space-y-3">
-                  {transformedGame.features?.map((feature, index) => (
-                    <li key={index} className="flex items-start space-x-3">
-                      <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0" />
-                      <span>{feature}</span>
-                    </li>
-                  )) || <li>No features listed.</li>}
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </motion.section>
-
-      {/* Video Section - Only show if there's a video */}
-      {transformedGame.videoId && transformedGame.videoId !== 'dQw4w9WgXcQ' && (
-        <motion.section 
-          className="py-20"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.4 }}
-        >
-          <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold text-center mb-12">Gameplay Video</h2>
-            <div className="max-w-4xl mx-auto">
-              <div className="aspect-video rounded-lg overflow-hidden bg-muted">
-                <iframe
-                  src={`https://www.youtube.com/embed/${transformedGame.videoId}`}
-                  title={`${transformedGame.title} Gameplay Video`}
-                  className="w-full h-full"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
               </div>
             </div>
           </div>
@@ -290,46 +310,28 @@ export function GamePage({ game, onNavigateHome, onNavigateToGame, relatedGames 
       >
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl font-bold mb-6">Interested in Our Work?</h2>
-            <p className="text-lg text-muted-foreground mb-8">
-              Get in touch with Nexenova Studios to discuss your next gaming project or learn more about our development process.
+            <h2 className="text-3xl font-bold mb-4">Like what you see?</h2>
+            <p className="text-lg text-muted-foreground mb-8 max-w-xl mx-auto">
+              Follow the studio for launch updates &mdash; or browse the rest of what we&rsquo;re making.
             </p>
-            
-            <div className="grid md:grid-cols-3 gap-6 mb-8">
-              <Card>
-                <CardContent className="p-6 text-center">
-                  <Mail className="h-8 w-8 mx-auto mb-4 text-primary" />
-                  <h3 className="font-semibold mb-2">Email Us</h3>
-                  <p className="text-muted-foreground">support@nexenovastudios.com</p>
-                </CardContent>
-              </Card>
 
-              <Card>
-                <CardContent className="p-6 text-center">
-                  <MapPin className="h-8 w-8 mx-auto mb-4 text-primary" />
-                  <h3 className="font-semibold mb-2">Based In</h3>
-                  <p className="text-muted-foreground">India</p>
-                </CardContent>
-              </Card>
-            </div>
-            
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               {transformedGame.steamUrl && (
-                <Button 
-                  size="lg" 
+                <Button
+                  size="lg"
                   onClick={() => window.open(transformedGame.steamUrl, '_blank')}
                   className="flex items-center space-x-2"
                 >
                   <ExternalLink className="h-5 w-5" />
-                  <span>View on Steam</span>
+                  <span>View on Store</span>
                 </Button>
               )}
-              <Button 
-                size="lg" 
+              <Button
+                size="lg"
                 variant="outline"
                 onClick={onNavigateHome}
               >
-                Back to Portfolio
+                See all games
               </Button>
             </div>
           </div>

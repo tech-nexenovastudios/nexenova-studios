@@ -31,29 +31,24 @@ export function Footer({
     address: "India"
   }
 
-  const quickLinks = [
+  const explore = [
     { label: 'Home', href: '#home' },
-    { label: 'About', href: '#about' },
-    { label: 'Services', href: '#services' },
-    { label: 'Portfolio', href: '#portfolio' }
+    { label: 'The Studio', href: '#about' },
+    { label: 'The Pipeline', href: '#services' },
+    { label: 'Games', href: '#portfolio' },
+    { label: 'Say Hello', href: '#contact' }
   ]
 
-  const services = [
-    { label: 'Mobile Game Development', href: '#services' },
-    { label: 'Puzzle & Casual Games', href: '#services' },
-    { label: 'Game Art & Design', href: '#services' },
-    { label: 'Live-Ops & Publishing', href: '#services' }
-  ]
-
-  const resources = [
-    { label: 'Blog', href: '#' },
-    { label: 'Case Studies', href: '#' },
-    { label: 'Game Development Tips', href: '#' },
-    { label: 'Industry News', href: '#' }
+  const games = [
+    { label: 'Bird Hunter', href: '#portfolio' },
+    { label: 'Smashy Qube', href: '#portfolio' },
+    { label: '2048: Striker', href: '#portfolio' },
+    { label: 'Echo Loop', href: '#portfolio' },
+    { label: 'See all games →', href: '#portfolio' }
   ]
 
   const scrollToSection = (href: string) => {
-    if (href.startsWith('#')) {
+    if (href.charAt(0) === '#') {
       const element = document.querySelector(href)
       if (element) {
         element.scrollIntoView({ behavior: 'smooth' })
@@ -84,7 +79,7 @@ export function Footer({
               </div>
             </div>
             <p className="text-muted-foreground text-sm leading-relaxed">
-              {defaultCompanyInfo.description} From concept to release, we bring your game vision to life.
+              Independent mobile games made in India. We make them. You play them.
             </p>
             <div className="space-y-2">
               <div className="flex items-center space-x-2 text-sm text-muted-foreground">
@@ -114,11 +109,11 @@ export function Footer({
             </div>
           </div>
 
-          {/* Quick Links */}
+          {/* Explore */}
           <div>
-            <h3 className="font-semibold mb-4">Quick Links</h3>
+            <h3 className="font-semibold mb-4">Explore</h3>
             <ul className="space-y-2">
-              {quickLinks.map((link, index) => (
+              {explore.map((link, index) => (
                 <li key={index}>
                   <button
                     onClick={() => scrollToSection(link.href)}
@@ -131,41 +126,30 @@ export function Footer({
             </ul>
           </div>
 
-          {/* Services */}
+          {/* Games */}
           <div>
-            <h3 className="font-semibold mb-4">Our Services</h3>
+            <h3 className="font-semibold mb-4">Games</h3>
             <ul className="space-y-2">
-              {services.map((service, index) => (
+              {games.map((game, index) => (
                 <li key={index}>
                   <button
-                    onClick={() => scrollToSection(service.href)}
+                    onClick={() => scrollToSection(game.href)}
                     className="text-muted-foreground hover:text-primary transition-colors text-sm"
                   >
-                    {service.label}
+                    {game.label}
                   </button>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Resources & Social */}
+          {/* Follow */}
           <div>
-            <h3 className="font-semibold mb-4">Resources</h3>
-            <ul className="space-y-2 mb-6">
-              {resources.map((resource, index) => (
-                <li key={index}>
-                  <a
-                    href={resource.href}
-                    className="text-muted-foreground hover:text-primary transition-colors text-sm"
-                  >
-                    {resource.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-            
             <div>
-              <h4 className="font-semibold mb-3">Follow Us</h4>
+              <h3 className="font-semibold mb-4">Follow the studio</h3>
+              <p className="text-sm text-muted-foreground mb-4">
+                Devlogs, soft-launch announcements, and the occasional behind-the-scenes screenshot.
+              </p>
               <div className="flex space-x-3">
                 <a 
                   href="https://twitter.com/nexenovastudios" 

@@ -1,165 +1,197 @@
 import { motion } from 'motion/react'
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
-import { Monitor, Smartphone, Gamepad, Palette, Code, Headphones } from 'lucide-react'
+import { Lightbulb, Hammer, Rocket, Sparkles, ArrowRight, Skull } from 'lucide-react'
+import { Card } from './ui/card'
+import { Badge } from './ui/badge'
 import { AnimatedSection } from './AnimatedSection'
+import gamesSeed from '../data/games.seed.json'
 
-export function ServicesSection() {
-  const services = [
-    {
-      icon: Monitor,
-      title: 'PC Game Development',
-      description: 'High-performance games for Windows, Mac, and Linux platforms with stunning graphics and smooth gameplay.',
-      features: ['Steam Integration', 'Advanced Graphics', 'Mod Support', 'Cloud Saves']
-    },
-    {
-      icon: Smartphone,
-      title: 'Mobile Game Development',
-      description: 'Engaging mobile games for iOS and Android with intuitive touch controls and optimized performance.',
-      features: ['Cross-Platform', 'In-App Purchases', 'Social Features', 'Analytics']
-    },
-    {
-      icon: Gamepad,
-      title: 'Console Development',
-      description: 'AAA console games for PlayStation, Xbox, and Nintendo Switch with platform-specific optimizations.',
-      features: ['HDR Support', 'Achievement Systems', 'Multiplayer', 'Platform Compliance']
-    },
-    {
-      icon: Palette,
-      title: 'Game Art & Design',
-      description: 'Stunning visual assets, character design, and environmental art that brings your game world to life.',
-      features: ['2D/3D Art', 'Character Design', 'UI/UX Design', 'Animation']
-    },
-    {
-      icon: Code,
-      title: 'Custom Game Engines',
-      description: 'Tailored game engines and tools designed specifically for your project\'s unique requirements.',
-      features: ['Performance Optimized', 'Scalable Architecture', 'Custom Tools', 'Documentation']
-    },
-    {
-      icon: Headphones,
-      title: 'Audio Design',
-      description: 'Immersive soundscapes, music composition, and audio implementation that enhances the gaming experience.',
-      features: ['3D Audio', 'Dynamic Music', 'Voice Acting', 'Sound Effects']
-    }
-  ]
+type Stage = 'ideation' | 'prototype' | 'soft-launch' | 'coming-soon'
+
+interface SeedGame {
+  id: string
+  title: string
+  description: string
+  tagline?: string
+  genre: string
+  tags: string[]
+  status: string
+}
+
+interface ServicesSectionProps {
+  onGameSelect?: (gameId: string) => void
+}
+
+// Where each concept sits in the pipeline. Mirrors the Game Ideas PDF backlog.
+const STAGE_MAP: Record<string, Stage> = {
+  'bird-hunter': 'coming-soon',
+  'smashy-qube': 'soft-launch',
+  '2048-striker': 'prototype',
+  'phase-shift-runner': 'prototype',
+  'echo-loop': 'prototype',
+  'flip-trace': 'prototype',
+  'momentum-painter': 'prototype',
+  'chain-architect': 'ideation',
+  'pressure-grid': 'ideation',
+  'split-control': 'ideation',
+  'reality-fold': 'ideation',
+  'signal-sync': 'ideation',
+}
+
+const LANES: Array<{
+  id: Stage
+  label: string
+  blurb: string
+  icon: React.ComponentType<{ className?: string }>
+  accent: string
+}> = [
+  {
+    id: 'ideation',
+    label: 'Ideation',
+    blurb: 'Sketches and core-loop pitches. Most won’t make it.',
+    icon: Lightbulb,
+    accent: 'from-amber-500/15 to-amber-500/0 text-amber-600 dark:text-amber-400',
+  },
+  {
+    id: 'prototype',
+    label: 'In Prototype',
+    blurb: 'Playable builds with one mechanic. Hunting the hook.',
+    icon: Hammer,
+    accent: 'from-blue-500/15 to-blue-500/0 text-blue-600 dark:text-blue-400',
+  },
+  {
+    id: 'soft-launch',
+    label: 'Soft-Launch Prep',
+    blurb: 'The candidate. Levels, juice, monetization being tuned.',
+    icon: Sparkles,
+    accent: 'from-violet-500/15 to-violet-500/0 text-violet-600 dark:text-violet-400',
+  },
+  {
+    id: 'coming-soon',
+    label: 'Coming Soon',
+    blurb: 'Heading to stores. The survivors of the gauntlet.',
+    icon: Rocket,
+    accent: 'from-emerald-500/15 to-emerald-500/0 text-emerald-600 dark:text-emerald-400',
+  },
+]
+
+export function ServicesSection({ onGameSelect }: ServicesSectionProps) {
+  const games = gamesSeed as SeedGame[]
+  const groupedByStage: Record<Stage, SeedGame[]> = {
+    ideation: [],
+    prototype: [],
+    'soft-launch': [],
+    'coming-soon': [],
+  }
+  for (const g of games) {
+    const stage = STAGE_MAP[g.id]
+    if (stage) groupedByStage[stage].push(g)
+  }
 
   return (
     <section id="services" className="py-20">
       <div className="container mx-auto px-4">
-        <AnimatedSection className="text-center mb-16">
-          <motion.h2 
-            initial={{ opacity: 0, y: 30 }}
+        <AnimatedSection className="text-center mb-14">
+          <motion.span
+            initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.5 }}
             viewport={{ once: true }}
-            className="text-3xl md:text-4xl font-bold mb-4"
+            className="inline-block text-xs uppercase tracking-[0.22em] text-primary font-medium mb-4"
           >
-            Our Services
-          </motion.h2>
-          <motion.p 
+            The Pipeline
+          </motion.span>
+          <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
+            transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="text-lg text-muted-foreground max-w-2xl mx-auto"
+            className="text-4xl md:text-5xl font-bold mb-5 tracking-tight"
           >
-            From initial concept to final release, we offer comprehensive game development 
-            services to bring your vision to life across all major platforms.
+            What we&rsquo;re building.
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.15 }}
+            viewport={{ once: true }}
+            className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed"
+          >
+            Twelve concepts in flight. One will earn the launch. The rest get killed without ceremony &mdash; that&rsquo;s how we keep the survivors sharp.
           </motion.p>
         </AnimatedSection>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {services.map((service, index) => (
-            <AnimatedSection
-              key={index}
-              delay={index * 0.1}
-              direction={index % 2 === 0 ? 'up' : 'down'}
-            >
-              <motion.div
-                whileHover={{ 
-                  scale: 1.05, 
-                  y: -10,
-                  boxShadow: '0 20px 40px rgba(0,0,0,0.1)'
-                }}
-                transition={{ duration: 0.3 }}
-              >
-                <Card className="group border-0 bg-card/50 backdrop-blur-sm h-full">
-                  <CardHeader>
-                    <motion.div 
-                      whileHover={{ scale: 1.2, rotate: 10 }}
-                      transition={{ duration: 0.3 }}
-                      className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors"
-                    >
-                      <service.icon className="h-6 w-6 text-primary" />
-                    </motion.div>
-                    <CardTitle className="text-xl">{service.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground mb-4">{service.description}</p>
-                    <ul className="space-y-1">
-                      {service.features.map((feature, featureIndex) => (
-                        <motion.li
-                          key={featureIndex}
-                          initial={{ opacity: 0, x: -20 }}
-                          whileInView={{ opacity: 1, x: 0 }}
-                          transition={{ duration: 0.5, delay: featureIndex * 0.1 }}
-                          viewport={{ once: true }}
-                          className="text-sm text-muted-foreground flex items-center"
+        {/* Pipeline */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {LANES.map((lane, laneIdx) => {
+            const laneGames = groupedByStage[lane.id]
+            return (
+              <AnimatedSection key={lane.id} delay={laneIdx * 0.1} direction="up">
+                <div className="h-full rounded-2xl border border-border/60 bg-card/60 backdrop-blur-sm overflow-hidden flex flex-col">
+                  <div className={`px-5 py-4 bg-gradient-to-b ${lane.accent} border-b border-border/40`}>
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <lane.icon className="h-4 w-4" />
+                        <span className="text-sm font-semibold uppercase tracking-wider">{lane.label}</span>
+                      </div>
+                      <span className="inline-flex items-center justify-center min-w-[1.5rem] h-6 px-2 rounded-full bg-background/70 text-xs font-semibold text-foreground/80">
+                        {laneGames.length}
+                      </span>
+                    </div>
+                    <p className="text-xs text-muted-foreground leading-relaxed">{lane.blurb}</p>
+                  </div>
+
+                  <div className="p-3 space-y-2 flex-1">
+                    {laneGames.length === 0 ? (
+                      <div className="text-center py-8 text-sm text-muted-foreground italic">
+                        <Skull className="h-4 w-4 mx-auto mb-2 opacity-50" />
+                        Nothing here yet.
+                      </div>
+                    ) : (
+                      laneGames.map((g) => (
+                        <motion.button
+                          key={g.id}
+                          type="button"
+                          onClick={() => onGameSelect?.(g.id)}
+                          whileHover={{ y: -2 }}
+                          transition={{ duration: 0.2 }}
+                          className="w-full text-left group focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background rounded-xl"
                         >
-                          <motion.div
-                            animate={{ scale: [1, 1.2, 1] }}
-                            transition={{ duration: 2, repeat: Infinity, delay: featureIndex * 0.2 }}
-                            className="w-1.5 h-1.5 bg-primary rounded-full mr-2"
-                          />
-                          {feature}
-                        </motion.li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            </AnimatedSection>
-          ))}
+                          <Card className="border-border/50 hover:border-primary/40 hover:shadow-sm transition-all bg-background/60 p-4">
+                            <div className="flex items-start justify-between gap-2 mb-2">
+                              <h3 className="font-semibold text-sm leading-tight flex-1">{g.title}</h3>
+                              <ArrowRight className="h-3.5 w-3.5 text-muted-foreground opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all flex-shrink-0 mt-0.5" />
+                            </div>
+                            {g.tagline && (
+                              <p className="text-xs text-muted-foreground leading-snug mb-2 line-clamp-2">
+                                {g.tagline}
+                              </p>
+                            )}
+                            <Badge variant="secondary" className="text-[10px] uppercase tracking-wider font-medium">
+                              {g.genre}
+                            </Badge>
+                          </Card>
+                        </motion.button>
+                      ))
+                    )}
+                  </div>
+                </div>
+              </AnimatedSection>
+            )
+          })}
         </div>
 
-        <AnimatedSection className="mt-16 text-center" delay={0.5}>
-          <motion.div
-            whileHover={{ scale: 1.02 }}
-            transition={{ duration: 0.3 }}
-            className="bg-gradient-to-r from-blue-500/10 to-purple-600/10 rounded-lg p-8 backdrop-blur-sm"
-          >
-            <motion.h3 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-              className="text-2xl font-bold mb-4"
-            >
-              Ready to Start Your Project?
-            </motion.h3>
-            <motion.p 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              viewport={{ once: true }}
-              className="text-muted-foreground mb-6"
-            >
-              Let's discuss your game development needs and create something amazing together.
-            </motion.p>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+        {/* Footer note */}
+        <AnimatedSection delay={0.5} className="mt-12 text-center">
+          <p className="text-sm text-muted-foreground">
+            Want to follow what survives the gauntlet?{' '}
+            <button
+              type="button"
               onClick={() => document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })}
-              className="inline-flex items-center px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+              className="font-medium text-primary hover:underline underline-offset-4"
             >
-              <motion.span
-                animate={{ x: [0, 5, 0] }}
-                transition={{ duration: 1.5, repeat: Infinity }}
-              >
-                Get Started Today
-              </motion.span>
-            </motion.button>
-          </motion.div>
+              Get devlog updates &rarr;
+            </button>
+          </p>
         </AnimatedSection>
       </div>
     </section>

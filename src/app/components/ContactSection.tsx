@@ -1,12 +1,13 @@
 import { useState } from 'react'
+import { motion } from 'motion/react'
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
 import { Input } from './ui/input'
 import { Textarea } from './ui/textarea'
 import { Button } from './ui/button'
-import { Badge } from './ui/badge'
-import { Mail, Phone, MapPin, Send, Clock, Globe, CheckCircle, AlertCircle } from 'lucide-react'
+import { Mail, MapPin, Send, CheckCircle, MessageCircle, Newspaper, Handshake } from 'lucide-react'
 import { toast } from 'sonner@2.0.3'
 import { projectId, publicAnonKey } from '../utils/supabase/info'
+import { AnimatedSection } from './AnimatedSection'
 
 interface CompanyInfo {
   name: string
@@ -20,328 +21,271 @@ interface ContactSectionProps {
   companyInfo?: CompanyInfo
   onNavigateToPrivacy?: () => void
   onNavigateToTerms?: () => void
-  onNavigateToCookies?: () => void
 }
 
-export function ContactSection({ 
+const TOPICS = [
+  { value: 'feedback', label: 'Player feedback', icon: MessageCircle },
+  { value: 'press', label: 'Press inquiry', icon: Newspaper },
+  { value: 'partnership', label: 'Partnership', icon: Handshake },
+  { value: 'other', label: 'Something else', icon: Mail },
+]
+
+export function ContactSection({
   companyInfo,
   onNavigateToPrivacy,
   onNavigateToTerms,
-  onNavigateToCookies
 }: ContactSectionProps) {
+  const defaults: CompanyInfo = companyInfo || {
+    name: 'Nexenova Studios',
+    description: 'Independent mobile game studio based in India.',
+    email: 'support@nexenovastudios.com',
+    phone: '',
+    address: 'India',
+  }
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    company: '',
-    projectType: '',
-    budget: '',
-    message: ''
+    topic: '',
+    message: '',
   })
-
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
 
-  const defaultCompanyInfo = companyInfo || {
-    name: "Nexenova Studios",
-    description: "We are a passionate team of mobile game developers dedicated to crafting memorable gaming experiences.",
-    email: "support@nexenovastudios.com",
-    phone: "",
-    address: "India"
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
+  ) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value })
+  }
+
+  const handleTopicClick = (topic: string) => {
+    setFormData({ ...formData, topic })
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
-    if (!formData.name || !formData.email || !formData.projectType || !formData.message) {
-      toast.error('Please fill in all required fields')
+    if (!formData.name || !formData.email || !formData.topic || !formData.message) {
+      toast.error('Tell us your name, email, what it’s about, and the message.')
       return
     }
-
     setIsSubmitting(true)
-
     try {
-      const response = await fetch(`https://${projectId}.supabase.co/functions/v1/make-server-dff5028d/contact`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${publicAnonKey}`
+      const response = await fetch(
+        `https://${projectId}.supabase.co/functions/v1/make-server-dff5028d/contact`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${publicAnonKey}`,
+          },
+          body: JSON.stringify({
+            name: formData.name,
+            email: formData.email,
+            projectType: formData.topic,
+            message: formData.message,
+          }),
         },
-        body: JSON.stringify(formData)
-      })
-
+      )
       const result = await response.json()
-
       if (result.success) {
         setIsSubmitted(true)
-        toast.success('Message sent successfully! We\'ll get back to you within 24 hours.')
-        
-        // Reset form
-        setFormData({
-          name: '',
-          email: '',
-          company: '',
-          projectType: '',
-          budget: '',
-          message: ''
-        })
-
-        // Reset submitted state after 5 seconds
-        setTimeout(() => {
-          setIsSubmitted(false)
-        }, 5000)
+        toast.success("Got it. We'll write back as soon as we can.")
+        setFormData({ name: '', email: '', topic: '', message: '' })
+        setTimeout(() => setIsSubmitted(false), 5000)
       } else {
         throw new Error(result.error || 'Failed to send message')
       }
     } catch (error) {
       console.error('Error sending message:', error)
-      toast.error(error instanceof Error ? error.message : 'Failed to send message. Please try again.')
+      toast.error(
+        error instanceof Error ? error.message : 'Failed to send. Please try again.',
+      )
     } finally {
       setIsSubmitting(false)
     }
   }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    })
-  }
-
-  const contactInfo = [
-    {
-      icon: Mail,
-      title: 'Email Us',
-      content: defaultCompanyInfo.email,
-      description: 'Send us your project details'
-    },
-    ...(defaultCompanyInfo.phone
-      ? [{
-          icon: Phone,
-          title: 'Call Us',
-          content: defaultCompanyInfo.phone,
-          description: 'Mon-Fri 9AM-6PM IST'
-        }]
-      : []),
-    {
-      icon: MapPin,
-      title: 'Based In',
-      content: defaultCompanyInfo.address,
-      description: 'Working with partners worldwide'
-    }
-  ]
-
-  const projectTypes = [
-    'Mobile Game',
-    'PC Game',
-    'Console Game',
-    'VR/AR Game',
-    'Web Game',
-    'Game Art & Design',
-    'Game Audio',
-    'Consulting',
-    'Other'
-  ]
-
-  const budgetRanges = [
-    'Under $10K',
-    '$10K - $50K',
-    '$50K - $100K',
-    '$100K - $500K',
-    '$500K+',
-    'Let\'s Discuss'
-  ]
-
   return (
     <section id="contact" className="py-20 bg-secondary/10">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Get In Touch</h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Ready to bring your game idea to life? Let's discuss your project and 
-            explore how {defaultCompanyInfo.name} can help you create an amazing gaming experience.
-          </p>
-        </div>
+        <AnimatedSection className="text-center mb-14">
+          <motion.span
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            viewport={{ once: true }}
+            className="inline-block text-xs uppercase tracking-[0.22em] text-primary font-medium mb-4"
+          >
+            Get in Touch
+          </motion.span>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-4xl md:text-5xl font-bold mb-5 tracking-tight"
+          >
+            Say hello.
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.15 }}
+            viewport={{ once: true }}
+            className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed"
+          >
+            Bug report? Press kit? Found a level too hard? We read everything &mdash; even the typos.
+          </motion.p>
+        </AnimatedSection>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Contact Information */}
-          <div className="space-y-6">
-            {contactInfo.map((info, index) => (
-              <Card key={index} className="border-0 bg-card/50 backdrop-blur-sm">
-                <CardContent className="p-6">
-                  <div className="flex items-start space-x-4">
-                    <div className="flex-shrink-0">
-                      <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                        <info.icon className="h-6 w-6 text-primary" />
-                      </div>
-                    </div>
-                    <div>
-                      <h3 className="font-semibold mb-1">{info.title}</h3>
-                      <p className="text-sm mb-1">{info.content}</p>
-                      <p className="text-xs text-muted-foreground">{info.description}</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-
-            <Card className="border-0 bg-card/50 backdrop-blur-sm">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 max-w-5xl mx-auto">
+          {/* Left: contact info */}
+          <div className="lg:col-span-2 space-y-4">
+            <Card className="border-border/60 bg-card/60 backdrop-blur-sm">
               <CardContent className="p-6">
-                <div className="flex items-center space-x-2 mb-4">
-                  <Clock className="h-5 w-5 text-primary" />
-                  <h3 className="font-semibold">Business Hours</h3>
-                </div>
-                <div className="space-y-2 text-sm text-muted-foreground">
-                  <div className="flex justify-between">
-                    <span>Monday - Friday</span>
-                    <span>9:00 AM - 6:00 PM</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Saturday</span>
-                    <span>10:00 AM - 4:00 PM</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Sunday</span>
-                    <span>Closed</span>
+                <div className="flex items-start gap-4">
+                  <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary flex-shrink-0">
+                    <Mail className="h-5 w-5" />
+                  </span>
+                  <div>
+                    <h3 className="font-semibold mb-1">Email</h3>
+                    <a
+                      href={`mailto:${defaults.email}`}
+                      className="text-sm text-primary hover:underline underline-offset-4 break-all"
+                    >
+                      {defaults.email}
+                    </a>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      We usually reply within a couple of days.
+                    </p>
                   </div>
                 </div>
               </CardContent>
             </Card>
+
+            <Card className="border-border/60 bg-card/60 backdrop-blur-sm">
+              <CardContent className="p-6">
+                <div className="flex items-start gap-4">
+                  <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary flex-shrink-0">
+                    <MapPin className="h-5 w-5" />
+                  </span>
+                  <div>
+                    <h3 className="font-semibold mb-1">Based In</h3>
+                    <p className="text-sm">{defaults.address}</p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Building mobile games for everywhere.
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-primary/20 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent">
+              <CardContent className="p-6">
+                <h3 className="font-semibold mb-2">Press &amp; partnerships</h3>
+                <p className="text-sm text-muted-foreground mb-3">
+                  Looking for screenshots, builds, or a chat? Same inbox &mdash; just pick &ldquo;Press inquiry&rdquo; or &ldquo;Partnership&rdquo; on the form.
+                </p>
+              </CardContent>
+            </Card>
           </div>
 
-          {/* Contact Form */}
-          <div className="lg:col-span-2">
-            <Card className="border-0 bg-card/50 backdrop-blur-sm">
+          {/* Right: form */}
+          <div className="lg:col-span-3">
+            <Card className="border-border/60 bg-card/60 backdrop-blur-sm">
               <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
+                <CardTitle className="flex items-center gap-2">
                   {isSubmitted ? (
                     <>
-                      <CheckCircle className="h-5 w-5 text-green-500" />
-                      <span>Message Sent Successfully!</span>
+                      <CheckCircle className="h-5 w-5 text-emerald-500" />
+                      <span>Message received</span>
                     </>
                   ) : (
                     <>
                       <Send className="h-5 w-5" />
-                      <span>Start Your Project</span>
+                      <span>Drop us a line</span>
                     </>
                   )}
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 {isSubmitted ? (
-                  <div className="text-center py-8">
-                    <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
-                    <h3 className="text-xl font-semibold mb-2">Thank you for your message!</h3>
-                    <p className="text-muted-foreground">
-                      We've received your project inquiry and will get back to you within 24 hours.
+                  <div className="text-center py-10">
+                    <CheckCircle className="h-14 w-14 text-emerald-500 mx-auto mb-4" />
+                    <h3 className="text-lg font-semibold mb-1">Thanks for writing.</h3>
+                    <p className="text-sm text-muted-foreground">
+                      We&rsquo;ll be back in your inbox shortly.
                     </p>
                   </div>
                 ) : (
-                  <form onSubmit={handleSubmit} className="space-y-6">
+                  <form onSubmit={handleSubmit} className="space-y-5">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-sm mb-2">Name *</label>
+                        <label className="block text-sm mb-2">Your name</label>
                         <Input
                           type="text"
                           name="name"
                           value={formData.name}
                           onChange={handleChange}
                           required
-                          placeholder="Your full name"
+                          placeholder="Riley"
                           disabled={isSubmitting}
                         />
                       </div>
                       <div>
-                        <label className="block text-sm mb-2">Email *</label>
+                        <label className="block text-sm mb-2">Email</label>
                         <Input
                           type="email"
                           name="email"
                           value={formData.email}
                           onChange={handleChange}
                           required
-                          placeholder="your@email.com"
+                          placeholder="riley@example.com"
                           disabled={isSubmitting}
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-sm mb-2">Company / Organization</label>
-                      <Input
-                        type="text"
-                        name="company"
-                        value={formData.company}
-                        onChange={handleChange}
-                        placeholder="Your company name"
-                        disabled={isSubmitting}
-                      />
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm mb-2">Project Type *</label>
-                        <select
-                          name="projectType"
-                          value={formData.projectType}
-                          onChange={handleChange}
-                          required
-                          disabled={isSubmitting}
-                          className="w-full px-3 py-2 border border-border rounded-md bg-background text-foreground disabled:opacity-50"
-                        >
-                          <option value="">Select project type</option>
-                          {projectTypes.map((type) => (
-                            <option key={type} value={type}>{type}</option>
-                          ))}
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block text-sm mb-2">Budget Range</label>
-                        <select
-                          name="budget"
-                          value={formData.budget}
-                          onChange={handleChange}
-                          disabled={isSubmitting}
-                          className="w-full px-3 py-2 border border-border rounded-md bg-background text-foreground disabled:opacity-50"
-                        >
-                          <option value="">Select budget range</option>
-                          {budgetRanges.map((range) => (
-                            <option key={range} value={range}>{range}</option>
-                          ))}
-                        </select>
+                      <label className="block text-sm mb-2">What&rsquo;s it about?</label>
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                        {TOPICS.map((topic) => {
+                          const Icon = topic.icon
+                          const isSelected = formData.topic === topic.value
+                          return (
+                            <button
+                              key={topic.value}
+                              type="button"
+                              onClick={() => handleTopicClick(topic.value)}
+                              disabled={isSubmitting}
+                              className={`px-3 py-3 rounded-lg border text-xs font-medium transition-all flex flex-col items-center gap-1.5 ${
+                                isSelected
+                                  ? 'border-primary bg-primary/10 text-primary'
+                                  : 'border-border bg-background hover:border-primary/40 hover:bg-primary/5 text-muted-foreground'
+                              }`}
+                            >
+                              <Icon className="h-4 w-4" />
+                              {topic.label}
+                            </button>
+                          )
+                        })}
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-sm mb-2">Project Description *</label>
+                      <label className="block text-sm mb-2">Message</label>
                       <Textarea
                         name="message"
                         value={formData.message}
                         onChange={handleChange}
                         required
                         rows={5}
-                        placeholder="Tell us about your game idea, target platforms, timeline, and any specific requirements..."
+                        placeholder="Tell us what's on your mind. The shorter the better."
                         disabled={isSubmitting}
                       />
                     </div>
 
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      <Badge variant="secondary" className="text-xs">
-                        <Globe className="w-3 h-3 mr-1" />
-                        Remote Friendly
-                      </Badge>
-                      <Badge variant="secondary" className="text-xs">
-                        Free Consultation
-                      </Badge>
-                      <Badge variant="secondary" className="text-xs">
-                        NDA Available
-                      </Badge>
-                    </div>
-
-                    <Button 
-                      type="submit" 
-                      size="lg" 
-                      className="w-full" 
-                      disabled={isSubmitting}
-                    >
+                    <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
                       {isSubmitting ? (
                         <>
                           <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full mr-2" />
@@ -356,13 +300,13 @@ export function ContactSection({
                     </Button>
 
                     <p className="text-xs text-muted-foreground text-center">
-                      By submitting this form, you agree to our{' '}
+                      By sending, you agree to our{' '}
                       <button
                         type="button"
                         onClick={onNavigateToTerms}
                         className="text-primary hover:underline"
                       >
-                        Terms of Service
+                        Terms
                       </button>{' '}
                       and{' '}
                       <button
@@ -372,6 +316,7 @@ export function ContactSection({
                       >
                         Privacy Policy
                       </button>
+                      .
                     </p>
                   </form>
                 )}

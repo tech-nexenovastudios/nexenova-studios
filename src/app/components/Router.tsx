@@ -319,7 +319,7 @@ export function Router() {
           
           <main>
             <AnimatedSection>
-              <HeroSection stats={defaultContent.heroStats} />
+              <HeroSection onGameSelect={navigateToGame} />
             </AnimatedSection>
             
             <AnimatedSection>
@@ -327,7 +327,7 @@ export function Router() {
             </AnimatedSection>
             
             <AnimatedSection>
-              <ServicesSection />
+              <ServicesSection onGameSelect={navigateToGame} />
             </AnimatedSection>
             
             <AnimatedSection>

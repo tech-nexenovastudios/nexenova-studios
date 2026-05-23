@@ -187,7 +187,7 @@ export function GamePage({ game, onNavigateHome, onNavigateToGame, relatedGames 
                 <h2 className="text-3xl font-bold mb-6">About the Game</h2>
                 <div className="prose prose-lg dark:prose-invert max-w-none">
                   {transformedGame.description ? (
-                    transformedGame.description.split('\\n\\n').map((paragraph, index) => (
+                    transformedGame.description.split('\n\n').map((paragraph, index) => (
                       <p key={index} className="mb-4">{paragraph}</p>
                     ))
                   ) : (

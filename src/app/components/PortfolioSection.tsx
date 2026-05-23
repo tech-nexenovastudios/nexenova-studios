@@ -1,7 +1,18 @@
+import { useState, useEffect } from 'react'
 import { Card, CardContent } from './ui/card'
 import { Badge } from './ui/badge'
 import { ExternalLink, Play } from 'lucide-react'
 import { ImageWithFallback } from './figma/ImageWithFallback'
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from './ui/pagination'
+
+const PAGE_SIZE = 6
 
 interface Game {
   id: string
@@ -33,6 +44,38 @@ export function PortfolioSection({ games = [], onGameSelect }: PortfolioSectionP
     url: game.steamUrl
   }))
 
+  const totalPages = Math.max(1, Math.ceil(projects.length / PAGE_SIZE))
+  const [currentPage, setCurrentPage] = useState(1)
+
+  // Reset to page 1 if the underlying list shrinks below the current page
+  useEffect(() => {
+    if (currentPage > totalPages) setCurrentPage(1)
+  }, [totalPages, currentPage])
+
+  const paginatedProjects = projects.slice(
+    (currentPage - 1) * PAGE_SIZE,
+    currentPage * PAGE_SIZE,
+  )
+
+  const goToPage = (page: number) => {
+    const target = Math.min(Math.max(1, page), totalPages)
+    setCurrentPage(target)
+    // Scroll the portfolio heading back into view so users see the new cards
+    requestAnimationFrame(() => {
+      document.querySelector('#portfolio')?.scrollIntoView({ behavior: 'smooth' })
+    })
+  }
+
+  const handleViewMore = () => {
+    if (currentPage < totalPages) {
+      goToPage(currentPage + 1)
+    } else {
+      document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
+
+  const isLastPage = currentPage >= totalPages
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'Published':
@@ -60,7 +103,7 @@ export function PortfolioSection({ games = [], onGameSelect }: PortfolioSectionP
               <p className="text-muted-foreground text-lg">No games found.</p>
             </div>
           ) : (
-            projects.map((project) => (
+            paginatedProjects.map((project) => (
               <Card 
               key={project.id} 
               className="group overflow-hidden border-0 bg-card/50 backdrop-blur-sm hover:shadow-xl transition-all duration-300 cursor-pointer"
@@ -126,15 +169,60 @@ export function PortfolioSection({ games = [], onGameSelect }: PortfolioSectionP
           )}
         </div>
 
+        {totalPages > 1 && (
+          <Pagination className="mt-12">
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  href="#portfolio"
+                  aria-disabled={currentPage === 1}
+                  className={currentPage === 1 ? 'pointer-events-none opacity-50' : ''}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    if (currentPage > 1) goToPage(currentPage - 1)
+                  }}
+                />
+              </PaginationItem>
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <PaginationItem key={page}>
+                  <PaginationLink
+                    href="#portfolio"
+                    isActive={page === currentPage}
+                    onClick={(e) => {
+                      e.preventDefault()
+                      goToPage(page)
+                    }}
+                  >
+                    {page}
+                  </PaginationLink>
+                </PaginationItem>
+              ))}
+              <PaginationItem>
+                <PaginationNext
+                  href="#portfolio"
+                  aria-disabled={isLastPage}
+                  className={isLastPage ? 'pointer-events-none opacity-50' : ''}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    if (!isLastPage) goToPage(currentPage + 1)
+                  }}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        )}
+
         <div className="text-center mt-12">
           <p className="text-muted-foreground mb-4">
-            Want to see more of our work or discuss a custom project?
+            {isLastPage
+              ? 'Want to see more of our work or discuss a custom project?'
+              : `Showing ${(currentPage - 1) * PAGE_SIZE + 1}–${(currentPage - 1) * PAGE_SIZE + paginatedProjects.length} of ${projects.length} projects.`}
           </p>
-          <button 
-            onClick={() => document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })}
+          <button
+            onClick={handleViewMore}
             className="inline-flex items-center px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
           >
-            View More Projects
+            {isLastPage ? 'Get in Touch' : 'View More Projects'}
           </button>
         </div>
       </div>

@@ -113,15 +113,23 @@ export function Navigation({ onNavigateHome, onNavigateAdmin }: NavigationProps)
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="flex-shrink-0 cursor-pointer flex items-baseline gap-1.5 select-none"
+              className="flex-shrink-0 cursor-pointer flex items-center gap-2 select-none"
               onClick={handleNavigateHome}
               aria-label="Nexenova Studios — Home"
             >
-              <span className="text-xl font-semibold tracking-tight text-foreground">
-                Nexenova
-              </span>
-              <span className="text-sm font-medium uppercase tracking-[0.18em] text-primary">
-                Studios
+              <img
+                src="/logo.svg"
+                alt=""
+                className="h-8 w-8"
+                aria-hidden="true"
+              />
+              <span className="flex items-baseline gap-1.5">
+                <span className="text-xl font-semibold tracking-tight text-foreground">
+                  Nexenova
+                </span>
+                <span className="text-sm font-medium uppercase tracking-[0.18em] text-primary">
+                  Studios
+                </span>
               </span>
             </motion.button>
           </motion.div>

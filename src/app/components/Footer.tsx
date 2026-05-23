@@ -67,13 +67,21 @@ export function Footer({
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Company Info */}
           <div className="space-y-4">
-            <div className="flex items-baseline gap-1.5">
-              <span className="text-2xl font-semibold tracking-tight text-foreground">
-                Nexenova
-              </span>
-              <span className="text-sm font-medium uppercase tracking-[0.18em] text-primary">
-                Studios
-              </span>
+            <div className="flex items-center gap-2">
+              <img
+                src="/logo.svg"
+                alt=""
+                className="h-9 w-9"
+                aria-hidden="true"
+              />
+              <div className="flex items-baseline gap-1.5">
+                <span className="text-2xl font-semibold tracking-tight text-foreground">
+                  Nexenova
+                </span>
+                <span className="text-sm font-medium uppercase tracking-[0.18em] text-primary">
+                  Studios
+                </span>
+              </div>
             </div>
             <p className="text-muted-foreground text-sm leading-relaxed">
               {defaultCompanyInfo.description} From concept to release, we bring your game vision to life.

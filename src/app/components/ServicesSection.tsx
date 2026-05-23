@@ -188,7 +188,7 @@ export function ServicesSection({ onGameSelect }: ServicesSectionProps) {
         {/* Pipeline — mobile tabs (below sm) */}
         <div className="sm:hidden">
           {/* Stage tab strip — horizontally scrollable */}
-          <div className="flex gap-2 overflow-x-auto pb-3 -mx-4 px-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div className="flex gap-7 overflow-x-auto border-b border-border/60 -mx-4 px-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {LANES.map((lane) => {
               const count = groupedByStage[lane.id].length
               const isActive = activeStage === lane.id
@@ -197,21 +197,20 @@ export function ServicesSection({ onGameSelect }: ServicesSectionProps) {
                   key={lane.id}
                   type="button"
                   onClick={() => setActiveStage(lane.id)}
-                  className={`flex-shrink-0 inline-flex items-center gap-2 px-4 py-2.5 rounded-full border text-sm font-medium transition-colors ${
-                    isActive
-                      ? 'border-primary bg-primary/10 text-primary'
-                      : 'border-border bg-background text-muted-foreground'
+                  className={`relative flex-shrink-0 inline-flex items-center gap-2 pt-1 pb-3 text-sm font-medium transition-colors ${
+                    isActive ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
                   }`}
                 >
                   <lane.icon className="h-4 w-4" />
                   {lane.label}
-                  <span
-                    className={`inline-flex items-center justify-center min-w-[1.25rem] h-5 px-1.5 rounded-full text-[11px] font-semibold ${
-                      isActive ? 'bg-primary/20 text-primary' : 'bg-muted text-foreground/70'
-                    }`}
-                  >
+                  <span className={`text-xs font-semibold ${isActive ? 'text-primary' : 'text-foreground/40'}`}>
                     {count}
                   </span>
+                  <span
+                    className={`absolute -bottom-px left-0 h-0.5 bg-primary transition-all duration-300 ${
+                      isActive ? 'w-full' : 'w-0'
+                    }`}
+                  />
                 </button>
               )
             })}

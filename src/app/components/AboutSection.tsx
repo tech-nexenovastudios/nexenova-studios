@@ -41,7 +41,7 @@ export function AboutSection({ description: _description }: AboutSectionProps) {
   ]
 
   const playbook = [
-    { icon: Sparkles, label: 'Prototype fast', body: 'Multiple concepts, parallel sprints. Get the loop in front of a thumb in week one.' },
+    { icon: Sparkles, label: 'Prototype fast', body: 'Multiple concepts, parallel sprints, AI in the loop. Get a playable build in front of a thumb in week one.' },
     { icon: Compass, label: 'Playtest early', body: 'Real players, real devices, before we add anything that isn’t the core loop.' },
     { icon: XCircle, label: 'Kill what doesn’t click', body: 'Strict gates. If a prototype doesn’t hook in 60 seconds, it doesn’t survive.' },
     { icon: Hammer, label: 'Polish the survivor', body: 'One winner per cycle gets the attention. Level design, juice, monetization — then launch.' },
@@ -76,7 +76,7 @@ export function AboutSection({ description: _description }: AboutSectionProps) {
             viewport={{ once: true }}
             className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed"
           >
-            We&rsquo;re an independent mobile games studio building in the open from India. We don&rsquo;t make games for hire. We make the games we wish someone else had made first &mdash; then we keep iterating until they&rsquo;re the kind of thing you reopen ten times a day.
+            We&rsquo;re an indie mobile games studio building in the open from India &mdash; using AI to prototype faster and kill bad ideas sooner. We don&rsquo;t make games for hire. We make the games we wish someone else had made first &mdash; then we keep iterating until they&rsquo;re the kind of thing you reopen ten times a day.
           </motion.p>
         </AnimatedSection>
 

@@ -7,6 +7,7 @@ import { Badge } from '../ui/badge'
 import { Button } from '../ui/button'
 import { getRoleBySlug, type CareerPosting } from '../../data/careers'
 import { ApplicationForm } from './ApplicationForm'
+import { applySeo, clip, jobPostingLd, SITE_NAME } from '../../utils/seo'
 
 interface CareerDetailPageProps {
   slug: string
@@ -20,6 +21,26 @@ export function CareerDetailPage({ slug, onNavigateHome, onNavigateToCareers }: 
   useEffect(() => {
     getRoleBySlug(slug).then(setRole)
   }, [slug])
+
+  useEffect(() => {
+    if (role === undefined) return
+    if (role === null) {
+      applySeo({
+        title: `Role Not Found — Careers | ${SITE_NAME}`,
+        description: 'This role could not be found.',
+        path: `/careers/${slug}`,
+        robots: 'noindex,follow',
+      })
+      return
+    }
+    const meta = [role.employment_type, role.location].filter(Boolean).join(' · ')
+    applySeo({
+      title: `${role.title} — Careers | ${SITE_NAME}`,
+      description: clip(role.short_summary || `${role.title}${meta ? ` (${meta})` : ''} at ${SITE_NAME}. ${role.description}`),
+      path: `/careers/${role.slug}`,
+      jsonLd: jobPostingLd(role),
+    })
+  }, [role, slug])
 
   if (role === undefined) {
     return <div className="min-h-screen bg-background pt-32 text-center text-muted-foreground">Loading…</div>

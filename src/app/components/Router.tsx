@@ -23,6 +23,11 @@ const CareerDetailPage = lazy(() => import('./careers/CareerDetailPage').then(m 
 const NotFoundPage = lazy(() => import('./NotFoundPage').then(m => ({ default: m.NotFoundPage })))
 import { fetchGames, fetchSiteContent, initializeDatabase, type Game, type SiteContent } from '../data/dataManager'
 import gamesSeed from '../data/games.seed.json'
+import { applySeo, clip, organizationLd, websiteLd, videoGameLd, SITE_NAME } from '../utils/seo'
+
+const HOME_TITLE = 'Nexenova Studios — AI-Powered Indie Mobile Game Studio'
+const HOME_DESCRIPTION =
+  'Nexenova Studios is an indie mobile game studio in India using AI and rapid prototyping to build and ship puzzle, casual, arcade, and action games worldwide.'
 
 const seedGames = gamesSeed as Game[]
 
@@ -108,6 +113,102 @@ export function Router() {
     window.addEventListener('popstate', applyRouteFromUrl)
     return () => window.removeEventListener('popstate', applyRouteFromUrl)
   }, [])
+
+  // Per-route SEO for routes Router can resolve synchronously. The devlog-post
+  // and career-detail pages set their own SEO once their content loads; here we
+  // apply an immediate placeholder so the tab/canonical aren't stale mid-load.
+  useEffect(() => {
+    switch (currentRoute) {
+      case 'game': {
+        const game = seedGames.find((g) => g.id === gameId)
+        if (game) {
+          applySeo({
+            title: `${game.title} — ${game.genre} Mobile Game | ${SITE_NAME}`,
+            description: clip(game.description),
+            path: `/game/${game.id}`,
+            image: game.image,
+            jsonLd: videoGameLd(game),
+          })
+        } else {
+          applySeo({
+            title: `Game Not Found | ${SITE_NAME}`,
+            description: HOME_DESCRIPTION,
+            path: `/game/${gameId}`,
+            robots: 'noindex,follow',
+          })
+        }
+        break
+      }
+      case 'devlog':
+        applySeo({
+          title: `Devlog — Behind Our Mobile Games | ${SITE_NAME}`,
+          description:
+            'Development updates, design deep-dives, and behind-the-scenes notes from the Nexenova Studios game team.',
+          path: '/devlog',
+        })
+        break
+      case 'devlog-post':
+        applySeo({
+          title: `Devlog | ${SITE_NAME}`,
+          description: 'A development update from the Nexenova Studios team.',
+          path: `/devlog/${postSlug}`,
+          type: 'article',
+        })
+        break
+      case 'careers':
+        applySeo({
+          title: `Careers — Build Mobile Games With Us | ${SITE_NAME}`,
+          description:
+            'Open roles at Nexenova Studios. Join an independent mobile game studio shipping puzzle, casual, and arcade titles worldwide.',
+          path: '/careers',
+        })
+        break
+      case 'career-detail':
+        applySeo({
+          title: `Careers | ${SITE_NAME}`,
+          description: 'An open role at Nexenova Studios.',
+          path: `/careers/${careerSlug}`,
+        })
+        break
+      case 'privacy':
+        applySeo({
+          title: `Privacy Policy | ${SITE_NAME}`,
+          description: 'How Nexenova Studios collects, uses, and protects your data.',
+          path: '/privacy',
+        })
+        break
+      case 'terms':
+        applySeo({
+          title: `Terms of Service | ${SITE_NAME}`,
+          description: 'The terms governing use of the Nexenova Studios website and games.',
+          path: '/terms',
+        })
+        break
+      case 'cookies':
+        applySeo({
+          title: `Cookie Policy | ${SITE_NAME}`,
+          description: 'How Nexenova Studios uses cookies and similar technologies.',
+          path: '/cookies',
+        })
+        break
+      case 'not-found':
+        applySeo({
+          title: `Page Not Found | ${SITE_NAME}`,
+          description: HOME_DESCRIPTION,
+          path: window.location.pathname,
+          robots: 'noindex,follow',
+        })
+        break
+      case 'home':
+      default:
+        applySeo({
+          title: HOME_TITLE,
+          description: HOME_DESCRIPTION,
+          path: '/',
+          jsonLd: [organizationLd(), websiteLd()],
+        })
+    }
+  }, [currentRoute, gameId, postSlug, careerSlug])
 
   const loadData = async () => {
     try {

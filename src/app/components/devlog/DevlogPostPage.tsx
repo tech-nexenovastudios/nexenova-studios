@@ -6,6 +6,7 @@ import { Badge } from '../ui/badge'
 import { Button } from '../ui/button'
 import { ImageWithFallback } from '../figma/ImageWithFallback'
 import { getPostBySlug, type DevlogPost } from '../../data/devlog'
+import { applySeo, clip, blogPostingLd, SITE_NAME } from '../../utils/seo'
 
 interface DevlogPostPageProps {
   slug: string
@@ -27,6 +28,27 @@ export function DevlogPostPage({ slug, onNavigateHome, onNavigateToDevlog }: Dev
   useEffect(() => {
     getPostBySlug(slug).then(setPost)
   }, [slug])
+
+  useEffect(() => {
+    if (post === undefined) return
+    if (post === null) {
+      applySeo({
+        title: `Post Not Found — Devlog | ${SITE_NAME}`,
+        description: 'This devlog post could not be found.',
+        path: `/devlog/${slug}`,
+        robots: 'noindex,follow',
+      })
+      return
+    }
+    applySeo({
+      title: `${post.title} — Devlog | ${SITE_NAME}`,
+      description: clip(post.excerpt || post.body),
+      path: `/devlog/${post.slug}`,
+      image: post.cover_image,
+      type: 'article',
+      jsonLd: blogPostingLd(post),
+    })
+  }, [post, slug])
 
   if (post === undefined) {
     return (

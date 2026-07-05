@@ -1,0 +1,5 @@
+# Nexenova Studios — allow all crawlers full access.
+User-agent: *
+Allow: /
+
+Sitemap: https://nexenovastudios.com/sitemap.xml

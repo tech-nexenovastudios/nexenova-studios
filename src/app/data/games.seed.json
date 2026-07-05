@@ -374,5 +374,125 @@
     "createdAt": "2026-05-23T00:00:00.000Z",
     "updatedAt": "2026-05-23T00:00:00.000Z",
     "tagline": "Tap. Send. Sync."
+  },
+  {
+    "id": "endless-merge-2048",
+    "title": "Endless Merge 2048",
+    "description": "Slide numbered blocks together, chain bigger merges, and see how long you can keep the board alive. An endless spin on 2048 built for one-more-run sessions.",
+    "fullDescription": "Endless Merge 2048 takes the merge puzzle everyone knows and strips out the game-over screen. Slide tiles, fuse matching numbers, and keep the chain going as the board fills and the numbers climb.\n\nThe hook is momentum. Good runs snowball — a single well-placed slide can trigger a cascade that clears half the grid and resets your breathing room. A careless one boxes you in. There is no finish line, only the next merge and the score you are chasing.\n\n## Core Mechanics\n\n**Slide & Merge** — Move the whole board in four directions. Equal values fuse into their sum. Simple to learn, brutal to master.\n\n**Endless Run** — No level cap. Play for score, chase your personal best, and climb toward the higher-value tiles.\n\n**Board Pressure** — Space is the real resource. Read the board two moves ahead and keep your escape routes open.",
+    "image": "https://picsum.photos/seed/endless-merge-2048-cover/1200/800",
+    "screenshots": [
+      "https://picsum.photos/seed/endless-merge-2048-shot-1/1600/900",
+      "https://picsum.photos/seed/endless-merge-2048-shot-2/1600/900",
+      "https://picsum.photos/seed/endless-merge-2048-shot-3/1600/900"
+    ],
+    "platform": [
+      "Android",
+      "iOS"
+    ],
+    "status": "Coming Soon",
+    "rating": 0,
+    "downloads": "",
+    "releaseDate": "",
+    "videoUrl": "",
+    "createdAt": "2026-07-05T00:00:00.000Z",
+    "updatedAt": "2026-07-05T00:00:00.000Z",
+    "tags": [
+      "Puzzle",
+      "Merge",
+      "Coming Soon"
+    ],
+    "genre": "Puzzle",
+    "tagline": "Merge, stack, and never stop."
+  },
+  {
+    "id": "last-turn",
+    "title": "Last Turn",
+    "description": "A tense turn-based puzzler about making the right play when you only have one left. Read the board, plan ahead, and outlast every setup.",
+    "fullDescription": "Last Turn is a puzzle of pressure. Each stage hands you a board and a limited set of moves, and the tension lives in that shrinking count — the closer you get to your last turn, the more every decision matters.\n\nThere is usually more than one way to clear a board, but rarely an obvious one. The game rewards players who slow down, read the whole setup, and commit to a plan instead of reacting move to move.\n\n## Core Mechanics\n\n**Limited Turns** — Every level caps your moves. Waste one and the board may become unsolvable.\n\n**Plan the Sequence** — Order matters as much as choice. The cleanest solution is a sequence, not a single clever play.\n\n**Escalating Boards** — New elements layer onto the core loop as you progress, keeping the read fresh.",
+    "image": "https://picsum.photos/seed/last-turn-cover/1200/800",
+    "screenshots": [
+      "https://picsum.photos/seed/last-turn-shot-1/1600/900",
+      "https://picsum.photos/seed/last-turn-shot-2/1600/900",
+      "https://picsum.photos/seed/last-turn-shot-3/1600/900"
+    ],
+    "platform": [
+      "Android",
+      "iOS"
+    ],
+    "status": "Coming Soon",
+    "rating": 0,
+    "downloads": "",
+    "releaseDate": "",
+    "videoUrl": "",
+    "createdAt": "2026-07-05T00:00:00.000Z",
+    "updatedAt": "2026-07-05T00:00:00.000Z",
+    "tags": [
+      "Puzzle",
+      "Strategy",
+      "Coming Soon"
+    ],
+    "genre": "Puzzle",
+    "tagline": "Every move is your last chance."
+  },
+  {
+    "id": "sweet-tumble",
+    "title": "Sweet Tumble",
+    "description": "A cozy sort-and-match puzzle. Group the tumbling sweets by color, clear the board, and unwind through hundreds of bite-sized levels.",
+    "fullDescription": "Sweet Tumble is the kind of puzzle you reach for to decompress. Sweets tumble into the play area and pile up by color — your job is to sort, group, and clear them before the board overflows.\n\nIt is gentle on the surface and quietly deep underneath. Early levels teach the sort-and-clear loop; later ones stack constraints that make you think about order and timing without ever losing the cozy feel.\n\n## Core Mechanics\n\n**Sort by Color** — Group matching sweets together to clear them off the board.\n\n**Keep It Flowing** — New pieces keep tumbling in. Stay ahead of the pile.\n\n**Bite-Sized Levels** — Hundreds of short, satisfying stages built for quick sessions.",
+    "image": "https://picsum.photos/seed/sweet-tumble-cover/1200/800",
+    "screenshots": [
+      "https://picsum.photos/seed/sweet-tumble-shot-1/1600/900",
+      "https://picsum.photos/seed/sweet-tumble-shot-2/1600/900",
+      "https://picsum.photos/seed/sweet-tumble-shot-3/1600/900"
+    ],
+    "platform": [
+      "Android",
+      "iOS"
+    ],
+    "status": "Coming Soon",
+    "rating": 0,
+    "downloads": "",
+    "releaseDate": "",
+    "videoUrl": "",
+    "createdAt": "2026-07-05T00:00:00.000Z",
+    "updatedAt": "2026-07-05T00:00:00.000Z",
+    "tags": [
+      "Puzzle",
+      "Casual",
+      "Coming Soon"
+    ],
+    "genre": "Casual",
+    "tagline": "Sort the chaos, one tumble at a time."
+  },
+  {
+    "id": "twisty-snake",
+    "title": "Twisty Snake",
+    "description": "The classic snake, reimagined with tight twisty controls and escalating chaos. Grow longer, dodge yourself, and chase the high score.",
+    "fullDescription": "Twisty Snake takes the arcade classic and tightens every screw. The controls are snappy, the turns are sharp, and the board fills up fast — the longer you survive, the more of your own tail you have to weave around.\n\nIt is pure pick-up-and-play arcade tension: one input, an instantly readable board, and a high score that always feels one run away.\n\n## Core Mechanics\n\n**Twisty Control** — Responsive, precise steering built for tight escapes.\n\n**Grow & Weave** — Every pickup makes you longer and the board more dangerous.\n\n**Score Chase** — Endless format tuned for one-more-run sessions and leaderboard bragging rights.",
+    "image": "https://picsum.photos/seed/twisty-snake-cover/1200/800",
+    "screenshots": [
+      "https://picsum.photos/seed/twisty-snake-shot-1/1600/900",
+      "https://picsum.photos/seed/twisty-snake-shot-2/1600/900",
+      "https://picsum.photos/seed/twisty-snake-shot-3/1600/900"
+    ],
+    "platform": [
+      "Android",
+      "iOS"
+    ],
+    "status": "Coming Soon",
+    "rating": 0,
+    "downloads": "",
+    "releaseDate": "",
+    "videoUrl": "",
+    "createdAt": "2026-07-05T00:00:00.000Z",
+    "updatedAt": "2026-07-05T00:00:00.000Z",
+    "tags": [
+      "Arcade",
+      "Casual",
+      "Coming Soon"
+    ],
+    "genre": "Arcade",
+    "tagline": "Twist, weave, survive."
   }
 ]

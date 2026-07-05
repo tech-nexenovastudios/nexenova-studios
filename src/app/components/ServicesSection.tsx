@@ -25,6 +25,10 @@ interface ServicesSectionProps {
 // Where each concept sits in the pipeline. Mirrors the Game Ideas PDF backlog.
 const STAGE_MAP: Record<string, Stage> = {
   'bird-hunter': 'coming-soon',
+  'endless-merge-2048': 'soft-launch',
+  'sweet-tumble': 'soft-launch',
+  'twisty-snake': 'soft-launch',
+  'last-turn': 'prototype',
   'smashy-qube': 'soft-launch',
   '2048-striker': 'prototype',
   'phase-shift-runner': 'prototype',

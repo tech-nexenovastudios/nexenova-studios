@@ -14,6 +14,20 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 const root = resolve(__dirname, '..')
 const SITE_URL = 'https://nexenovastudios.com'
 
+// Vite loads .env.local at build time, but this Node script does not — load it
+// here (without overriding real process.env) so devlog/career URLs are included
+// locally too, matching what the app is built against.
+for (const f of ['.env.local', '.env']) {
+  try {
+    for (const line of readFileSync(resolve(root, f), 'utf8').split('\n')) {
+      const m = line.match(/^\s*([A-Z0-9_]+)\s*=\s*(.*)\s*$/)
+      if (m && !process.env[m[1]]) process.env[m[1]] = m[2].replace(/^["']|["']$/g, '')
+    }
+  } catch {
+    /* file may not exist — fine */
+  }
+}
+
 const games = JSON.parse(
   readFileSync(resolve(root, 'src/app/data/games.seed.json'), 'utf8'),
 )

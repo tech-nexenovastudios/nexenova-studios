@@ -5,10 +5,10 @@ import { useEffect } from 'react'
 export const SITE_URL = 'https://nexenovastudios.com'
 export const SITE_NAME = 'Nexenova Studios'
 
-// Default share image. NOTE: this is an SVG — most social crawlers (Facebook,
-// LinkedIn, X) do NOT render SVG OG images. Replace with a 1200×630 PNG/JPG at
-// /og-image.png and point DEFAULT_IMAGE at it for correct social previews.
-const DEFAULT_IMAGE = `${SITE_URL}/logo.svg`
+// Default social share image: a 1200×630 PNG (raster — SVG isn't rendered by
+// Facebook/LinkedIn/X crawlers). Game and devlog pages override this with their
+// own artwork; other routes fall back to this branded card.
+const DEFAULT_IMAGE = `${SITE_URL}/og-image.png`
 
 export interface SeoConfig {
   /** Full <title> text (also used for og:title / twitter:title). */

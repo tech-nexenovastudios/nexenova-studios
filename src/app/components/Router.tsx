@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, lazy, Suspense } from 'react'
 import { HeroSection } from './HeroSection'
 import { AboutSection } from './AboutSection'
 import { ServicesSection } from './ServicesSection'
@@ -7,23 +7,34 @@ import { TeamSection } from './TeamSection'
 import { ContactSection } from './ContactSection'
 import { Footer } from './Footer'
 import { Navigation } from './Navigation'
-import { GamePage } from './games/GamePage'
-import { PrivacyPolicyPage } from './legal/PrivacyPolicyPage'
-import { TermsOfServicePage } from './legal/TermsOfServicePage'
-import { CookiePolicyPage } from './legal/CookiePolicyPage'
-import { DevlogIndexPage } from './devlog/DevlogIndexPage'
-import { DevlogPostPage } from './devlog/DevlogPostPage'
 import { DevlogSection } from './DevlogSection'
-import { CareersIndexPage } from './careers/CareersIndexPage'
-import { CareerDetailPage } from './careers/CareerDetailPage'
-import { NotFoundPage } from './NotFoundPage'
 import { AnimatedSection } from './AnimatedSection'
+
+// Secondary routes are code-split: their bundles load only when visited,
+// keeping the landing-page payload small. Home-page sections above stay eager.
+const GamePage = lazy(() => import('./games/GamePage').then(m => ({ default: m.GamePage })))
+const PrivacyPolicyPage = lazy(() => import('./legal/PrivacyPolicyPage').then(m => ({ default: m.PrivacyPolicyPage })))
+const TermsOfServicePage = lazy(() => import('./legal/TermsOfServicePage').then(m => ({ default: m.TermsOfServicePage })))
+const CookiePolicyPage = lazy(() => import('./legal/CookiePolicyPage').then(m => ({ default: m.CookiePolicyPage })))
+const DevlogIndexPage = lazy(() => import('./devlog/DevlogIndexPage').then(m => ({ default: m.DevlogIndexPage })))
+const DevlogPostPage = lazy(() => import('./devlog/DevlogPostPage').then(m => ({ default: m.DevlogPostPage })))
+const CareersIndexPage = lazy(() => import('./careers/CareersIndexPage').then(m => ({ default: m.CareersIndexPage })))
+const CareerDetailPage = lazy(() => import('./careers/CareerDetailPage').then(m => ({ default: m.CareerDetailPage })))
+const NotFoundPage = lazy(() => import('./NotFoundPage').then(m => ({ default: m.NotFoundPage })))
 import { fetchGames, fetchSiteContent, initializeDatabase, type Game, type SiteContent } from '../data/dataManager'
 import gamesSeed from '../data/games.seed.json'
 
 const seedGames = gamesSeed as Game[]
 
 type Route = 'home' | 'game' | 'privacy' | 'terms' | 'cookies' | 'devlog' | 'devlog-post' | 'careers' | 'career-detail' | 'not-found'
+
+function PageLoader() {
+  return (
+    <div className="min-h-[60vh] flex items-center justify-center">
+      <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full"></div>
+    </div>
+  )
+}
 
 const scrollToTop = (smooth: boolean = true) => {
   window.scrollTo({
@@ -188,7 +199,7 @@ export function Router() {
   const MainLayout = ({ children }: { children: React.ReactNode }) => (
     <>
       <Navigation onNavigateHome={navigateToHome} />
-      {children}
+      <Suspense fallback={<PageLoader />}>{children}</Suspense>
       <Footer
         companyInfo={siteContent?.companyInfo}
         onNavigateToPrivacy={navigateToPrivacy}

@@ -68,7 +68,10 @@ export function Router() {
 
   useEffect(() => {
     const applyRouteFromUrl = () => {
-      const path = window.location.pathname
+      // Normalize a trailing slash (except the root) so "/careers/" resolves the
+      // same as "/careers" instead of falling through to the 404 route.
+      const rawPath = window.location.pathname
+      const path = rawPath.length > 1 ? rawPath.replace(/\/+$/, '') : rawPath
       const hash = window.location.hash.slice(1)
 
       if (path.indexOf('/game/') === 0 || hash.indexOf('game/') === 0) {
@@ -77,6 +80,8 @@ export function Router() {
         if (id) {
           setGameId(id)
           setCurrentRoute('game')
+        } else {
+          setCurrentRoute('not-found')
         }
       } else if (path.indexOf('/devlog/') === 0 || hash.indexOf('devlog/') === 0) {
         const slug =
@@ -84,6 +89,8 @@ export function Router() {
         if (slug) {
           setPostSlug(slug)
           setCurrentRoute('devlog-post')
+        } else {
+          setCurrentRoute('not-found')
         }
       } else if (path === '/devlog' || hash === 'devlog') {
         setCurrentRoute('devlog')
@@ -93,6 +100,8 @@ export function Router() {
         if (slug) {
           setCareerSlug(slug)
           setCurrentRoute('career-detail')
+        } else {
+          setCurrentRoute('not-found')
         }
       } else if (path === '/careers' || hash === 'careers') {
         setCurrentRoute('careers')
@@ -102,8 +111,14 @@ export function Router() {
         setCurrentRoute('terms')
       } else if (path === '/cookies' || hash === 'cookies') {
         setCurrentRoute('cookies')
-      } else {
+      } else if (path === '/' || path === '') {
+        // Root path (plus any homepage anchor like /#about or /#home) is home.
         setCurrentRoute('home')
+      } else {
+        // Unknown URL — render the 404 page (noindex) instead of silently
+        // serving homepage content, which Google treats as a soft 404 /
+        // duplicate content.
+        setCurrentRoute('not-found')
       }
     }
 
@@ -392,6 +407,13 @@ export function Router() {
             onNavigateHome={navigateToHome}
             onNavigateToCareers={navigateToCareers}
           />
+        </MainLayout>
+      )
+
+    case 'not-found':
+      return (
+        <MainLayout>
+          <NotFoundPage onNavigateHome={navigateToHome} />
         </MainLayout>
       )
 

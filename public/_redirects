@@ -1,2 +1,4 @@
-# SPA fallback for Cloudflare Pages — Vite's custom router handles paths client-side.
+# SPA fallback for Cloudflare Pages — every navigation serves the app shell so
+# the client router can render it. HTTP status is refined by functions/_middleware.js,
+# which returns a real 404 for URLs that match no known route (avoiding soft 404s).
 /*    /index.html    200

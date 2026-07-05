@@ -80,5 +80,11 @@
     "supabase": "^2.101.0",
     "tailwindcss": "4.1.12",
     "vite": "6.3.5"
+  },
+  "allowScripts": {
+    "@tailwindcss/oxide@4.1.12": true,
+    "esbuild@0.25.12": true,
+    "fsevents@2.3.3": true,
+    "fsevents@2.3.2": true
   }
 }

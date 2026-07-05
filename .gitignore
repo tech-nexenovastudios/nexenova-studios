@@ -1,7 +1,10 @@
 node_modules
 dist
 .DS_Store
-.env
+# .env is committed: it holds only public VITE_ values (Supabase URL +
+# publishable key) that ship in the client bundle anyway, so every local
+# build has the right config. Keep local overrides / any secrets in
+# .env.local, which stays ignored.
 .env.local
 .env.*.local
 *.log

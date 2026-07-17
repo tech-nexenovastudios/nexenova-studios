@@ -16,6 +16,7 @@ const GamePage = lazy(() => import('./games/GamePage').then(m => ({ default: m.G
 const PrivacyPolicyPage = lazy(() => import('./legal/PrivacyPolicyPage').then(m => ({ default: m.PrivacyPolicyPage })))
 const TermsOfServicePage = lazy(() => import('./legal/TermsOfServicePage').then(m => ({ default: m.TermsOfServicePage })))
 const CookiePolicyPage = lazy(() => import('./legal/CookiePolicyPage').then(m => ({ default: m.CookiePolicyPage })))
+const DeleteAccountPage = lazy(() => import('./legal/DeleteAccountPage').then(m => ({ default: m.DeleteAccountPage })))
 const DevlogIndexPage = lazy(() => import('./devlog/DevlogIndexPage').then(m => ({ default: m.DevlogIndexPage })))
 const DevlogPostPage = lazy(() => import('./devlog/DevlogPostPage').then(m => ({ default: m.DevlogPostPage })))
 const CareersIndexPage = lazy(() => import('./careers/CareersIndexPage').then(m => ({ default: m.CareersIndexPage })))
@@ -31,7 +32,7 @@ const HOME_DESCRIPTION =
 
 const seedGames = gamesSeed as Game[]
 
-type Route = 'home' | 'game' | 'privacy' | 'terms' | 'cookies' | 'devlog' | 'devlog-post' | 'careers' | 'career-detail' | 'not-found'
+type Route = 'home' | 'game' | 'privacy' | 'terms' | 'cookies' | 'delete-account' | 'devlog' | 'devlog-post' | 'careers' | 'career-detail' | 'not-found'
 
 function PageLoader() {
   return (
@@ -111,6 +112,8 @@ export function Router() {
         setCurrentRoute('terms')
       } else if (path === '/cookies' || hash === 'cookies') {
         setCurrentRoute('cookies')
+      } else if (path === '/delete-account' || hash === 'delete-account') {
+        setCurrentRoute('delete-account')
       } else if (path === '/' || path === '') {
         // Root path (plus any homepage anchor like /#about or /#home) is home.
         setCurrentRoute('home')
@@ -206,6 +209,15 @@ export function Router() {
           path: '/cookies',
         })
         break
+      case 'delete-account':
+        applySeo({
+          title: `Delete Your Account | ${SITE_NAME}`,
+          description:
+            'Request permanent deletion of your Nexenova Studios game account and associated data. No app install required.',
+          path: '/delete-account',
+          robots: 'noindex,follow',
+        })
+        break
       case 'not-found':
         applySeo({
           title: `Page Not Found | ${SITE_NAME}`,
@@ -279,6 +291,11 @@ export function Router() {
     window.history.pushState({}, '', '/cookies')
   }
 
+  const navigateToDeleteAccount = () => {
+    setCurrentRoute('delete-account')
+    window.history.pushState({}, '', '/delete-account')
+  }
+
   const navigateToDevlog = () => {
     setCurrentRoute('devlog')
     window.history.pushState({}, '', '/devlog')
@@ -322,6 +339,7 @@ export function Router() {
         onNavigateToTerms={navigateToTerms}
         onNavigateToCookies={navigateToCookies}
         onNavigateToCareers={navigateToCareers}
+        onNavigateToDeleteAccount={navigateToDeleteAccount}
       />
     </>
   )
@@ -365,6 +383,13 @@ export function Router() {
       return (
         <MainLayout>
           <CookiePolicyPage onNavigateHome={navigateToHome} />
+        </MainLayout>
+      )
+
+    case 'delete-account':
+      return (
+        <MainLayout>
+          <DeleteAccountPage onNavigateHome={navigateToHome} />
         </MainLayout>
       )
 
@@ -489,6 +514,7 @@ export function Router() {
             onNavigateToTerms={navigateToTerms}
             onNavigateToCookies={navigateToCookies}
             onNavigateToCareers={navigateToCareers}
+            onNavigateToDeleteAccount={navigateToDeleteAccount}
           />
         </>
       )

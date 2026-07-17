@@ -1330,4 +1330,318 @@ app.post("/make-server-dff5028d/init", async (c) => {
   }
 });
 
+// ---------------------------------------------------------------------------
+// Google Play account/data deletion (public form + verify/cancel + cron)
+// ---------------------------------------------------------------------------
+// Flow:
+//   POST /account-deletion            -> row (pending_verification) + confirm email
+//   GET  /account-deletion/verify     -> verified, schedules deletion (+30d grace)
+//   GET  /account-deletion/cancel     -> cancelled
+//   POST /account-deletion/process    -> cron-only; deletes due rows via Unity
+//
+// The actual Unity deletion is stubbed (see deleteUnityAccount). Until Unity
+// credentials + logic are wired in, due rows are left 'verified' and retried on
+// the next cron run — nothing is silently marked complete.
+
+const DELETION_GRACE_DAYS = 30;
+const ADMIN_EMAIL = 'tech@nexenovastudios.com';
+const SITE_URL = (Deno.env.get('SITE_URL') || 'https://nexenovastudios.com').replace(/\/+$/, '');
+
+const esc = (s: unknown) => String(s ?? '')
+  .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+function newToken(): string {
+  return (crypto.randomUUID() + crypto.randomUUID()).replace(/-/g, '');
+}
+
+// Minimal branded HTML page returned to the browser for verify/cancel links.
+function resultPage(title: string, body: string, ok = true): string {
+  return `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>${esc(title)} — Nexenova Studios</title>
+<style>
+  :root{color-scheme:light dark}
+  body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
+       font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:#0b0b0f;color:#e5e7eb;padding:24px}
+  .card{max-width:440px;width:100%;background:#15151c;border:1px solid #26263050;border-radius:16px;padding:32px;text-align:center}
+  .badge{width:56px;height:56px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;
+         font-size:28px;margin-bottom:16px;background:${ok ? '#10b98122' : '#ef444422'};color:${ok ? '#10b981' : '#ef4444'}}
+  h1{font-size:20px;margin:0 0 8px}
+  p{font-size:14px;line-height:1.6;color:#9ca3af;margin:0 0 20px}
+  a{display:inline-block;padding:10px 20px;border-radius:10px;background:#6366f1;color:#fff;text-decoration:none;font-size:14px;font-weight:600}
+</style></head><body><div class="card">
+  <div class="badge">${ok ? '✓' : '✕'}</div>
+  <h1>${esc(title)}</h1>
+  <p>${body}</p>
+  <a href="${SITE_URL}/">Back to Nexenova Studios</a>
+</div></body></html>`;
+}
+
+// Thrown when Unity env vars are absent — the processor keeps the row 'verified'
+// (waiting on setup) rather than counting it as a failure.
+class UnityNotConfiguredError extends Error {}
+// A real API failure — the processor retries, and gives up (status 'failed')
+// after MAX_DELETE_ATTEMPTS.
+class UnityDeleteError extends Error {}
+
+// Exchange the service-account key/secret for a short-lived stateless Bearer token.
+// Endpoint per Unity docs: POST services.api.unity.com/auth/v1/token-exchange
+async function getUnityToken(
+  projectId: string, envId: string, keyId: string, secret: string,
+): Promise<string> {
+  const basic = btoa(`${keyId}:${secret}`);
+  const res = await fetch(
+    `https://services.api.unity.com/auth/v1/token-exchange?projectId=${projectId}&environmentId=${envId}`,
+    {
+      method: 'POST',
+      headers: { Authorization: `Basic ${basic}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({}),
+    },
+  );
+  if (!res.ok) throw new UnityDeleteError(`token-exchange ${res.status}: ${await res.text()}`);
+  const j = await res.json();
+  const token = j.accessToken || j.token;
+  if (!token) throw new UnityDeleteError('token-exchange returned no accessToken');
+  return token;
+}
+
+// Permanently delete the Unity player identity for req.player_id.
+// The delete URL is configurable via UNITY_DELETE_URL_TEMPLATE so the exact
+// Player-Auth-Admin path can be set without a code change; the default below is
+// the documented shape. A 404 is treated as "already deleted".
+async function deleteUnityAccount(req: any): Promise<void> {
+  const projectId = Deno.env.get('UNITY_PROJECT_ID');
+  const envId = Deno.env.get('UNITY_ENV_ID');
+  const keyId = Deno.env.get('UNITY_SERVICE_ACCOUNT_KEY');
+  const secret = Deno.env.get('UNITY_SERVICE_ACCOUNT_SECRET');
+  if (!projectId || !envId || !keyId || !secret) {
+    throw new UnityNotConfiguredError('Unity credentials not set');
+  }
+
+  const token = await getUnityToken(projectId, envId, keyId, secret);
+
+  const template = Deno.env.get('UNITY_DELETE_URL_TEMPLATE')
+    || 'https://services.api.unity.com/player-auth-admin/v1/projects/{projectId}/users/{playerId}';
+  const url = template
+    .replace('{projectId}', projectId)
+    .replace('{playerId}', encodeURIComponent(String(req.player_id)));
+
+  const res = await fetch(url, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } });
+  if (res.status === 404) return; // already gone — treat as success
+  if (!res.ok) throw new UnityDeleteError(`delete player ${res.status}: ${await res.text()}`);
+
+  // OPTIONAL: if the games persist data in Cloud Save / Economy / Leaderboards,
+  // purge those here (they are environment-scoped) before returning. See docs/.
+}
+
+// Public submit
+app.post("/make-server-dff5028d/account-deletion", async (c) => {
+  try {
+    const { player_id, email, game, reason } = await c.req.json();
+
+    if (!email || !isValidEmail(email)) {
+      return c.json({ success: false, error: 'A valid email is required.' }, 400);
+    }
+    if (!player_id || String(player_id).trim().length < 3) {
+      return c.json({
+        success: false,
+        error: 'Your in-game Player ID is required. Find it in the game under Settings → Account.',
+      }, 400);
+    }
+
+    const verify_token = newToken();
+    const cancel_token = newToken();
+
+    const { data, error } = await supabase
+      .from('account_deletion_requests')
+      .insert({
+        player_id: String(player_id).trim(),
+        email: String(email).trim().toLowerCase(),
+        game: game ? String(game).trim() : null,
+        reason: reason ? String(reason).trim() : null,
+        status: 'pending_verification',
+        verify_token,
+        cancel_token,
+        ip: c.req.header('x-forwarded-for') || c.req.header('x-real-ip') || '',
+        user_agent: c.req.header('user-agent') || '',
+      })
+      .select('id')
+      .single();
+
+    if (error) throw error;
+
+    const verifyUrl = `${SITE_URL}/delete-account?action=verify&token=${verify_token}`;
+    const html = `
+      <div style="font-family:-apple-system,Segoe UI,Roboto,sans-serif;color:#1f2937;font-size:14px;line-height:1.7">
+        <p>We received a request to delete the Nexenova Studios game account linked to this email.</p>
+        <p><strong>Player ID:</strong> ${esc(player_id)}${game ? `<br><strong>Game:</strong> ${esc(game)}` : ''}</p>
+        <p>To confirm and start the deletion, click the button below. If you did not request this, ignore this email — nothing will be deleted.</p>
+        <p style="margin:24px 0"><a href="${verifyUrl}" style="background:#6366f1;color:#fff;padding:12px 24px;border-radius:10px;text-decoration:none;font-weight:600">Confirm account deletion</a></p>
+        <p style="color:#6b7280;font-size:12px">After you confirm, your account enters a ${DELETION_GRACE_DAYS}-day grace period. You can cancel any time during that window using the link in the confirmation email. After that, the account and its data are permanently deleted.</p>
+        <p style="color:#9ca3af;font-size:12px;word-break:break-all">If the button doesn't work, paste this link:<br>${verifyUrl}</p>
+      </div>`;
+
+    const emailSent = await sendEmail(email, 'Confirm your account deletion request', html);
+
+    return c.json({
+      success: true,
+      message: emailSent
+        ? "Check your email — we've sent a confirmation link. Your account will not be deleted until you confirm."
+        : "Request recorded, but we couldn't send the confirmation email. Contact " + ADMIN_EMAIL + " to complete it.",
+      data: { id: data.id, emailSent },
+    });
+  } catch (error) {
+    console.log('Error creating deletion request:', error);
+    return c.json({ success: false, error: 'Could not submit your request. Please try again.' }, 500);
+  }
+});
+
+// Confirm (double opt-in) — schedules deletion after grace period
+app.get("/make-server-dff5028d/account-deletion/verify", async (c) => {
+  const token = c.req.query('token');
+  const wantsHtml = (c.req.header('accept') || '').includes('text/html');
+  const fail = (msg: string) =>
+    wantsHtml ? c.html(resultPage('Link invalid', msg, false), 400)
+              : c.json({ success: false, error: msg }, 400);
+  try {
+    if (!token) return fail('Missing token.');
+
+    const { data: row } = await supabase
+      .from('account_deletion_requests')
+      .select('id,status')
+      .eq('verify_token', token)
+      .maybeSingle();
+
+    if (!row) return fail('This confirmation link is invalid or has expired.');
+    if (row.status === 'cancelled')
+      return fail('This request was cancelled and can no longer be confirmed.');
+
+    // Idempotent: re-clicking after verifying is fine.
+    if (['verified', 'processing', 'completed'].includes(row.status)) {
+      const msg = `Your deletion is already confirmed. The account is scheduled for permanent deletion after a ${DELETION_GRACE_DAYS}-day grace period.`;
+      return wantsHtml ? c.html(resultPage('Already confirmed', msg)) : c.json({ success: true, message: msg });
+    }
+
+    const now = new Date();
+    const scheduled = new Date(now.getTime() + DELETION_GRACE_DAYS * 86400000);
+    const { error } = await supabase
+      .from('account_deletion_requests')
+      .update({
+        status: 'verified',
+        verified_at: now.toISOString(),
+        scheduled_deletion_at: scheduled.toISOString(),
+      })
+      .eq('id', row.id);
+    if (error) throw error;
+
+    const msg = `Your account deletion is confirmed. It will be permanently deleted on or after <strong>${scheduled.toISOString().slice(0, 10)}</strong>. You can still cancel before then using the link in your confirmation email.`;
+    return wantsHtml ? c.html(resultPage('Deletion confirmed', msg)) : c.json({ success: true, message: msg });
+  } catch (error) {
+    console.log('Error verifying deletion request:', error);
+    return fail('Something went wrong. Please try again or contact ' + ADMIN_EMAIL + '.');
+  }
+});
+
+// Cancel (during grace period)
+app.get("/make-server-dff5028d/account-deletion/cancel", async (c) => {
+  const token = c.req.query('token');
+  const wantsHtml = (c.req.header('accept') || '').includes('text/html');
+  const fail = (msg: string) =>
+    wantsHtml ? c.html(resultPage('Link invalid', msg, false), 400)
+              : c.json({ success: false, error: msg }, 400);
+  try {
+    if (!token) return fail('Missing token.');
+
+    const { data: row } = await supabase
+      .from('account_deletion_requests')
+      .select('id,status')
+      .eq('cancel_token', token)
+      .maybeSingle();
+
+    if (!row) return fail('This cancellation link is invalid.');
+    if (['completed', 'processing'].includes(row.status))
+      return fail('This account has already been deleted and cannot be restored.');
+    if (row.status === 'cancelled') {
+      const msg = 'This request was already cancelled. Your account is safe.';
+      return wantsHtml ? c.html(resultPage('Already cancelled', msg)) : c.json({ success: true, message: msg });
+    }
+
+    const { error } = await supabase
+      .from('account_deletion_requests')
+      .update({ status: 'cancelled' })
+      .eq('id', row.id);
+    if (error) throw error;
+
+    const msg = 'Your deletion request has been cancelled. Your account and data are safe.';
+    return wantsHtml ? c.html(resultPage('Deletion cancelled', msg)) : c.json({ success: true, message: msg });
+  } catch (error) {
+    console.log('Error cancelling deletion request:', error);
+    return fail('Something went wrong. Please try again or contact ' + ADMIN_EMAIL + '.');
+  }
+});
+
+// Cron-only: process due deletions. Protected by a shared secret header.
+app.post("/make-server-dff5028d/account-deletion/process", async (c) => {
+  const secret = Deno.env.get('CRON_SECRET');
+  if (!secret) return c.json({ success: false, error: 'CRON_SECRET not configured' }, 503);
+  if (c.req.header('x-cron-secret') !== secret)
+    return c.json({ success: false, error: 'Unauthorized' }, 401);
+
+  const summary = { due: 0, completed: 0, deferred: 0, failed: 0 as number };
+  try {
+    const { data: due, error } = await supabase
+      .from('account_deletion_requests')
+      .select('*')
+      .eq('status', 'verified')
+      .lte('scheduled_deletion_at', new Date().toISOString())
+      .limit(25);
+    if (error) throw error;
+
+    summary.due = due?.length || 0;
+
+    for (const req of due || []) {
+      await supabase.from('account_deletion_requests')
+        .update({ status: 'processing' }).eq('id', req.id);
+      try {
+        await deleteUnityAccount(req);
+        await supabase.from('account_deletion_requests')
+          .update({ status: 'completed', processed_at: new Date().toISOString(), last_error: null })
+          .eq('id', req.id);
+        summary.completed++;
+        // Notify the user their deletion is done.
+        await sendEmail(
+          req.email,
+          'Your account has been deleted',
+          `<div style="font-family:-apple-system,Segoe UI,Roboto,sans-serif;color:#1f2937;font-size:14px;line-height:1.7">
+            <p>Your Nexenova Studios game account (Player ID <strong>${esc(req.player_id)}</strong>) and its associated data have been permanently deleted.</p>
+            <p>If you did not expect this, contact ${ADMIN_EMAIL}.</p>
+          </div>`,
+        ).catch(() => {});
+      } catch (err) {
+        const isConfig = err instanceof UnityNotConfiguredError;
+        const nextAttempts = (req.attempts || 0) + 1;
+        // Config-not-set: park at 'verified' indefinitely (don't burn attempts).
+        // Real error: retry, but give up as 'failed' after MAX_DELETE_ATTEMPTS.
+        const MAX_DELETE_ATTEMPTS = 5;
+        const giveUp = !isConfig && nextAttempts >= MAX_DELETE_ATTEMPTS;
+        await supabase.from('account_deletion_requests')
+          .update({
+            status: giveUp ? 'failed' : 'verified',
+            attempts: isConfig ? (req.attempts || 0) : nextAttempts,
+            last_error: String(err instanceof Error ? err.message : err),
+          })
+          .eq('id', req.id);
+        giveUp ? summary.failed++ : summary.deferred++;
+        if (!isConfig) console.log('Unity deletion error for', req.id, err);
+      }
+    }
+
+    return c.json({ success: true, data: summary });
+  } catch (error) {
+    console.log('Error processing deletions:', error);
+    return c.json({ success: false, error: 'Processing failed', data: summary }, 500);
+  }
+});
+
 Deno.serve(app.fetch);

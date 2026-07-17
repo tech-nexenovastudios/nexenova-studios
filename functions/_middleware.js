@@ -10,7 +10,7 @@
 //
 // Keep the route list in sync with the client router (src/app/components/Router.tsx).
 
-const KNOWN_EXACT = new Set(['/', '/devlog', '/careers', '/privacy', '/terms', '/cookies', '/coda-return'])
+const KNOWN_EXACT = new Set(['/', '/devlog', '/careers', '/privacy', '/terms', '/cookies', '/coda-return', '/delete-account'])
 
 // A path is known if it's one of the exact routes above, or a detail URL under
 // one of these families with a non-empty slug (e.g. /game/bird-hunter). Whether

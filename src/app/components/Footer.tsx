@@ -14,6 +14,7 @@ interface FooterProps {
   onNavigateToTerms?: () => void
   onNavigateToCookies?: () => void
   onNavigateToCareers?: () => void
+  onNavigateToDeleteAccount?: () => void
 }
 
 export function Footer({
@@ -21,7 +22,8 @@ export function Footer({
   onNavigateToPrivacy,
   onNavigateToTerms,
   onNavigateToCookies,
-  onNavigateToCareers
+  onNavigateToCareers,
+  onNavigateToDeleteAccount
 }: FooterProps) {
   const currentYear = new Date().getFullYear()
 
@@ -219,12 +221,20 @@ export function Footer({
               >
                 Terms of Service
               </button>
-              <button 
+              <button
                 onClick={onNavigateToCookies}
                 className="hover:text-primary transition-colors"
               >
                 Cookie Policy
               </button>
+              {onNavigateToDeleteAccount && (
+                <button
+                  onClick={onNavigateToDeleteAccount}
+                  className="hover:text-primary transition-colors"
+                >
+                  Delete Account
+                </button>
+              )}
             </div>
           </div>
         </div>

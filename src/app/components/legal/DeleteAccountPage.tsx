@@ -52,16 +52,18 @@ function readMode(): { mode: Mode; token: string } {
 /**
  * Prefill values a game can pass when it opens this page from an in-game
  * "Delete Account" button, e.g.
- *   https://nexenovastudios.com/delete-account?pid=<PlayerId>&game=<gameId>&email=<optional>
+ *   https://nexenovastudios.com/delete-account?pid=<PlayerId>&project=<UnityProjectId>&email=<optional>
  * Player ID (`pid`) is the important one — the game knows it from
- * AuthenticationService.Instance.PlayerId.
+ * AuthenticationService.Instance.PlayerId; `project` from Application.cloudProjectId.
+ * `project` is forwarded to the backend, which honors it only if allow-listed.
  */
-function readPrefill(): { playerId: string; email: string; game: string } {
+function readPrefill(): { playerId: string; email: string; game: string; project: string } {
   const p = new URLSearchParams(window.location.search)
   return {
     playerId: (p.get('pid') || p.get('player_id') || '').trim(),
     email: (p.get('email') || '').trim(),
     game: (p.get('game') || '').trim(),
+    project: (p.get('project') || p.get('projectId') || '').trim(),
   }
 }
 
@@ -253,6 +255,9 @@ function DeletionForm() {
           email: form.email,
           game: form.game || 'not-listed',
           reason: form.reason,
+          // Unity project id passed by the in-game deep link; backend honors it
+          // only if allow-listed. Omitted for manual/browser submissions.
+          project: prefill.project || undefined,
         }),
       })
       const result = await res.json()

@@ -1346,6 +1346,73 @@ app.post("/make-server-dff5028d/init", async (c) => {
 const DELETION_GRACE_DAYS = 30;
 const ADMIN_EMAIL = 'tech@nexenovastudios.com';
 const SITE_URL = (Deno.env.get('SITE_URL') || 'https://nexenovastudios.com').replace(/\/+$/, '');
+// game id (from the in-game deep link ?game=<id>, stored on each request) -> Unity project id.
+// ONE org-scoped service account (UNITY_SERVICE_ACCOUNT_KEY/SECRET) authorizes deletes across
+// every project in the org, so only the project id varies per game. This map is also the
+// allow-list: a game not present here (and with no UNITY_PROJECT_ID default) never deletes —
+// the row waits instead, so a tampered ?game= can't aim the org credential at an arbitrary project.
+//
+// Extend without a redeploy via env UNITY_GAME_PROJECT_MAP, a JSON object string like
+//   {"2048-no-limit":"<projectId>","other-game":"<projectId>"}
+// which is merged over these built-in defaults.
+const GAME_PROJECT_IDS: Record<string, string> = {
+  // '2048-no-limit': '<unity-project-id>',
+};
+
+// The game slug -> project id map (built-ins merged with env UNITY_GAME_PROJECT_MAP).
+function gameProjectMap(): Record<string, string> {
+  let map: Record<string, string> = { ...GAME_PROJECT_IDS };
+  const raw = Deno.env.get('UNITY_GAME_PROJECT_MAP');
+  if (raw) {
+    try {
+      const parsed = JSON.parse(raw);
+      if (parsed && typeof parsed === 'object') map = { ...map, ...parsed };
+    } catch (_e) {
+      console.log('UNITY_GAME_PROJECT_MAP is not valid JSON — ignoring it');
+    }
+  }
+  return map;
+}
+
+function mapGameToProject(game: unknown): string | null {
+  const key = String(game ?? '').trim();
+  if (!key) return null;
+  return gameProjectMap()[key] || null;
+}
+
+// Allow-list of project ids the org-scoped credential may target. A client can
+// pass a project id in the deep link (?project=<uuid>), but it is honored ONLY
+// if it appears here — otherwise a tampered link could aim the credential at any
+// project in the org. The set is the union of:
+//   - every value in the game -> project map
+//   - UNITY_PROJECT_ID (single-project default)
+//   - explicit UNITY_ALLOWED_PROJECT_IDS (comma-separated)
+function allowedProjectIds(): Set<string> {
+  const set = new Set<string>();
+  for (const v of Object.values(gameProjectMap())) if (v) set.add(String(v));
+  const def = Deno.env.get('UNITY_PROJECT_ID');
+  if (def) set.add(def.trim());
+  const extra = Deno.env.get('UNITY_ALLOWED_PROJECT_IDS');
+  if (extra) for (const v of extra.split(',')) { const t = v.trim(); if (t) set.add(t); }
+  return set;
+}
+
+// Resolve the Unity project a deletion row targets. Priority:
+//   1. project id supplied in the deep link (stored on the row) — must be allow-listed
+//   2. game slug -> project map
+//   3. UNITY_PROJECT_ID single-project default
+function resolveProjectId(req: any): { projectId: string | null; reason?: string } {
+  const supplied = String(req?.unity_project_id ?? '').trim();
+  if (supplied) {
+    if (allowedProjectIds().has(supplied)) return { projectId: supplied };
+    return { projectId: null, reason: `supplied project id ${supplied} is not allow-listed` };
+  }
+  const mapped = mapGameToProject(req?.game);
+  if (mapped) return { projectId: mapped };
+  const def = Deno.env.get('UNITY_PROJECT_ID');
+  if (def) return { projectId: def.trim() };
+  return { projectId: null, reason: `no project id resolved for game ${JSON.stringify(req?.game ?? null)}` };
+}
 
 const esc = (s: unknown) => String(s ?? '')
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -1393,11 +1460,19 @@ class UnityDeleteError extends Error {}
 // overridable via UNITY_DELETE_URL_TEMPLATE; the default is the documented shape.
 // A 404 is treated as "already deleted".
 async function deleteUnityAccount(req: any): Promise<void> {
-  const projectId = Deno.env.get('UNITY_PROJECT_ID');
   const keyId = Deno.env.get('UNITY_SERVICE_ACCOUNT_KEY');
   const secret = Deno.env.get('UNITY_SERVICE_ACCOUNT_SECRET');
-  if (!projectId || !keyId || !secret) {
+  if (!keyId || !secret) {
     throw new UnityNotConfiguredError('Unity credentials not set');
+  }
+
+  // Resolve target project: deep-link project id (allow-listed) -> game map -> default.
+  const { projectId, reason } = resolveProjectId(req);
+  if (!projectId) {
+    // Unresolved / not allow-listed: don't burn a delete attempt. Park the row
+    // as 'verified' rather than failing it. Log so a real misconfig is visible.
+    console.log('account-deletion: project unresolved for', req.id, '-', reason);
+    throw new UnityNotConfiguredError(reason || 'No Unity project id resolved');
   }
 
   const basic = btoa(`${keyId}:${secret}`);
@@ -1421,7 +1496,7 @@ async function deleteUnityAccount(req: any): Promise<void> {
 // Public submit
 app.post("/make-server-dff5028d/account-deletion", async (c) => {
   try {
-    const { player_id, email, game, reason } = await c.req.json();
+    const { player_id, email, game, reason, project } = await c.req.json();
 
     if (!email || !isValidEmail(email)) {
       return c.json({ success: false, error: 'A valid email is required.' }, 400);
@@ -1442,6 +1517,7 @@ app.post("/make-server-dff5028d/account-deletion", async (c) => {
         player_id: String(player_id).trim(),
         email: String(email).trim().toLowerCase(),
         game: game ? String(game).trim() : null,
+        unity_project_id: project ? String(project).trim() : null,
         reason: reason ? String(reason).trim() : null,
         status: 'pending_verification',
         verify_token,

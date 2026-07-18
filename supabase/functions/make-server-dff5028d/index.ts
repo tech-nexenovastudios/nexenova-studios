@@ -1385,49 +1385,32 @@ class UnityNotConfiguredError extends Error {}
 // after MAX_DELETE_ATTEMPTS.
 class UnityDeleteError extends Error {}
 
-// Exchange the service-account key/secret for a short-lived stateless Bearer token.
-// Endpoint per Unity docs: POST services.api.unity.com/auth/v1/token-exchange
-async function getUnityToken(
-  projectId: string, envId: string, keyId: string, secret: string,
-): Promise<string> {
-  const basic = btoa(`${keyId}:${secret}`);
-  const res = await fetch(
-    `https://services.api.unity.com/auth/v1/token-exchange?projectId=${projectId}&environmentId=${envId}`,
-    {
-      method: 'POST',
-      headers: { Authorization: `Basic ${basic}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({}),
-    },
-  );
-  if (!res.ok) throw new UnityDeleteError(`token-exchange ${res.status}: ${await res.text()}`);
-  const j = await res.json();
-  const token = j.accessToken || j.token;
-  if (!token) throw new UnityDeleteError('token-exchange returned no accessToken');
-  return token;
-}
-
 // Permanently delete the Unity player identity for req.player_id.
-// The delete URL is configurable via UNITY_DELETE_URL_TEMPLATE so the exact
-// Player-Auth-Admin path can be set without a code change; the default below is
-// the documented shape. A 404 is treated as "already deleted".
+//
+// The Player-Auth-Admin DeleteUser endpoint is an ADMIN API: per Unity, admin
+// APIs authenticate with the service-account key/secret DIRECTLY via HTTP Basic
+// (no token-exchange — that's only for "trusted" APIs). The delete URL is
+// overridable via UNITY_DELETE_URL_TEMPLATE; the default is the documented shape.
+// A 404 is treated as "already deleted".
 async function deleteUnityAccount(req: any): Promise<void> {
   const projectId = Deno.env.get('UNITY_PROJECT_ID');
-  const envId = Deno.env.get('UNITY_ENV_ID');
   const keyId = Deno.env.get('UNITY_SERVICE_ACCOUNT_KEY');
   const secret = Deno.env.get('UNITY_SERVICE_ACCOUNT_SECRET');
-  if (!projectId || !envId || !keyId || !secret) {
+  if (!projectId || !keyId || !secret) {
     throw new UnityNotConfiguredError('Unity credentials not set');
   }
 
-  const token = await getUnityToken(projectId, envId, keyId, secret);
-
+  const basic = btoa(`${keyId}:${secret}`);
   const template = Deno.env.get('UNITY_DELETE_URL_TEMPLATE')
     || 'https://services.api.unity.com/player-auth-admin/v1/projects/{projectId}/users/{playerId}';
   const url = template
     .replace('{projectId}', projectId)
     .replace('{playerId}', encodeURIComponent(String(req.player_id)));
 
-  const res = await fetch(url, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } });
+  const res = await fetch(url, {
+    method: 'DELETE',
+    headers: { Authorization: `Basic ${basic}` },
+  });
   if (res.status === 404) return; // already gone — treat as success
   if (!res.ok) throw new UnityDeleteError(`delete player ${res.status}: ${await res.text()}`);
 

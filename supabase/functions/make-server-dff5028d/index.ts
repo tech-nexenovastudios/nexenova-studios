@@ -1493,15 +1493,224 @@ async function deleteUnityAccount(req: any): Promise<void> {
   // purge those here (they are environment-scoped) before returning. See docs/.
 }
 
+// ---------------------------------------------------------------------------
+// Token handoff: the in-game button proves ownership of the signed-in player by
+// sending its Unity access token, gets an opaque single-use session id, and opens
+// /delete-account?s=<id>. The raw player id / project id never travel in the URL,
+// and only the real account owner (holder of a valid Unity token) can start a
+// deletion — closing the "guess a player id + use my own email" abuse vector.
+// ---------------------------------------------------------------------------
+
+const SESSION_TTL_MIN = 15;
+const UNITY_JWKS_URL = 'https://player-auth.services.api.unity.com/.well-known/jwks.json';
+const UNITY_TOKEN_ISS = 'https://player-auth.services.api.unity.com';
+let _jwksCache: { keys: any[]; fetchedAt: number } | null = null;
+
+class TokenError extends Error {}
+
+function b64urlToBytes(s: string): Uint8Array {
+  let t = s.replace(/-/g, '+').replace(/_/g, '/');
+  const pad = t.length % 4;
+  if (pad) t += '='.repeat(4 - pad);
+  const bin = atob(t);
+  const out = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+  return out;
+}
+function b64urlToJson(s: string): any {
+  return JSON.parse(new TextDecoder().decode(b64urlToBytes(s)));
+}
+
+async function getJwks(force = false): Promise<any[]> {
+  const now = Date.now();
+  if (!force && _jwksCache && now - _jwksCache.fetchedAt < 3600_000) return _jwksCache.keys;
+  const res = await fetch(UNITY_JWKS_URL);
+  if (!res.ok) throw new TokenError(`JWKS fetch failed ${res.status}`);
+  const data = await res.json();
+  _jwksCache = { keys: data.keys || [], fetchedAt: now };
+  return _jwksCache.keys;
+}
+
+// Verify a Unity Player Authentication access token (RS256 signed by Unity's JWKS).
+// Returns the player id (the token subject). Throws TokenError on any failure.
+async function verifyUnityAccessToken(token: string): Promise<{ playerId: string }> {
+  const parts = String(token || '').split('.');
+  if (parts.length !== 3) throw new TokenError('malformed token');
+  const [h, p, s] = parts;
+  const header = b64urlToJson(h);
+  if (header.alg !== 'RS256') throw new TokenError(`unexpected alg ${header.alg}`);
+
+  let keys = await getJwks();
+  let jwk = keys.find((k) => k.kid === header.kid);
+  if (!jwk) { keys = await getJwks(true); jwk = keys.find((k) => k.kid === header.kid); } // key rotated
+  if (!jwk) throw new TokenError('signing key not found');
+
+  const key = await crypto.subtle.importKey(
+    'jwk', jwk, { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' }, false, ['verify']);
+  const ok = await crypto.subtle.verify(
+    'RSASSA-PKCS1-v1_5', key, b64urlToBytes(s), new TextEncoder().encode(`${h}.${p}`));
+  if (!ok) throw new TokenError('bad signature');
+
+  const payload = b64urlToJson(p);
+  const now = Math.floor(Date.now() / 1000);
+  if (typeof payload.exp === 'number' && payload.exp < now) throw new TokenError('token expired');
+  if (payload.iss && !String(payload.iss).startsWith(UNITY_TOKEN_ISS)) throw new TokenError('bad issuer');
+  const playerId = payload.sub;
+  if (!playerId) throw new TokenError('token has no subject');
+  return { playerId: String(playerId) };
+}
+
+// Game -> backend: mint a session from a verified player token.
+app.post("/make-server-dff5028d/account-deletion/session", async (c) => {
+  try {
+    const { access_token, project, game } = await c.req.json();
+    let playerId: string;
+    try {
+      ({ playerId } = await verifyUnityAccessToken(access_token));
+    } catch (_e) {
+      return c.json({ success: false, error: 'Invalid or expired player token.' }, 401);
+    }
+    const id = newToken();
+    const expires_at = new Date(Date.now() + SESSION_TTL_MIN * 60_000).toISOString();
+    const { error } = await supabase.from('deletion_sessions').insert({
+      id,
+      player_id: playerId,
+      unity_project_id: project ? String(project).trim() : null,
+      game: game ? String(game).trim() : null,
+      expires_at,
+    });
+    if (error) throw error;
+    return c.json({
+      success: true,
+      data: { session: id, url: `${SITE_URL}/delete-account?s=${id}`, expiresAt: expires_at },
+    });
+  } catch (error) {
+    console.log('session create error:', error);
+    return c.json({ success: false, error: 'Failed to create session' }, 500);
+  }
+});
+
+// Page -> backend: fetch consent-screen info without exposing the raw ids.
+app.get("/make-server-dff5028d/account-deletion/session/:id", async (c) => {
+  const id = c.req.param('id');
+  const { data, error } = await supabase.from('deletion_sessions')
+    .select('player_id, game, expires_at, used_at').eq('id', id).maybeSingle();
+  if (error) { console.log('session lookup error:', error); return c.json({ success: false, error: 'lookup failed' }, 500); }
+  if (!data) return c.json({ success: false, error: 'not_found' }, 404);
+  const expired = new Date(data.expires_at).getTime() < Date.now();
+  const used = !!data.used_at;
+  const pid = String(data.player_id);
+  const masked = pid.length <= 4 ? '••••' : `••••${pid.slice(-4)}`;
+  return c.json({
+    success: true,
+    data: { valid: !expired && !used, expired, used, playerMasked: masked, game: data.game || null },
+  });
+});
+
+// Immediate delete for the in-game flow. Ownership is already proven by the token
+// that minted the session, so no email double-opt-in / grace period — the account
+// is deleted on the spot and an optional receipt email is sent. Records an audit row.
+app.post("/make-server-dff5028d/account-deletion/session/:id/delete", async (c) => {
+  try {
+    const id = c.req.param('id');
+    let email = '';
+    try { const b = await c.req.json(); email = String(b?.email ?? '').trim(); } catch (_e) { /* body optional */ }
+    if (email && !isValidEmail(email)) email = ''; // ignore a malformed receipt address
+
+    const { data: sess } = await supabase.from('deletion_sessions').select('*').eq('id', id).maybeSingle();
+    if (!sess) return c.json({ success: false, error: 'Your session was not found. Reopen from the game.' }, 400);
+    if (sess.used_at) return c.json({ success: false, error: 'This account was already deleted.' }, 400);
+    if (new Date(sess.expires_at).getTime() < Date.now())
+      return c.json({ success: false, error: 'Your session expired. Reopen from the game.' }, 400);
+
+    const now = new Date().toISOString();
+    const { data: row, error: insErr } = await supabase.from('account_deletion_requests').insert({
+      player_id: String(sess.player_id),
+      email: email ? email.toLowerCase() : null,
+      game: sess.game || null,
+      unity_project_id: sess.unity_project_id || null,
+      status: 'processing',
+      verify_token: newToken(),
+      cancel_token: newToken(),
+      verified_at: now,
+      scheduled_deletion_at: now,
+      ip: c.req.header('x-forwarded-for') || c.req.header('x-real-ip') || '',
+      user_agent: c.req.header('user-agent') || '',
+    }).select('id').single();
+    if (insErr) throw insErr;
+
+    // req-like shape for the shared resolver/deleter.
+    const reqLike = { id: row.id, player_id: sess.player_id, game: sess.game, unity_project_id: sess.unity_project_id };
+    try {
+      await deleteUnityAccount(reqLike);
+    } catch (err) {
+      const isConfig = err instanceof UnityNotConfiguredError;
+      await supabase.from('account_deletion_requests')
+        .update({ status: 'failed', last_error: String(err instanceof Error ? err.message : err) })
+        .eq('id', row.id);
+      console.log('immediate delete error for', row.id, err);
+      // Session NOT burned: a transient failure can be retried until it expires.
+      return c.json({
+        success: false,
+        error: isConfig
+          ? 'We could not process this deletion right now. Please contact ' + ADMIN_EMAIL + '.'
+          : 'Deletion failed. Please try again in a moment.',
+      }, isConfig ? 503 : 502);
+    }
+
+    await supabase.from('account_deletion_requests')
+      .update({ status: 'completed', processed_at: new Date().toISOString(), last_error: null })
+      .eq('id', row.id);
+    await supabase.from('deletion_sessions').update({ used_at: new Date().toISOString() }).eq('id', id);
+
+    if (email) {
+      await sendEmail(
+        email,
+        'Your account has been deleted',
+        `<div style="font-family:-apple-system,Segoe UI,Roboto,sans-serif;color:#1f2937;font-size:14px;line-height:1.7">
+          <p>Your Nexenova Studios game account (Player ID <strong>${esc(sess.player_id)}</strong>) and its associated data have been permanently deleted.</p>
+          <p>If you did not expect this, contact ${ADMIN_EMAIL}.</p>
+        </div>`,
+      ).catch(() => {});
+    }
+
+    return c.json({ success: true, data: { deleted: true } });
+  } catch (error) {
+    console.log('session delete error:', error);
+    return c.json({ success: false, error: 'Deletion failed. Please try again.' }, 500);
+  }
+});
+
 // Public submit
 app.post("/make-server-dff5028d/account-deletion", async (c) => {
   try {
-    const { player_id, email, game, reason, project } = await c.req.json();
+    const { player_id, email, game, reason, project, session } = await c.req.json();
 
     if (!email || !isValidEmail(email)) {
       return c.json({ success: false, error: 'A valid email is required.' }, 400);
     }
-    if (!player_id || String(player_id).trim().length < 3) {
+
+    // Session mode (from the in-game button): the player id and project come from
+    // the verified, single-use session — never from the client. Otherwise (public
+    // URL / Play Console) fall back to a manually entered player id.
+    let effPlayerId = player_id;
+    let effProject = project;
+    let effGame = game;
+    let sessionRow: any = null;
+    if (session) {
+      const { data: sess } = await supabase.from('deletion_sessions')
+        .select('*').eq('id', String(session)).maybeSingle();
+      if (!sess) return c.json({ success: false, error: 'Your session was not found. Reopen from the game.' }, 400);
+      if (sess.used_at) return c.json({ success: false, error: 'This request was already submitted.' }, 400);
+      if (new Date(sess.expires_at).getTime() < Date.now())
+        return c.json({ success: false, error: 'Your session expired. Reopen from the game.' }, 400);
+      sessionRow = sess;
+      effPlayerId = sess.player_id;
+      effProject = sess.unity_project_id;
+      effGame = game || sess.game;
+    }
+
+    if (!effPlayerId || String(effPlayerId).trim().length < 3) {
       return c.json({
         success: false,
         error: 'Your in-game Player ID is required. Find it in the game under Settings → Account.',
@@ -1514,10 +1723,10 @@ app.post("/make-server-dff5028d/account-deletion", async (c) => {
     const { data, error } = await supabase
       .from('account_deletion_requests')
       .insert({
-        player_id: String(player_id).trim(),
+        player_id: String(effPlayerId).trim(),
         email: String(email).trim().toLowerCase(),
-        game: game ? String(game).trim() : null,
-        unity_project_id: project ? String(project).trim() : null,
+        game: effGame ? String(effGame).trim() : null,
+        unity_project_id: effProject ? String(effProject).trim() : null,
         reason: reason ? String(reason).trim() : null,
         status: 'pending_verification',
         verify_token,
@@ -1530,11 +1739,17 @@ app.post("/make-server-dff5028d/account-deletion", async (c) => {
 
     if (error) throw error;
 
+    // Burn the session so it can't be replayed.
+    if (sessionRow) {
+      await supabase.from('deletion_sessions')
+        .update({ used_at: new Date().toISOString() }).eq('id', sessionRow.id);
+    }
+
     const verifyUrl = `${SITE_URL}/delete-account?action=verify&token=${verify_token}`;
     const html = `
       <div style="font-family:-apple-system,Segoe UI,Roboto,sans-serif;color:#1f2937;font-size:14px;line-height:1.7">
         <p>We received a request to delete the Nexenova Studios game account linked to this email.</p>
-        <p><strong>Player ID:</strong> ${esc(player_id)}${game ? `<br><strong>Game:</strong> ${esc(game)}` : ''}</p>
+        <p><strong>Player ID:</strong> ${esc(effPlayerId)}${effGame ? `<br><strong>Game:</strong> ${esc(effGame)}` : ''}</p>
         <p>To confirm and start the deletion, click the button below. If you did not request this, ignore this email — nothing will be deleted.</p>
         <p style="margin:24px 0"><a href="${verifyUrl}" style="background:#6366f1;color:#fff;padding:12px 24px;border-radius:10px;text-decoration:none;font-weight:600">Confirm account deletion</a></p>
         <p style="color:#6b7280;font-size:12px">After you confirm, your account enters a ${DELETION_GRACE_DAYS}-day grace period. You can cancel any time during that window using the link in the confirmation email. After that, the account and its data are permanently deleted.</p>

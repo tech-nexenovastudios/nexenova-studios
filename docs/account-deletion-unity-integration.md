@@ -96,18 +96,74 @@ ugs can't enumerate the org, so gather them per project (or Unity dashboard).
 
 Known: **Park Escape = `9cc98e1a-d28c-4311-b4cc-dd9ab1e23446`**.
 
-## In-game "Delete Account" button (deep link)
+## Two entry paths
+
+### A) In-game button — token handoff (recommended, secure)
+The game proves ownership of the signed-in player with its Unity **access token**, so no
+ids ride in the URL and only the real owner can start a deletion. This path deletes
+**immediately** on consent (ownership already proven) and emails an optional receipt —
+no double-opt-in, no grace period.
+
+Flow:
 ```
-https://nexenovastudios.com/delete-account?pid=<PlayerId>&project=<ProjectId>
+Game (signed in) -> POST /account-deletion/session { access_token, project?, game? }
+   backend verifies the token (RS256 via Unity JWKS), returns opaque { session, url }
+Game opens: https://nexenovastudios.com/delete-account?s=<session>   (15-min, single-use)
+   page GET /account-deletion/session/:id  -> masked player + game (no raw ids)
+   player consents -> POST /account-deletion/session/:id/delete { email? }
+   -> Unity DELETE now -> 'completed' + optional receipt email
 ```
+
+Unity C#:
 ```csharp
-string url = "https://nexenovastudios.com/delete-account" +
-    $"?pid={UnityWebRequest.EscapeURL(AuthenticationService.Instance.PlayerId)}" +
-    $"&project={Application.cloudProjectId}";
-Application.OpenURL(url);
+using System.Net.Http;
+using System.Text;
+using UnityEngine;
+using Unity.Services.Authentication;
+using Unity.Services.Core;
+
+async void OpenDeleteAccount()
+{
+    // Requires: await UnityServices.InitializeAsync(); signed in.
+    string token   = AuthenticationService.Instance.AccessToken;   // proves ownership
+    string project = Application.cloudProjectId;
+    string game    = "2048-no-limit";                              // this game's slug
+
+    var body = new StringContent(
+        $"{{\"access_token\":\"{token}\",\"project\":\"{project}\",\"game\":\"{game}\"}}",
+        Encoding.UTF8, "application/json");
+
+    using var http = new HttpClient();
+    http.DefaultRequestHeaders.Add("Authorization", "Bearer <SUPABASE_ANON_KEY>");
+    var res  = await http.PostAsync(
+        "https://<ref>.supabase.co/functions/v1/make-server-dff5028d/account-deletion/session", body);
+    var json = await res.Content.ReadAsStringAsync();
+    // parse { data: { url } } with your JSON lib, then:
+    // Application.OpenURL(url);
+}
 ```
-The page prefills `pid`/`project`, the player enters email + consents, then the standard
-double-opt-in + 30-day grace flow runs. The project UUID stays out of the visible form.
+The session carries `project` (allow-listed) so the org credential deletes from the right
+project. Player id never appears in the URL, page, or browser history.
+
+### B) Public URL — manual entry (Play Console requirement)
+Google Play needs a URL any user can visit without the app. That path has **no token**, so
+ownership is unproven: it keeps the **email double-opt-in + 30-day grace** (a stranger who
+guesses a player id still can't complete deletion without the confirmation email, and the
+owner has a cancel window). URL: `https://nexenovastudios.com/delete-account`.
+
+Legacy `?pid=&project=` prefill still works for this manual path (weaker — prefer path A).
+
+## Token verification
+
+`verifyUnityAccessToken()` validates the access token itself: RS256 signature against
+Unity's JWKS (`https://player-auth.services.api.unity.com/.well-known/jwks.json`, cached
+1h, refetched on key rotation), `exp`, and issuer. Player id = token `sub`. No shared
+secret needed — Unity signs, we verify with the public key.
+
+## Housekeeping (optional)
+`deletion_sessions` rows expire (15 min) but aren't auto-purged. Optional cleanup:
+`delete from public.deletion_sessions where expires_at < now() - interval '1 day';`
+(harmless if skipped — indexed on `expires_at`, single-use, and validated at delete time.)
 
 ### 4. (Optional) purge other services' data
 `ugs player delete` / the admin DELETE removes the **Authentication identity**. If the

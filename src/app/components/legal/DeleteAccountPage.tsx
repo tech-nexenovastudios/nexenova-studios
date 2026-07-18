@@ -49,6 +49,22 @@ function readMode(): { mode: Mode; token: string } {
   return { mode: 'form', token: '' }
 }
 
+/**
+ * Prefill values a game can pass when it opens this page from an in-game
+ * "Delete Account" button, e.g.
+ *   https://nexenovastudios.com/delete-account?pid=<PlayerId>&game=<gameId>&email=<optional>
+ * Player ID (`pid`) is the important one — the game knows it from
+ * AuthenticationService.Instance.PlayerId.
+ */
+function readPrefill(): { playerId: string; email: string; game: string } {
+  const p = new URLSearchParams(window.location.search)
+  return {
+    playerId: (p.get('pid') || p.get('player_id') || '').trim(),
+    email: (p.get('email') || '').trim(),
+    game: (p.get('game') || '').trim(),
+  }
+}
+
 export function DeleteAccountPage({ onNavigateHome }: DeleteAccountPageProps) {
   const { mode, token } = useMemo(readMode, [])
 
@@ -189,7 +205,15 @@ function TokenAction({
 
 function DeletionForm() {
   const [games, setGames] = useState<Game[]>([])
-  const [form, setForm] = useState({ playerId: '', email: '', game: '', reason: '' })
+  // Prefill from URL params when the game deep-links into this page.
+  const prefill = useMemo(readPrefill, [])
+  const [form, setForm] = useState({
+    playerId: prefill.playerId,
+    email: prefill.email,
+    game: prefill.game,
+    reason: '',
+  })
+  const prefilledFromGame = prefill.playerId.length > 0
   const [acknowledged, setAcknowledged] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
@@ -318,8 +342,14 @@ function DeletionForm() {
                 required
               />
               <p className="text-xs text-muted-foreground mt-1.5">
-                Open the game → <strong>Settings → Account</strong> to find your Player ID.
-                This is how we locate the exact account to delete.
+                {prefilledFromGame ? (
+                  <>Detected from your game — confirm it&rsquo;s correct before submitting.</>
+                ) : (
+                  <>
+                    Open the game → <strong>Settings → Account</strong> to find your Player ID.
+                    This is how we locate the exact account to delete.
+                  </>
+                )}
               </p>
             </div>
 

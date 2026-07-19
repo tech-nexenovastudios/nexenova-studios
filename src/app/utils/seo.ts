@@ -128,7 +128,7 @@ export function organizationLd() {
     slogan: 'An AI-powered indie mobile game studio built for rapid prototyping.',
     description:
       'Nexenova Studios is an indie mobile game studio in India that uses AI and rapid prototyping to build and ship puzzle, casual, arcade, and action games worldwide.',
-    email: 'tech@nexenovastudios.com',
+    email: 'support@nexenovastudios.com',
     foundingLocation: { '@type': 'Place', name: 'India' },
     address: { '@type': 'PostalAddress', addressCountry: 'IN' },
     knowsAbout: [

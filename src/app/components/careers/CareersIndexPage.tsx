@@ -47,8 +47,8 @@ export function CareersIndexPage({ onNavigateHome, onNavigateToRole }: CareersIn
             <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">Build with us.</h1>
             <p className="text-lg text-muted-foreground max-w-2xl">
               Small team. No layers. Every craft we hire for ships the game from sketch to store. Open roles below — don&rsquo;t see your fit? Email{' '}
-              <a href="mailto:tech@nexenovastudios.com" className="font-medium text-primary hover:underline underline-offset-4">
-                tech@nexenovastudios.com
+              <a href="mailto:support@nexenovastudios.com" className="font-medium text-primary hover:underline underline-offset-4">
+                support@nexenovastudios.com
               </a>{' '}
               anyway.
             </p>
@@ -68,7 +68,7 @@ export function CareersIndexPage({ onNavigateHome, onNavigateToRole }: CareersIn
                 We&rsquo;re a small studio and we hire deliberately. If our work pulls you, drop us your portfolio.
               </p>
               <Button asChild>
-                <a href="mailto:tech@nexenovastudios.com">Get in touch</a>
+                <a href="mailto:support@nexenovastudios.com">Get in touch</a>
               </Button>
             </CardContent>
           </Card>

@@ -516,7 +516,7 @@ function DeletionForm() {
             {GRACE_DAYS}-day grace period during which you can still cancel.
           </p>
           <p className="text-xs text-muted-foreground mt-4">
-            Didn&rsquo;t get it? Check spam, or email tech@nexenovastudios.com.
+            Didn&rsquo;t get it? Check spam, or email support@nexenovastudios.com.
           </p>
         </CardContent>
       </Card>

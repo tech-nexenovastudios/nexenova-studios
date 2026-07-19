@@ -176,7 +176,7 @@ async function sendEmail(to: string, subject: string, htmlContent: string): Prom
         from_name: 'Nexenova Studios Contact Form',
         subject: subject,
         message_html: htmlContent,
-        reply_to: 'noreply@nexenovastudios.com'
+        reply_to: 'support@nexenovastudios.com'
       }
     };
     // EmailJS strict mode requires the private key as accessToken.
@@ -595,7 +595,7 @@ app.post("/make-server-dff5028d/contact", async (c) => {
     
     // Send the email to Nexenova's support inbox
     const emailSent = await sendEmail(
-      'tech@nexenovastudios.com',
+      'support@nexenovastudios.com',
       emailSubject,
       emailHTML
     );
@@ -702,7 +702,7 @@ app.post("/make-server-dff5028d/apply", async (c) => {
     `;
 
     const emailSent = await sendEmail(
-      'tech@nexenovastudios.com',
+      'support@nexenovastudios.com',
       `Application: ${role_title} — ${name}`,
       emailHTML,
     );
@@ -711,7 +711,7 @@ app.post("/make-server-dff5028d/apply", async (c) => {
       console.warn('Application email failed to send');
       return c.json({
         success: false,
-        error: 'Could not deliver your application. Please email tech@nexenovastudios.com directly.',
+        error: 'Could not deliver your application. Please email support@nexenovastudios.com directly.',
       }, 500);
     }
 
@@ -1128,7 +1128,7 @@ app.get("/make-server-dff5028d/content", async (c) => {
       companyInfo: {
         name: "Nexenova Studios",
         description: "Independent mobile game studio crafting puzzle and action titles for global audiences.",
-        email: "tech@nexenovastudios.com",
+        email: "support@nexenovastudios.com",
         phone: "",
         address: "India"
       }
@@ -1344,7 +1344,7 @@ app.post("/make-server-dff5028d/init", async (c) => {
 // the next cron run — nothing is silently marked complete.
 
 const DELETION_GRACE_DAYS = 30;
-const ADMIN_EMAIL = 'tech@nexenovastudios.com';
+const ADMIN_EMAIL = 'support@nexenovastudios.com';
 const SITE_URL = (Deno.env.get('SITE_URL') || 'https://nexenovastudios.com').replace(/\/+$/, '');
 // game id (from the in-game deep link ?game=<id>, stored on each request) -> Unity project id.
 // ONE org-scoped service account (UNITY_SERVICE_ACCOUNT_KEY/SECRET) authorizes deletes across

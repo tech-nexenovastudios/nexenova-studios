@@ -458,7 +458,7 @@ export function Router() {
         companyInfo: {
           name: "Nexenova Studios",
           description: "Independent mobile game studio crafting puzzle and action titles for global audiences.",
-          email: "tech@nexenovastudios.com",
+          email: "support@nexenovastudios.com",
           phone: "",
           address: "India"
         }

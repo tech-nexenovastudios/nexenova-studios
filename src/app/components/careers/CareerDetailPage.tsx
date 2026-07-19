@@ -56,7 +56,7 @@ export function CareerDetailPage({ slug, onNavigateHome, onNavigateToCareers }: 
     )
   }
 
-  const applyEmail = role.apply_email || 'tech@nexenovastudios.com'
+  const applyEmail = role.apply_email || 'support@nexenovastudios.com'
 
   return (
     <div className="min-h-screen bg-background pt-16">

@@ -26,7 +26,6 @@ import {
 } from '../ui/select'
 import { toast } from 'sonner@2.0.3'
 import { projectId, publicAnonKey } from '../../utils/supabase/info'
-import { fetchGames, type Game } from '../../data/dataManager'
 
 interface DeleteAccountPageProps {
   onNavigateHome: () => void
@@ -34,6 +33,22 @@ interface DeleteAccountPageProps {
 
 const API = `https://${projectId}.supabase.co/functions/v1/make-server-dff5028d`
 const GRACE_DAYS = 30
+
+/**
+ * Games with player accounts, shown in the deletion form's dropdown.
+ * The id (slug) must match a key in the server's UNITY_GAME_PROJECT_MAP —
+ * that's how the backend resolves which Unity project to delete from.
+ */
+const DELETABLE_GAMES = [
+  { id: '2048-no-limit', title: '2048 No Limit' },
+  { id: 'big-brain', title: 'Big Brain' },
+  { id: 'endless-merge', title: 'Endless Merge' },
+  { id: 'last-turn', title: 'Last Turn' },
+  { id: 'park-escape', title: 'Park Escape' },
+  { id: 'smashy-cube', title: 'Smashy Cube' },
+  { id: 'sweet-tumble', title: 'Sweet Tumble' },
+  { id: 'twisty-snake', title: 'Twisty Snake' },
+]
 
 type Mode = 'form' | 'verify' | 'cancel' | 'session'
 type TokenState = 'loading' | 'ok' | 'error'
@@ -436,7 +451,6 @@ function SessionDeleteFlow({ sessionId, onDone }: { sessionId: string; onDone: (
 /* ---------------------------------------------------------------------- */
 
 function DeletionForm() {
-  const [games, setGames] = useState<Game[]>([])
   // Prefill from URL params when the game deep-links into this page.
   const prefill = useMemo(readPrefill, [])
   const [form, setForm] = useState({
@@ -449,12 +463,6 @@ function DeletionForm() {
   const [acknowledged, setAcknowledged] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
-
-  useEffect(() => {
-    fetchGames()
-      .then((g) => setGames(g || []))
-      .catch(() => setGames([]))
-  }, [])
 
   const set = (k: keyof typeof form, v: string) => setForm((f) => ({ ...f, [k]: v }))
 
@@ -612,7 +620,7 @@ function DeletionForm() {
                     <SelectValue placeholder="Select a game" />
                   </SelectTrigger>
                   <SelectContent>
-                    {games.map((g) => (
+                    {DELETABLE_GAMES.map((g) => (
                       <SelectItem key={g.id} value={g.id}>
                         {g.title}
                       </SelectItem>

@@ -94,7 +94,18 @@ optional — that id is auto-allowed.
 Get a project id via CLI (run inside each Unity game project): `ugs config get project-id`.
 ugs can't enumerate the org, so gather them per project (or Unity dashboard).
 
-Known: **Park Escape = `9cc98e1a-d28c-4311-b4cc-dd9ab1e23446`**.
+### Current game map (run before deploying)
+The `/delete-account` dropdown (`DELETABLE_GAMES` in `DeleteAccountPage.tsx`) submits the
+slugs below; the server resolves them via `UNITY_GAME_PROJECT_MAP`. Admin: set it with —
+```
+npx supabase secrets set \
+  UNITY_GAME_PROJECT_MAP='{"2048-no-limit":"b3d8580f-6228-4314-b566-8d9e8cedc9e8","big-brain":"c2bc347a-736b-43c2-bba2-d16160f3710b","endless-merge":"68fb7488-0c5f-41ea-a834-4e392c43910a","last-turn":"28fa299c-f116-43db-bafa-bf26327dcc17","park-escape":"9cc98e1a-d28c-4311-b4cc-dd9ab1e23446","smashy-cube":"6d7ed490-7399-4e97-8a8b-5fd83c057b8b","sweet-tumble":"db02f3da-340c-4a5e-bf9a-83cad5345abf","twisty-snake":"0633df8f-cbd7-4ba9-a3c2-f7b6e495fd8b"}' \
+  --project-ref frncdqehmtfbteyrnymp
+```
+(or paste the same JSON into Supabase dashboard → Project Settings → Edge Functions →
+Secrets). Map values are auto-allow-listed, so `UNITY_ALLOWED_PROJECT_IDS` isn't needed
+for these. When adding a game: add it to `DELETABLE_GAMES` (same slug) and re-set this
+secret with the new entry.
 
 ## Two entry paths
 

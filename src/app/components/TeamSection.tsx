@@ -10,6 +10,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from './ui/carousel'
+import { AppLink } from './AppLink'
 
 interface TeamMember {
   id: number
@@ -208,22 +209,13 @@ export function TeamSection({ teamMembers = [], onNavigateToCareers }: TeamSecti
         <AnimatedSection delay={0.3} className="mt-12 text-center">
           <p className="text-sm text-muted-foreground">
             We&rsquo;re hiring craft we believe in.{' '}
-            {onNavigateToCareers ? (
-              <button
-                type="button"
-                onClick={onNavigateToCareers}
-                className="font-medium text-primary hover:underline underline-offset-4"
-              >
-                See open roles &rarr;
-              </button>
-            ) : (
-              <a
-                href="/careers"
-                className="font-medium text-primary hover:underline underline-offset-4"
-              >
-                See open roles &rarr;
-              </a>
-            )}
+            <AppLink
+              href="/careers"
+              onNavigate={onNavigateToCareers}
+              className="font-medium text-primary hover:underline underline-offset-4"
+            >
+              See open roles &rarr;
+            </AppLink>
           </p>
         </AnimatedSection>
       </div>

@@ -2,6 +2,7 @@ import { motion } from 'motion/react'
 import { Button } from './ui/button'
 import { Card, CardContent } from './ui/card'
 import { Home, Search, ArrowLeft, GamepadIcon } from 'lucide-react'
+import { AppLink } from './AppLink'
 
 interface NotFoundPageProps {
   onNavigateHome: () => void
@@ -116,37 +117,21 @@ export function NotFoundPage({ onNavigateHome }: NotFoundPageProps) {
                 </div>
                 <h3 className="text-xl font-semibold mb-4">What were you looking for?</h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <Button 
-                    variant="outline" 
-                    className="flex items-center space-x-2 h-auto py-3"
-                    onClick={onNavigateHome}
-                  >
-                    <GamepadIcon className="h-4 w-4" />
-                    <span>Our Games</span>
+                  <Button asChild variant="outline" className="flex items-center space-x-2 h-auto py-3">
+                    <a href="/#portfolio">
+                      <GamepadIcon className="h-4 w-4" />
+                      <span>Our Games</span>
+                    </a>
                   </Button>
-                  <Button 
-                    variant="outline" 
-                    className="flex items-center space-x-2 h-auto py-3"
-                    onClick={() => {
-                      onNavigateHome()
-                      setTimeout(() => {
-                        document.querySelector('#about')?.scrollIntoView({ behavior: 'smooth' })
-                      }, 100)
-                    }}
-                  >
-                    <span>About Us</span>
+                  <Button asChild variant="outline" className="flex items-center space-x-2 h-auto py-3">
+                    <a href="/#about">
+                      <span>About Us</span>
+                    </a>
                   </Button>
-                  <Button 
-                    variant="outline" 
-                    className="flex items-center space-x-2 h-auto py-3"
-                    onClick={() => {
-                      onNavigateHome()
-                      setTimeout(() => {
-                        document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })
-                      }, 100)
-                    }}
-                  >
-                    <span>Contact</span>
+                  <Button asChild variant="outline" className="flex items-center space-x-2 h-auto py-3">
+                    <a href="/#contact">
+                      <span>Contact</span>
+                    </a>
                   </Button>
                 </div>
               </CardContent>
@@ -159,11 +144,8 @@ export function NotFoundPage({ onNavigateHome }: NotFoundPageProps) {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <Button 
-                size="lg" 
-                onClick={onNavigateHome}
-                className="group text-lg px-8 py-4 h-auto"
-              >
+              <Button asChild size="lg" className="group text-lg px-8 py-4 h-auto">
+                <AppLink href="/" onNavigate={onNavigateHome}>
                 <Home className="h-5 w-5 mr-3" />
                 Back to Home
                 <motion.div
@@ -173,6 +155,7 @@ export function NotFoundPage({ onNavigateHome }: NotFoundPageProps) {
                 >
                   <ArrowLeft className="h-5 w-5 rotate-180" />
                 </motion.div>
+                </AppLink>
               </Button>
             </motion.div>
             

@@ -1,5 +1,30 @@
 # Nexenova Studios — allow all crawlers full access.
+#
+# NOTE: Cloudflare's AI Crawl Control can prepend a managed robots.txt to this
+# file at the edge, which disallows ClaudeBot, GPTBot, CCBot, Google-Extended,
+# Applebot-Extended, Bytespider, Amazonbot and meta-externalagent. That override
+# is configured in the Cloudflare dashboard (Security -> Bots -> AI crawlers),
+# not here — if the live file at /robots.txt disagrees with this one, the
+# dashboard setting is why. The groups below are the studio's intent: AI
+# assistants may read and cite the site.
+
 User-agent: *
+Allow: /
+
+# AI assistants / answer engines — explicitly welcome.
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
 Allow: /
 
 Sitemap: https://nexenovastudios.com/sitemap.xml

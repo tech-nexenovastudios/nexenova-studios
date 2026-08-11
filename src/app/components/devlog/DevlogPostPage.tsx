@@ -6,7 +6,8 @@ import { Badge } from '../ui/badge'
 import { Button } from '../ui/button'
 import { ImageWithFallback } from '../figma/ImageWithFallback'
 import { getPostBySlug, type DevlogPost } from '../../data/devlog'
-import { applySeo, clip, blogPostingLd, SITE_NAME } from '../../utils/seo'
+import { applySeo, devlogPostNotFoundSeo, devlogPostSeo } from '../../utils/seo'
+import { AppLink } from '../AppLink'
 
 interface DevlogPostPageProps {
   slug: string
@@ -32,22 +33,10 @@ export function DevlogPostPage({ slug, onNavigateHome, onNavigateToDevlog }: Dev
   useEffect(() => {
     if (post === undefined) return
     if (post === null) {
-      applySeo({
-        title: `Post Not Found — Devlog | ${SITE_NAME}`,
-        description: 'This devlog post could not be found.',
-        path: `/devlog/${slug}`,
-        robots: 'noindex,follow',
-      })
+      applySeo(devlogPostNotFoundSeo(slug))
       return
     }
-    applySeo({
-      title: `${post.title} — Devlog | ${SITE_NAME}`,
-      description: clip(post.excerpt || post.body),
-      path: `/devlog/${post.slug}`,
-      image: post.cover_image,
-      type: 'article',
-      jsonLd: blogPostingLd(post),
-    })
+    applySeo(devlogPostSeo(post))
   }, [post, slug])
 
   if (post === undefined) {
@@ -63,7 +52,9 @@ export function DevlogPostPage({ slug, onNavigateHome, onNavigateToDevlog }: Dev
       <div className="min-h-screen bg-background pt-32 flex flex-col items-center text-center px-4">
         <h1 className="text-2xl font-bold mb-3">Post not found</h1>
         <p className="text-muted-foreground mb-6">It may have been unpublished or never existed.</p>
-        <Button onClick={onNavigateToDevlog}>Back to Devlog</Button>
+        <Button asChild>
+          <AppLink href="/devlog" onNavigate={onNavigateToDevlog}>Back to Devlog</AppLink>
+        </Button>
       </div>
     )
   }
@@ -77,14 +68,11 @@ export function DevlogPostPage({ slug, onNavigateHome, onNavigateToDevlog }: Dev
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
           >
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={onNavigateToDevlog}
-              className="mb-6 -ml-2 text-muted-foreground hover:text-foreground"
-            >
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              All posts
+            <Button asChild variant="ghost" size="sm" className="mb-6 -ml-2 text-muted-foreground hover:text-foreground">
+              <AppLink href="/devlog" onNavigate={onNavigateToDevlog}>
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                All posts
+              </AppLink>
             </Button>
             <div className="flex flex-wrap gap-2 mb-4">
               {post.tags.map((tag) => (
@@ -118,12 +106,14 @@ export function DevlogPostPage({ slug, onNavigateHome, onNavigateToDevlog }: Dev
         </article>
 
         <div className="mt-16 pt-8 border-t border-border/60 flex items-center justify-between text-sm">
-          <Button variant="ghost" size="sm" onClick={onNavigateToDevlog}>
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            All posts
+          <Button asChild variant="ghost" size="sm">
+            <AppLink href="/devlog" onNavigate={onNavigateToDevlog}>
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              All posts
+            </AppLink>
           </Button>
-          <Button variant="ghost" size="sm" onClick={onNavigateHome}>
-            Home
+          <Button asChild variant="ghost" size="sm">
+            <AppLink href="/" onNavigate={onNavigateHome}>Home</AppLink>
           </Button>
         </div>
       </main>

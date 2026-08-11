@@ -5,6 +5,7 @@ import { Card, CardContent } from '../ui/card'
 import { Badge } from '../ui/badge'
 import { Button } from '../ui/button'
 import { listOpenRoles, type CareerPosting } from '../../data/careers'
+import { AppLink, handleNavClick } from '../AppLink'
 
 interface CareersIndexPageProps {
   onNavigateHome: () => void
@@ -27,14 +28,11 @@ export function CareersIndexPage({ onNavigateHome, onNavigateToRole }: CareersIn
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
           >
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={onNavigateHome}
-              className="mb-6 -ml-2 text-muted-foreground hover:text-foreground"
-            >
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Home
+            <Button asChild variant="ghost" size="sm" className="mb-6 -ml-2 text-muted-foreground hover:text-foreground">
+              <AppLink href="/" onNavigate={onNavigateHome}>
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Back to Home
+              </AppLink>
             </Button>
             <div className="flex items-center gap-3 mb-4">
               <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-primary/15 text-primary">
@@ -75,16 +73,16 @@ export function CareersIndexPage({ onNavigateHome, onNavigateToRole }: CareersIn
         ) : (
           <div className="space-y-4">
             {roles.map((role, i) => (
-              <motion.button
+              <motion.a
                 key={role.id}
-                type="button"
-                onClick={() => onNavigateToRole(role.slug)}
+                href={`/careers/${role.slug}`}
+                onClick={handleNavClick(() => onNavigateToRole(role.slug))}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: i * 0.06 }}
                 whileHover={{ y: -2 }}
-                className="w-full text-left group focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background rounded-2xl"
+                className="block w-full text-left group focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background rounded-2xl"
               >
                 <Card className="border-border/60 bg-card/60 backdrop-blur-sm hover:shadow-md hover:border-primary/40 transition-all">
                   <CardContent className="p-6 sm:p-7">
@@ -120,7 +118,7 @@ export function CareersIndexPage({ onNavigateHome, onNavigateToRole }: CareersIn
                     </div>
                   </CardContent>
                 </Card>
-              </motion.button>
+              </motion.a>
             ))}
           </div>
         )}

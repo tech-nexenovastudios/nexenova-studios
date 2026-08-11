@@ -82,6 +82,44 @@ nexenova-studios/
 └── package.json
 ```
 
+## SEO
+
+The site is a client-rendered SPA, so the raw HTML a crawler receives is
+assembled at the edge rather than by React:
+
+```
+shared/seo/schema.mjs    JSON-LD builders + brand constants (no DOM, no Node)
+shared/seo/routes.mjs    one function per route returning its title/description/
+                         canonical/JSON-LD — the single source of truth
+   ├── src/app/utils/seo.ts        applies them client-side on navigation
+   ├── scripts/generate-seo.mjs    build step: writes dist/sitemap.xml and
+   │                               generated/seo-routes.js
+   └── functions/_middleware.js    injects the same values into index.html with
+                                   HTMLRewriter, and 404s unknown URLs
+```
+
+Because both halves read the same builders, the pre-JS head matches the post-JS
+head. The middleware tags its JSON-LD with `data-seo-jsonld`, which is exactly
+what the client's `setJsonLd()` clears on hydration, so schema is never doubled.
+
+`generated/seo-routes.js` is written by `npm run build` and **is committed** —
+Cloudflare compiles `functions/` after the build command, and the import must
+resolve even if the generator is skipped.
+
+Internal navigation must stay in real `<a href>` elements (`AppLink` /
+`SectionLink` in `src/app/components/AppLink.tsx`). A `<button onClick>` is
+invisible to Googlebot and unreachable by keyboard.
+
+Brand assets (favicons, PWA icons, apple-touch icon, `og-image.jpg`) are all
+derived from `brand/logo-star-master.png`:
+
+```bash
+node scripts/generate-brand-assets.mjs
+```
+
+IndexNow submission reads the **live** sitemap, so it runs after a deploy:
+`npm run deploy` chains build → `wrangler pages deploy` → `npm run indexnow`.
+
 ## Deployment
 
 Cloudflare Pages is set up via `wrangler.toml`:
@@ -91,7 +129,16 @@ Cloudflare Pages is set up via `wrangler.toml`:
 
 Connect this repo in the Cloudflare Pages dashboard, or deploy manually with `npx wrangler pages deploy dist`.
 
-SPA fallback is handled by `public/_redirects` (`/* /index.html 200`).
+SPA fallback is handled by `public/_redirects` (`/* /index.html 200`); statuses
+and per-route meta are refined by `functions/_middleware.js`.
+
+Verify the edge layer locally against a production build:
+
+```bash
+npm run build
+npx wrangler pages dev dist
+curl -s localhost:8788/game/bird-hunter | grep -E 'canonical|og:title'
+```
 
 ## License
 

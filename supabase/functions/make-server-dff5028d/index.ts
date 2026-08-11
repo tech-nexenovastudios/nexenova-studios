@@ -1425,6 +1425,19 @@ function resolveProjectId(req: any): { projectId: string | null; reason?: string
   return { projectId: null, reason: `no project id resolved for game ${JSON.stringify(req?.game ?? null)}` };
 }
 
+// Public: the games the deletion form may name. Sourced from the same map the
+// deleter resolves against, so a picked option always resolves to a project —
+// the admin games list (KV) is a separate, unrelated catalogue. Slugs only;
+// project ids never leave the server.
+app.get("/make-server-dff5028d/account-deletion/games", (c) => {
+  const titleize = (s: string) =>
+    s.split(/[-_]+/).filter(Boolean)
+      .map((w) => (/^\d/.test(w) ? w : w.charAt(0).toUpperCase() + w.slice(1)))
+      .join(' ');
+  const data = Object.keys(gameProjectMap()).sort().map((id) => ({ id, title: titleize(id) }));
+  return c.json({ success: true, data });
+});
+
 const esc = (s: unknown) => String(s ?? '')
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 

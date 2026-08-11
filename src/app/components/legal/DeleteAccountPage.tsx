@@ -26,7 +26,7 @@ import {
 } from '../ui/select'
 import { toast } from 'sonner@2.0.3'
 import { projectId, publicAnonKey } from '../../utils/supabase/info'
-import { fetchGames, type Game } from '../../data/dataManager'
+import { AppLink } from '../AppLink'
 
 interface DeleteAccountPageProps {
   onNavigateHome: () => void
@@ -81,14 +81,11 @@ export function DeleteAccountPage({ onNavigateHome }: DeleteAccountPageProps) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
           >
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={onNavigateHome}
-              className="mb-6 -ml-2 text-muted-foreground hover:text-foreground"
-            >
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Home
+            <Button asChild variant="ghost" size="sm" className="mb-6 -ml-2 text-muted-foreground hover:text-foreground">
+              <AppLink href="/" onNavigate={onNavigateHome}>
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Back to Home
+              </AppLink>
             </Button>
             <div className="flex items-center gap-3 mb-4">
               <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-destructive/15 text-destructive">
@@ -435,8 +432,14 @@ function SessionDeleteFlow({ sessionId, onDone }: { sessionId: string; onDone: (
 /* Submission form                                                        */
 /* ---------------------------------------------------------------------- */
 
+type DeletableGame = { id: string; title: string }
+
 function DeletionForm() {
-  const [games, setGames] = useState<Game[]>([])
+  // Deletion-eligible games, from the backend's game -> Unity project map. Not
+  // the marketing catalogue: a game only belongs here once its account deletion
+  // can actually be carried out. Empty on failure — "Other / not listed" still
+  // submits, and support resolves it manually.
+  const [games, setGames] = useState<DeletableGame[]>([])
   // Prefill from URL params when the game deep-links into this page.
   const prefill = useMemo(readPrefill, [])
   const [form, setForm] = useState({
@@ -451,10 +454,33 @@ function DeletionForm() {
   const [submitted, setSubmitted] = useState(false)
 
   useEffect(() => {
-    fetchGames()
-      .then((g) => setGames(g || []))
-      .catch(() => setGames([]))
+    let cancelled = false
+    fetch(`${API}/account-deletion/games`, {
+      headers: { Authorization: `Bearer ${publicAnonKey}` },
+    })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((j) => {
+        if (!cancelled && j?.success && Array.isArray(j.data)) setGames(j.data)
+      })
+      .catch(() => {})
+    return () => {
+      cancelled = true
+    }
   }, [])
+
+  // A deep link may spell the slug differently than the option value
+  // ("parkescape" vs "park-escape"). Snap it to the real option so the field
+  // shows the game instead of an empty placeholder. Mirrors the server's
+  // normalizeGameSlug; the backend still resolves either spelling.
+  useEffect(() => {
+    if (!games.length) return
+    setForm((f) => {
+      if (!f.game || games.some((g) => g.id === f.game)) return f
+      const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, '')
+      const match = games.find((g) => norm(g.id) === norm(f.game))
+      return match ? { ...f, game: match.id } : f
+    })
+  }, [games])
 
   const set = (k: keyof typeof form, v: string) => setForm((f) => ({ ...f, [k]: v }))
 

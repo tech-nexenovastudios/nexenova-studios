@@ -35,6 +35,29 @@ interface DeleteAccountPageProps {
 const API = `https://${projectId}.supabase.co/functions/v1/make-server-dff5028d`
 const GRACE_DAYS = 30
 
+type DeletableGame = { id: string; title: string }
+
+/**
+ * Games with player accounts, shown in the deletion form's dropdown. Each id
+ * must match a key in the server's UNITY_GAME_PROJECT_MAP — that's how the
+ * backend resolves which Unity project to delete from.
+ *
+ * This is the offline fallback only: the form asks the server for the live list
+ * (which is derived from that map, so it can never drift) and replaces this one
+ * as soon as it arrives. Kept so a failed request leaves a usable dropdown
+ * rather than an empty one.
+ */
+const DELETABLE_GAMES: DeletableGame[] = [
+  { id: '2048-no-limit', title: '2048 No Limit' },
+  { id: 'big-brain', title: 'Big Brain' },
+  { id: 'endless-merge', title: 'Endless Merge' },
+  { id: 'last-turn', title: 'Last Turn' },
+  { id: 'park-escape', title: 'Park Escape' },
+  { id: 'smashy-cube', title: 'Smashy Cube' },
+  { id: 'sweet-tumble', title: 'Sweet Tumble' },
+  { id: 'twisty-snake', title: 'Twisty Snake' },
+]
+
 type Mode = 'form' | 'verify' | 'cancel' | 'session'
 type TokenState = 'loading' | 'ok' | 'error'
 
@@ -432,14 +455,12 @@ function SessionDeleteFlow({ sessionId, onDone }: { sessionId: string; onDone: (
 /* Submission form                                                        */
 /* ---------------------------------------------------------------------- */
 
-type DeletableGame = { id: string; title: string }
-
 function DeletionForm() {
   // Deletion-eligible games, from the backend's game -> Unity project map. Not
   // the marketing catalogue: a game only belongs here once its account deletion
-  // can actually be carried out. Empty on failure — "Other / not listed" still
-  // submits, and support resolves it manually.
-  const [games, setGames] = useState<DeletableGame[]>([])
+  // can actually be carried out. Starts from the bundled list so the dropdown is
+  // never empty, then the server's copy takes over.
+  const [games, setGames] = useState<DeletableGame[]>(DELETABLE_GAMES)
   // Prefill from URL params when the game deep-links into this page.
   const prefill = useMemo(readPrefill, [])
   const [form, setForm] = useState({
@@ -460,7 +481,10 @@ function DeletionForm() {
     })
       .then((r) => (r.ok ? r.json() : null))
       .then((j) => {
-        if (!cancelled && j?.success && Array.isArray(j.data)) setGames(j.data)
+        // An empty list means the map isn't configured — keep the bundled one.
+        if (!cancelled && j?.success && Array.isArray(j.data) && j.data.length) {
+          setGames(j.data)
+        }
       })
       .catch(() => {})
     return () => {

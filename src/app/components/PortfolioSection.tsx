@@ -3,6 +3,7 @@ import { Card, CardContent } from './ui/card'
 import { Badge } from './ui/badge'
 import { ExternalLink, Play } from 'lucide-react'
 import { ImageWithFallback } from './figma/ImageWithFallback'
+import { AppLink } from './AppLink'
 import {
   Pagination,
   PaginationContent,
@@ -98,7 +99,7 @@ export function PortfolioSection({ onGameSelect }: PortfolioSectionProps) {
     <section id="portfolio" className="py-20 bg-secondary/10">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Our Portfolio</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">Our Mobile Game Portfolio</h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Explore our diverse collection of games spanning multiple genres and platforms, 
             each crafted with attention to detail and passion for gaming.
@@ -112,16 +113,24 @@ export function PortfolioSection({ onGameSelect }: PortfolioSectionProps) {
             </div>
           ) : (
             paginatedProjects.map((project) => (
-              <Card 
-              key={project.id} 
-              className="group overflow-hidden border-0 bg-card/50 backdrop-blur-sm hover:shadow-xl transition-all duration-300 cursor-pointer"
-              onClick={() => {
-                if (project.gameId && onGameSelect) {
-                  onGameSelect(project.gameId)
-                } else if (project.url) {
-                  window.open(project.url, '_blank')
+              // The whole card is one anchor: crawlable, keyboard-focusable, and
+              // ⌘-clickable. It used to be a <div onClick>, which meant Googlebot
+              // never followed it and keyboard users could not reach a game page.
+              <AppLink
+                key={project.id}
+                href={project.gameId ? `/game/${project.gameId}` : project.url || '/#portfolio'}
+                onNavigate={
+                  project.gameId && onGameSelect
+                    ? () => onGameSelect(project.gameId)
+                    : undefined
                 }
-              }}
+                {...(!project.gameId && project.url
+                  ? { target: '_blank', rel: 'noopener noreferrer' }
+                  : {})}
+                className="block rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              >
+              <Card
+              className="group overflow-hidden border-0 bg-card/50 backdrop-blur-sm hover:shadow-xl transition-all duration-300 cursor-pointer h-full"
             >
               <div className="relative overflow-hidden">
                 <ImageWithFallback
@@ -173,6 +182,7 @@ export function PortfolioSection({ onGameSelect }: PortfolioSectionProps) {
                 </div>
               </CardContent>
               </Card>
+              </AppLink>
             ))
           )}
         </div>

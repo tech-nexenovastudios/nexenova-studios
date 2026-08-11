@@ -152,7 +152,7 @@ export function ApplicationForm({ roleSlug, roleTitle }: ApplicationFormProps) {
       toast.error(
         err instanceof Error
           ? err.message
-          : 'Something went wrong. Please email tech@nexenovastudios.com directly.',
+          : 'Something went wrong. Please email support@nexenovastudios.com directly.',
       )
     } finally {
       setIsSubmitting(false)
@@ -276,7 +276,7 @@ export function ApplicationForm({ roleSlug, roleTitle }: ApplicationFormProps) {
 
       <p className="text-xs text-muted-foreground text-center">
         Your resume is stored privately. Only the studio can read it. Trouble submitting?{' '}
-        <a href={`mailto:tech@nexenovastudios.com?subject=${encodeURIComponent(`${roleTitle} — application`)}`} className="text-primary hover:underline">
+        <a href={`mailto:support@nexenovastudios.com?subject=${encodeURIComponent(`${roleTitle} — application`)}`} className="text-primary hover:underline">
           Email us directly
         </a>
         .

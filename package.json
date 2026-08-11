@@ -4,7 +4,8 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "build": "vite build && node scripts/generate-sitemap.mjs",
+    "build": "vite build && node scripts/generate-seo.mjs",
+    "deploy": "npm run build && npx wrangler pages deploy dist && npm run indexnow",
     "dev": "vite",
     "preview": "vite preview",
     "indexnow": "node scripts/indexnow-ping.mjs"

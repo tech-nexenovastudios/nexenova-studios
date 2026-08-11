@@ -4,6 +4,7 @@ import { Button } from './ui/button'
 import { Badge } from './ui/badge'
 import { ArrowRight, Gamepad2, Play, Sparkles } from 'lucide-react'
 import gamesSeed from '../data/games.seed.json'
+import { handleNavClick, SectionLink } from './AppLink'
 
 interface SeedGame {
   id: string
@@ -30,10 +31,6 @@ export function HeroSection({ onGameSelect }: HeroSectionProps) {
     const t = setInterval(() => setIndex((i) => (i + 1) % games.length), REEL_INTERVAL_MS)
     return () => clearInterval(t)
   }, [paused, games.length])
-
-  const scrollTo = (selector: string) => {
-    document.querySelector(selector)?.scrollIntoView({ behavior: 'smooth' })
-  }
 
   const current = games[index]
 
@@ -95,23 +92,18 @@ export function HeroSection({ onGameSelect }: HeroSectionProps) {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-10">
-              <Button
-                size="lg"
-                onClick={() => scrollTo('#portfolio')}
-                className="group text-base px-8 h-12"
-              >
-                <Play className="h-4 w-4 mr-2" />
-                Play Our Games
-                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+              <Button asChild size="lg" className="group text-base px-8 h-12">
+                <SectionLink hash="portfolio">
+                  <Play className="h-4 w-4 mr-2" />
+                  Play Our Games
+                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </SectionLink>
               </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                onClick={() => scrollTo('#about')}
-                className="text-base px-8 h-12"
-              >
-                <Gamepad2 className="h-4 w-4 mr-2" />
-                Meet the Studio
+              <Button asChild size="lg" variant="outline" className="text-base px-8 h-12">
+                <SectionLink hash="about">
+                  <Gamepad2 className="h-4 w-4 mr-2" />
+                  Meet the Studio
+                </SectionLink>
               </Button>
             </div>
 
@@ -142,10 +134,10 @@ export function HeroSection({ onGameSelect }: HeroSectionProps) {
           >
             <div className="relative aspect-[4/5] max-w-sm mx-auto">
               <AnimatePresence mode="wait">
-                <motion.button
+                <motion.a
                   key={current.id}
-                  type="button"
-                  onClick={() => onGameSelect?.(current.id)}
+                  href={`/game/${current.id}`}
+                  onClick={handleNavClick(() => onGameSelect?.(current.id))}
                   initial={{ opacity: 0, scale: 0.95, y: 20 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.95, y: -20 }}
@@ -187,7 +179,7 @@ export function HeroSection({ onGameSelect }: HeroSectionProps) {
                       </div>
                     </div>
                   </div>
-                </motion.button>
+                </motion.a>
               </AnimatePresence>
             </div>
 

@@ -6,6 +6,7 @@ import { Badge } from '../ui/badge'
 import { Card, CardContent } from '../ui/card'
 import { ImageWithFallback } from '../figma/ImageWithFallback'
 import { useState } from 'react'
+import { AppLink } from '../AppLink'
 
 interface Game {
   id: string
@@ -47,7 +48,9 @@ export function GamePage({ game, onNavigateHome, onNavigateToGame, relatedGames 
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold mb-4">Game Not Found</h1>
-          <Button onClick={onNavigateHome}>Return Home</Button>
+          <Button asChild>
+            <AppLink href="/" onNavigate={onNavigateHome}>Return Home</AppLink>
+          </Button>
         </div>
       </div>
     )
@@ -218,6 +221,10 @@ export function GamePage({ game, onNavigateHome, onNavigateToGame, relatedGames 
                     src={transformedGame.images[currentImageIndex] || ''}
                     alt={`${transformedGame.title} screenshot ${currentImageIndex + 1}`}
                     className="w-full h-full object-cover"
+                    // The gallery is this page's LCP element — load it eagerly
+                    // and at high priority instead of lazily like the rest.
+                    loading="eager"
+                    fetchPriority="high"
                   />
                 </div>
 
@@ -269,11 +276,15 @@ export function GamePage({ game, onNavigateHome, onNavigateToGame, relatedGames 
             <h2 className="text-3xl font-bold text-center mb-12">More Games</h2>
             <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
               {relatedGames.map((relatedGame) => (
-                <Card 
-                  key={relatedGame.id} 
-                  className="group cursor-pointer hover:shadow-lg transition-all duration-300"
-                  onClick={() => onNavigateToGame && onNavigateToGame(relatedGame.id)}
+                <AppLink
+                  key={relatedGame.id}
+                  href={`/game/${relatedGame.id}`}
+                  onNavigate={
+                    onNavigateToGame ? () => onNavigateToGame(relatedGame.id) : undefined
+                  }
+                  className="block rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                 >
+                <Card className="group cursor-pointer hover:shadow-lg transition-all duration-300 h-full">
                   <div className="aspect-video bg-muted">
                     <ImageWithFallback
                       src={relatedGame.image}
@@ -295,6 +306,7 @@ export function GamePage({ game, onNavigateHome, onNavigateToGame, relatedGames 
                     </div>
                   </CardContent>
                 </Card>
+                </AppLink>
               ))}
             </div>
           </div>
@@ -326,12 +338,10 @@ export function GamePage({ game, onNavigateHome, onNavigateToGame, relatedGames 
                   <span>View on Store</span>
                 </Button>
               )}
-              <Button
-                size="lg"
-                variant="outline"
-                onClick={onNavigateHome}
-              >
-                See all games
+              <Button asChild size="lg" variant="outline">
+                <AppLink href="/#portfolio" onNavigate={onNavigateHome}>
+                  See all games
+                </AppLink>
               </Button>
             </div>
           </div>

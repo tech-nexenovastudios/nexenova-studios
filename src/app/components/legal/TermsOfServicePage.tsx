@@ -11,6 +11,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 import { Badge } from '../ui/badge'
 import { Button } from '../ui/button'
+import { AppLink } from '../AppLink'
 
 interface TermsOfServicePageProps {
   onNavigateHome: () => void
@@ -59,14 +60,11 @@ export function TermsOfServicePage({ onNavigateHome }: TermsOfServicePageProps) 
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
           >
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={onNavigateHome}
-              className="mb-6 -ml-2 text-muted-foreground hover:text-foreground"
-            >
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Home
+            <Button asChild variant="ghost" size="sm" className="mb-6 -ml-2 text-muted-foreground hover:text-foreground">
+              <AppLink href="/" onNavigate={onNavigateHome}>
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Back to Home
+              </AppLink>
             </Button>
             <div className="flex items-center gap-3 mb-4">
               <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-primary/15 text-primary">

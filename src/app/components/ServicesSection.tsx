@@ -5,6 +5,7 @@ import { Card } from './ui/card'
 import { Badge } from './ui/badge'
 import { AnimatedSection } from './AnimatedSection'
 import gamesSeed from '../data/games.seed.json'
+import { handleNavClick } from './AppLink'
 
 type Stage = 'ideation' | 'prototype' | 'soft-launch' | 'coming-soon'
 
@@ -97,13 +98,13 @@ export function ServicesSection({ onGameSelect }: ServicesSectionProps) {
   const [activeStage, setActiveStage] = useState<Stage>('ideation')
 
   const renderCard = (g: SeedGame) => (
-    <motion.button
+    <motion.a
       key={g.id}
-      type="button"
-      onClick={() => onGameSelect?.(g.id)}
+      href={`/game/${g.id}`}
+      onClick={handleNavClick(() => onGameSelect?.(g.id))}
       whileHover={{ y: -2 }}
       transition={{ duration: 0.2 }}
-      className="w-full text-left group focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background rounded-xl"
+      className="block w-full text-left group focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background rounded-xl"
     >
       <Card className="border-border/50 hover:border-primary/40 hover:shadow-sm transition-all bg-background/60 p-4">
         <div className="flex items-start justify-between gap-2 mb-2">
@@ -117,7 +118,7 @@ export function ServicesSection({ onGameSelect }: ServicesSectionProps) {
           {g.genre}
         </Badge>
       </Card>
-    </motion.button>
+    </motion.a>
   )
 
   const emptyState = (

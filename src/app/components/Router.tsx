@@ -22,13 +22,21 @@ const DevlogPostPage = lazy(() => import('./devlog/DevlogPostPage').then(m => ({
 const CareersIndexPage = lazy(() => import('./careers/CareersIndexPage').then(m => ({ default: m.CareersIndexPage })))
 const CareerDetailPage = lazy(() => import('./careers/CareerDetailPage').then(m => ({ default: m.CareerDetailPage })))
 const NotFoundPage = lazy(() => import('./NotFoundPage').then(m => ({ default: m.NotFoundPage })))
-import { fetchGames, fetchSiteContent, initializeDatabase, type Game, type SiteContent } from '../data/dataManager'
+import { fetchSiteContent, initializeDatabase, type Game, type SiteContent } from '../data/dataManager'
 import gamesSeed from '../data/games.seed.json'
-import { applySeo, clip, organizationLd, websiteLd, videoGameLd, SITE_NAME } from '../utils/seo'
-
-const HOME_TITLE = 'Nexenova Studios — AI-Powered Indie Mobile Game Studio'
-const HOME_DESCRIPTION =
-  'Nexenova Studios is an indie mobile game studio in India using AI and rapid prototyping to build and ship puzzle, casual, arcade, and action games worldwide.'
+import {
+  applySeo,
+  careersIndexSeo,
+  cookiesSeo,
+  deleteAccountSeo,
+  devlogIndexSeo,
+  gameNotFoundSeo,
+  gameSeo,
+  homeSeo,
+  notFoundSeo,
+  privacySeo,
+  termsSeo,
+} from '../utils/seo'
 
 const seedGames = gamesSeed as Game[]
 
@@ -55,9 +63,7 @@ export function Router() {
   const [gameId, setGameId] = useState<string>('')
   const [postSlug, setPostSlug] = useState<string>('')
   const [careerSlug, setCareerSlug] = useState<string>('')
-  const [games, setGames] = useState<Game[]>([])
   const [siteContent, setSiteContent] = useState<SiteContent | null>(null)
-  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
@@ -132,137 +138,63 @@ export function Router() {
     return () => window.removeEventListener('popstate', applyRouteFromUrl)
   }, [])
 
-  // Per-route SEO for routes Router can resolve synchronously. The devlog-post
-  // and career-detail pages set their own SEO once their content loads; here we
-  // apply an immediate placeholder so the tab/canonical aren't stale mid-load.
+  // Per-route SEO for the routes Router can resolve synchronously. devlog-post
+  // and career-detail are deliberately absent: their content is fetched by the
+  // child component, which owns their SEO end to end. (A placeholder here used
+  // to race the child — React runs child effects first on mount, so the
+  // parent's generic title could land last on first paint.)
   useEffect(() => {
     switch (currentRoute) {
       case 'game': {
         const game = seedGames.find((g) => g.id === gameId)
-        if (game) {
-          applySeo({
-            title: `${game.title} — ${game.genre} Mobile Game | ${SITE_NAME}`,
-            description: clip(game.description),
-            path: `/game/${game.id}`,
-            image: game.image,
-            jsonLd: videoGameLd(game),
-          })
-        } else {
-          applySeo({
-            title: `Game Not Found | ${SITE_NAME}`,
-            description: HOME_DESCRIPTION,
-            path: `/game/${gameId}`,
-            robots: 'noindex,follow',
-          })
-        }
+        applySeo(game ? gameSeo(game) : gameNotFoundSeo(gameId))
         break
       }
       case 'devlog':
-        applySeo({
-          title: `Devlog — Behind Our Mobile Games | ${SITE_NAME}`,
-          description:
-            'Development updates, design deep-dives, and behind-the-scenes notes from the Nexenova Studios game team.',
-          path: '/devlog',
-        })
-        break
-      case 'devlog-post':
-        applySeo({
-          title: `Devlog | ${SITE_NAME}`,
-          description: 'A development update from the Nexenova Studios team.',
-          path: `/devlog/${postSlug}`,
-          type: 'article',
-        })
+        applySeo(devlogIndexSeo())
         break
       case 'careers':
-        applySeo({
-          title: `Careers — Build Mobile Games With Us | ${SITE_NAME}`,
-          description:
-            'Open roles at Nexenova Studios. Join an independent mobile game studio shipping puzzle, casual, and arcade titles worldwide.',
-          path: '/careers',
-        })
-        break
-      case 'career-detail':
-        applySeo({
-          title: `Careers | ${SITE_NAME}`,
-          description: 'An open role at Nexenova Studios.',
-          path: `/careers/${careerSlug}`,
-        })
+        applySeo(careersIndexSeo())
         break
       case 'privacy':
-        applySeo({
-          title: `Privacy Policy | ${SITE_NAME}`,
-          description: 'How Nexenova Studios collects, uses, and protects your data.',
-          path: '/privacy',
-        })
+        applySeo(privacySeo())
         break
       case 'terms':
-        applySeo({
-          title: `Terms of Service | ${SITE_NAME}`,
-          description: 'The terms governing use of the Nexenova Studios website and games.',
-          path: '/terms',
-        })
+        applySeo(termsSeo())
         break
       case 'cookies':
-        applySeo({
-          title: `Cookie Policy | ${SITE_NAME}`,
-          description: 'How Nexenova Studios uses cookies and similar technologies.',
-          path: '/cookies',
-        })
+        applySeo(cookiesSeo())
         break
       case 'delete-account':
-        applySeo({
-          title: `Delete Your Account | ${SITE_NAME}`,
-          description:
-            'Request permanent deletion of your Nexenova Studios game account and associated data. No app install required.',
-          path: '/delete-account',
-          robots: 'noindex,follow',
-        })
+        applySeo(deleteAccountSeo())
         break
       case 'not-found':
-        applySeo({
-          title: `Page Not Found | ${SITE_NAME}`,
-          description: HOME_DESCRIPTION,
-          path: window.location.pathname,
-          robots: 'noindex,follow',
-        })
+        applySeo(notFoundSeo(window.location.pathname))
+        break
+      case 'devlog-post':
+      case 'career-detail':
         break
       case 'home':
       default:
-        applySeo({
-          title: HOME_TITLE,
-          description: HOME_DESCRIPTION,
-          path: '/',
-          jsonLd: [organizationLd(), websiteLd()],
-        })
+        applySeo(homeSeo())
     }
   }, [currentRoute, gameId, postSlug, careerSlug])
 
+  // Site content is an enhancement, not a prerequisite: every route renders
+  // immediately from the bundled seed data and swaps in the Supabase copy when
+  // it arrives. Blocking the first paint on this round-trip used to gate LCP —
+  // on every route, including static legal pages — behind a third-party call.
   const loadData = async () => {
-    try {
-      setLoading(true)
-      
-      initializeDatabase().catch(error => {
-        console.warn('Database initialization failed:', error)
-      })
-      
-      const [gamesData, contentData] = await Promise.all([
-        fetchGames().catch(error => {
-          console.error('Failed to fetch games:', error)
-          return []
-        }),
-        fetchSiteContent().catch(error => {
-          console.error('Failed to fetch site content:', error)
-          return null
-        })
-      ])
+    initializeDatabase().catch(error => {
+      console.warn('Database initialization failed:', error)
+    })
 
-      setGames(gamesData || [])
-      setSiteContent(contentData)
-    } catch (error) {
-      console.error('Error loading data:', error)
-    } finally {
-      setLoading(false)
-    }
+    const contentData = await fetchSiteContent().catch(error => {
+      console.error('Failed to fetch site content:', error)
+      return null
+    })
+
+    if (contentData) setSiteContent(contentData)
   }
 
   const navigateToHome = () => {
@@ -316,17 +248,6 @@ export function Router() {
     setCareerSlug(slug)
     setCurrentRoute('career-detail')
     window.history.pushState({}, '', `/careers/${slug}`)
-  }
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
-          <p>Loading...</p>
-        </div>
-      </div>
-    )
   }
 
   const MainLayout = ({ children }: { children: React.ReactNode }) => (
@@ -458,7 +379,7 @@ export function Router() {
         companyInfo: {
           name: "Nexenova Studios",
           description: "Independent mobile game studio crafting puzzle and action titles for global audiences.",
-          email: "tech@nexenovastudios.com",
+          email: "support@nexenovastudios.com",
           phone: "",
           address: "India"
         }

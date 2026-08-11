@@ -8,6 +8,7 @@ import { Mail, MapPin, Send, CheckCircle, MessageCircle, Newspaper, Handshake } 
 import { toast } from 'sonner@2.0.3'
 import { projectId, publicAnonKey } from '../utils/supabase/info'
 import { AnimatedSection } from './AnimatedSection'
+import { AppLink } from './AppLink'
 
 interface CompanyInfo {
   name: string
@@ -301,21 +302,21 @@ export function ContactSection({
 
                     <p className="text-xs text-muted-foreground text-center">
                       By sending, you agree to our{' '}
-                      <button
-                        type="button"
-                        onClick={onNavigateToTerms}
+                      <AppLink
+                        href="/terms"
+                        onNavigate={onNavigateToTerms}
                         className="text-primary hover:underline"
                       >
                         Terms
-                      </button>{' '}
+                      </AppLink>{' '}
                       and{' '}
-                      <button
-                        type="button"
-                        onClick={onNavigateToPrivacy}
+                      <AppLink
+                        href="/privacy"
+                        onNavigate={onNavigateToPrivacy}
                         className="text-primary hover:underline"
                       >
                         Privacy Policy
-                      </button>
+                      </AppLink>
                       .
                     </p>
                   </form>

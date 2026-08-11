@@ -1374,10 +1374,21 @@ function gameProjectMap(): Record<string, string> {
   return map;
 }
 
+// Slugs arrive from several builds with inconsistent separators ("park-escape",
+// "parkescape", "Park Escape") — compare on lowercase alphanumerics only.
+function normalizeGameSlug(s: unknown): string {
+  return String(s ?? '').toLowerCase().replace(/[^a-z0-9]/g, '');
+}
+
 function mapGameToProject(game: unknown): string | null {
-  const key = String(game ?? '').trim();
+  const key = normalizeGameSlug(game);
   if (!key) return null;
-  return gameProjectMap()[key] || null;
+  const map = gameProjectMap();
+  if (map[String(game ?? '').trim()]) return map[String(game ?? '').trim()];
+  for (const [k, v] of Object.entries(map)) {
+    if (normalizeGameSlug(k) === key) return v;
+  }
+  return null;
 }
 
 // Allow-list of project ids the org-scoped credential may target. A client can

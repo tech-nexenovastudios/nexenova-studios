@@ -359,10 +359,29 @@ const fallbackSiteContent: SiteContent = {
     description: "Independent mobile game studio crafting puzzle and action titles for global audiences.",
     email: "tech@nexenovastudios.com",
     phone: "",
-    address: "India"
+    address: "6th Floor, ALTF Coworking Space, Sector 142, Noida, India"
   },
   createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString()
+}
+
+/**
+ * The studio's registered address. The CMS record still carries the old
+ * placeholder ("India"), and the footer, contact block and structured data all
+ * read that field — so the real address is applied here, at the single point
+ * every consumer goes through.
+ *
+ * This defers to the CMS as soon as someone puts a real address in it: the
+ * override only fires when the stored value is empty or the known placeholder.
+ */
+export const STUDIO_ADDRESS = '6th Floor, ALTF Coworking Space, Sector 142, Noida, India'
+
+const PLACEHOLDER_ADDRESSES = ['', 'India']
+
+function withStudioAddress(content: SiteContent): SiteContent {
+  const stored = content.companyInfo?.address?.trim() ?? ''
+  if (!PLACEHOLDER_ADDRESSES.includes(stored)) return content
+  return { ...content, companyInfo: { ...content.companyInfo, address: STUDIO_ADDRESS } }
 }
 
 export async function fetchSiteContent(): Promise<SiteContent> {
@@ -375,19 +394,19 @@ export async function fetchSiteContent(): Promise<SiteContent> {
     
     if (!response.ok) {
       console.warn('Server unavailable, using fallback site content')
-      return fallbackSiteContent
+      return withStudioAddress(fallbackSiteContent)
     }
     
     const result = await response.json()
     if (!result.success) {
       console.warn('Server error, using fallback site content:', result.error)
-      return fallbackSiteContent
+      return withStudioAddress(fallbackSiteContent)
     }
     
-    return result.data
+    return withStudioAddress(result.data)
   } catch (error) {
     console.warn('Network error, using fallback site content:', error)
-    return fallbackSiteContent
+    return withStudioAddress(fallbackSiteContent)
   }
 }
 

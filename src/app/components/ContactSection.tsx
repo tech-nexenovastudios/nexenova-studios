@@ -40,7 +40,7 @@ export function ContactSection({
     description: 'Independent mobile game studio based in India.',
     email: 'support@nexenovastudios.com',
     phone: '',
-    address: 'India',
+    address: '6th Floor, ALTF Coworking Space, Sector 142, Noida, India',
   }
 
   const [formData, setFormData] = useState({
@@ -106,7 +106,7 @@ export function ContactSection({
   }
 
   return (
-    <section id="contact" className="py-20">
+    <section id="contact" className="section-contact py-24">
       <div className="container mx-auto px-4">
         <AnimatedSection className="text-center mb-14">
           <motion.span
@@ -114,7 +114,7 @@ export function ContactSection({
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
-            className="inline-block text-xs uppercase tracking-[0.22em] text-primary font-medium mb-4"
+            className="section-eyebrow mb-4 inline-block"
           >
             Get in Touch
           </motion.span>
@@ -123,7 +123,7 @@ export function ContactSection({
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="text-4xl md:text-5xl font-bold mb-5 tracking-tight"
+            className="text-4xl md:text-5xl font-extrabold mb-5 tracking-tight"
           >
             Say hello.
           </motion.h2>
@@ -141,17 +141,17 @@ export function ContactSection({
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 max-w-5xl mx-auto">
           {/* Left: contact info */}
           <div className="lg:col-span-2 space-y-4">
-            <Card className="border-border/60 bg-card/60 backdrop-blur-sm">
+            <Card className="border-border/60 bg-[var(--surface-1)] backdrop-blur-sm">
               <CardContent className="p-6">
                 <div className="flex items-start gap-4">
-                  <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary flex-shrink-0">
+                  <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-[color-mix(in_oklab,var(--section-accent)_12%,transparent)] text-[var(--section-accent)] flex-shrink-0">
                     <Mail className="h-5 w-5" />
                   </span>
                   <div>
                     <h3 className="font-semibold mb-1">Email</h3>
                     <a
                       href={`mailto:${defaults.email}`}
-                      className="text-sm text-primary hover:underline underline-offset-4 break-all"
+                      className="text-sm text-[var(--section-accent)] hover:underline underline-offset-4 break-all"
                     >
                       {defaults.email}
                     </a>
@@ -163,10 +163,10 @@ export function ContactSection({
               </CardContent>
             </Card>
 
-            <Card className="border-border/60 bg-card/60 backdrop-blur-sm">
+            <Card className="border-border/60 bg-[var(--surface-1)] backdrop-blur-sm">
               <CardContent className="p-6">
                 <div className="flex items-start gap-4">
-                  <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary flex-shrink-0">
+                  <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-[color-mix(in_oklab,var(--section-accent)_12%,transparent)] text-[var(--section-accent)] flex-shrink-0">
                     <MapPin className="h-5 w-5" />
                   </span>
                   <div>
@@ -180,7 +180,7 @@ export function ContactSection({
               </CardContent>
             </Card>
 
-            <Card className="border-primary/20 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent">
+            <Card className="border-[color-mix(in_oklab,var(--section-accent)_30%,transparent)] bg-gradient-to-br from-primary/10 via-primary/5 to-transparent">
               <CardContent className="p-6">
                 <h3 className="font-semibold mb-2">Press &amp; partnerships</h3>
                 <p className="text-sm text-muted-foreground mb-3">
@@ -192,7 +192,7 @@ export function ContactSection({
 
           {/* Right: form */}
           <div className="lg:col-span-3">
-            <Card className="border-border/60 bg-card/60 backdrop-blur-sm">
+            <Card className="border-border/60 bg-[var(--surface-1)] backdrop-blur-sm">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   {isSubmitted ? (
@@ -260,7 +260,7 @@ export function ContactSection({
                               disabled={isSubmitting}
                               className={`px-3 py-3 rounded-lg border text-xs font-medium transition-all flex flex-col items-center gap-1.5 ${
                                 isSelected
-                                  ? 'border-primary bg-primary/10 text-primary'
+                                  ? 'border-primary bg-[color-mix(in_oklab,var(--section-accent)_12%,transparent)] text-[var(--section-accent)]'
                                   : 'border-border bg-background hover:border-primary/40 hover:bg-primary/5 text-muted-foreground'
                               }`}
                             >
@@ -304,7 +304,7 @@ export function ContactSection({
                       <button
                         type="button"
                         onClick={onNavigateToTerms}
-                        className="text-primary hover:underline"
+                        className="text-[var(--section-accent)] hover:underline"
                       >
                         Terms
                       </button>{' '}
@@ -312,7 +312,7 @@ export function ContactSection({
                       <button
                         type="button"
                         onClick={onNavigateToPrivacy}
-                        className="text-primary hover:underline"
+                        className="text-[var(--section-accent)] hover:underline"
                       >
                         Privacy Policy
                       </button>

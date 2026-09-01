@@ -1,4 +1,7 @@
-import { Mail, Phone, MapPin, Github, Twitter, Linkedin, Youtube } from 'lucide-react'
+import { Mail, Phone, MapPin, Github, Linkedin, Youtube } from 'lucide-react'
+import { XIcon } from './icons/XIcon'
+import { BrandLogo } from './BrandLogo'
+import gamesSeed from '../data/games.seed.json'
 
 interface CompanyInfo {
   name: string
@@ -32,24 +35,24 @@ export function Footer({
     description: "Crafting memorable mobile gaming experiences for global audiences.",
     email: "support@nexenovastudios.com",
     phone: "",
-    address: "India"
+    address: "6th Floor, ALTF Coworking Space, Sector 142, Noida, India"
   }
 
   const explore = [
     { label: 'Home', href: '#home' },
     { label: 'The Studio', href: '#about' },
-    { label: 'The Pipeline', href: '#services' },
     { label: 'Games', href: '#portfolio' },
-    { label: 'Devlog', href: '#devlog' },
     { label: 'Say Hello', href: '#contact' }
   ]
 
+  // Derived from the catalogue, newest-shipped first — a hardcoded list here
+  // went stale the moment games were renamed or removed.
   const games = [
-    { label: 'Bird Hunter', href: '#portfolio' },
-    { label: 'Smashy Qube', href: '#portfolio' },
-    { label: '2048: Striker', href: '#portfolio' },
-    { label: 'Echo Loop', href: '#portfolio' },
-    { label: 'See all games →', href: '#portfolio' }
+    ...(gamesSeed as { id: string; title: string; status: string }[])
+      .filter(g => g.status === 'Released')
+      .slice(0, 4)
+      .map(g => ({ label: g.title, href: '#portfolio' })),
+    { label: 'See all games →', href: '#portfolio' },
   ]
 
   const scrollToSection = (href: string) => {
@@ -68,20 +71,7 @@ export function Footer({
           {/* Company Info */}
           <div className="space-y-4 col-span-2 md:col-span-1">
             <div className="flex items-center gap-2">
-              <img
-                src="/logo.svg"
-                alt=""
-                className="h-9 w-9 invert dark:invert-0"
-                aria-hidden="true"
-              />
-              <div className="flex items-baseline gap-1.5">
-                <span className="text-2xl font-semibold tracking-tight text-foreground">
-                  Nexenova
-                </span>
-                <span className="text-sm font-medium uppercase tracking-[0.18em] text-primary">
-                  Studios
-                </span>
-              </div>
+              <BrandLogo size="h-10" textSize="text-2xl" />
             </div>
             <p className="text-muted-foreground text-sm leading-relaxed">
               Independent mobile games made in India. We make them. You play them.
@@ -167,12 +157,12 @@ export function Footer({
               </p>
               <div className="flex space-x-3">
                 <a 
-                  href="https://twitter.com/nexenovastudios" 
+                  href="https://x.com/nexenovastudios" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="p-2 bg-muted rounded-lg hover:bg-primary hover:text-primary-foreground transition-colors"
                 >
-                  <Twitter className="h-4 w-4" />
+                  <XIcon className="h-4 w-4" />
                 </a>
                 <a 
                   href="https://linkedin.com/company/nexenovastudios" 

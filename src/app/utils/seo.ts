@@ -124,13 +124,19 @@ export function organizationLd() {
     name: SITE_NAME,
     alternateName: 'Nexenova',
     url: SITE_URL,
-    logo: `${SITE_URL}/logo.svg`,
+    logo: `${SITE_URL}/logo-lockup.png`,
     slogan: 'An AI-powered indie mobile game studio built for rapid prototyping.',
     description:
       'Nexenova Studios is an indie mobile game studio in India that uses AI and rapid prototyping to build and ship puzzle, casual, arcade, and action games worldwide.',
     email: 'tech@nexenovastudios.com',
     foundingLocation: { '@type': 'Place', name: 'India' },
-    address: { '@type': 'PostalAddress', addressCountry: 'IN' },
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: '6th Floor, ALTF Coworking Space, Sector 142',
+      addressLocality: 'Noida',
+      addressRegion: 'Uttar Pradesh',
+      addressCountry: 'IN',
+    },
     knowsAbout: [
       'Indie mobile game development',
       'AI-assisted game development',
@@ -210,7 +216,7 @@ export function blogPostingLd(post: PostLike) {
     publisher: {
       '@type': 'Organization',
       name: SITE_NAME,
-      logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo.svg` },
+      logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo-lockup.png` },
     },
   }
 }
@@ -242,7 +248,7 @@ export function jobPostingLd(role: RoleLike) {
       '@type': 'Organization',
       name: SITE_NAME,
       sameAs: SITE_URL,
-      logo: `${SITE_URL}/logo.svg`,
+      logo: `${SITE_URL}/logo-lockup.png`,
     },
     directApply: true,
   }

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { Button } from './ui/button'
+import { BrandLogo } from './BrandLogo'
 import { Moon, Sun, Menu, X } from 'lucide-react'
 
 interface NavigationProps {
@@ -15,10 +16,11 @@ export function Navigation({ onNavigateHome }: NavigationProps) {
   const [isScrolled, setIsScrolled] = useState(false)
 
   useEffect(() => {
+    // Studio Black is the default theme; only an explicit 'light' opts out.
+    // index.html already applied the class before first paint — this just
+    // syncs the toggle's own state.
     const theme = localStorage.getItem('theme')
-    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches
-    
-    if (theme === 'dark' || (!theme && systemTheme)) {
+    if (theme !== 'light') {
       setIsDark(true)
       document.documentElement.classList.add('dark')
     }
@@ -49,10 +51,8 @@ export function Navigation({ onNavigateHome }: NavigationProps) {
   const navItems = [
     { label: 'Home', href: '#home' },
     { label: 'Studio', href: '#about' },
-    { label: 'Pipeline', href: '#services' },
     { label: 'Games', href: '#portfolio' },
     { label: 'Team', href: '#team' },
-    { label: 'Devlog', href: '#devlog' },
     { label: 'Contact', href: '#contact' }
   ]
 
@@ -111,20 +111,9 @@ export function Navigation({ onNavigateHome }: NavigationProps) {
               onClick={handleNavigateHome}
               aria-label="Nexenova Studios — Home"
             >
-              <img
-                src="/logo.svg"
-                alt=""
-                className="h-8 w-8 invert dark:invert-0"
-                aria-hidden="true"
-              />
-              <span className="flex items-baseline gap-1.5">
-                <span className="text-xl font-semibold tracking-tight text-foreground">
-                  Nexenova
-                </span>
-                <span className="text-sm font-medium uppercase tracking-[0.18em] text-primary">
-                  Studios
-                </span>
-              </span>
+              {/* Full-colour artwork — the mark carries the brand purple/cyan
+                  itself, so it is never filtered or inverted. */}
+              <BrandLogo size="h-9" textSize="text-xl" />
             </motion.button>
           </motion.div>
 

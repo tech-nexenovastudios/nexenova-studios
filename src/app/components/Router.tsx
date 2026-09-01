@@ -1,13 +1,13 @@
 import { useState, useEffect, lazy, Suspense } from 'react'
 import { HeroSection } from './HeroSection'
 import { AboutSection } from './AboutSection'
-import { ServicesSection } from './ServicesSection'
 import { PortfolioSection } from './PortfolioSection'
 import { TeamSection } from './TeamSection'
 import { ContactSection } from './ContactSection'
 import { Footer } from './Footer'
 import { Navigation } from './Navigation'
 import { DevlogSection } from './DevlogSection'
+import { FEATURES } from '../config/features'
 import { AnimatedSection } from './AnimatedSection'
 
 // Secondary routes are code-split: their bundles load only when visited,
@@ -360,7 +360,11 @@ export function Router() {
             game={game}
             onNavigateHome={navigateToHome}
             onNavigateToGame={navigateToGame}
-            relatedGames={seedGames.filter(g => g.id !== gameId).slice(0, 3)}
+            relatedGames={seedGames
+              // Only shipped titles here — recommending something a visitor
+              // can't download is a dead end.
+              .filter(g => g.id !== gameId && g.status === 'Released')
+              .slice(0, 3)}
           />
         </MainLayout>
       )
@@ -478,10 +482,6 @@ export function Router() {
             </AnimatedSection>
             
             <AnimatedSection>
-              <ServicesSection onGameSelect={navigateToGame} />
-            </AnimatedSection>
-            
-            <AnimatedSection>
               <PortfolioSection onGameSelect={navigateToGame} />
             </AnimatedSection>
             
@@ -492,12 +492,14 @@ export function Router() {
               />
             </AnimatedSection>
 
-            <AnimatedSection>
-              <DevlogSection
-                onNavigateToDevlog={navigateToDevlog}
-                onNavigateToPost={navigateToDevlogPost}
-              />
-            </AnimatedSection>
+            {FEATURES.devlog && (
+              <AnimatedSection>
+                <DevlogSection
+                  onNavigateToDevlog={navigateToDevlog}
+                  onNavigateToPost={navigateToDevlogPost}
+                />
+              </AnimatedSection>
+            )}
 
             <AnimatedSection>
               <ContactSection

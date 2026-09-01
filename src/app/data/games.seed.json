@@ -1,18 +1,15 @@
 [
   {
     "id": "2048-no-limit",
-    "title": "2048 No Limit",
-    "description": "A captivating puzzle game that will keep you hooked for hours. Combine tiles to reach the highest number possible in this endless challenge.",
-    "fullDescription": "2048 No Limit is the classic merge puzzle, unshackled. Swipe to slide every tile in a direction, fuse equal numbers, and watch the board climb past 2048 into territory the original never let you reach. Endless, leaderboard-driven, and built for that one-more-run pull.",
-    "image": "https://picsum.photos/seed/2048-no-limit-cover/1200/800",
+    "title": "No Limit Arena",
+    "description": "Your board grows every time you win, and Powerup cards land right on the grid.",
+    "fullDescription": "The board itself levels up.\n\nYou start on a 2x2 grid. Reach its target tile and the arena grows - 3x3, 4x4, 5x5, 6x6 - and every size you unlock stays unlocked. There is no final board and no winning tile. The grid keeps growing for as long as you keep merging.\n\nTHE ARENA GROWS WITH YOU\nEvery grid has a target. Hit it and the board expands, permanently. A bigger arena means more room, longer chains and bigger numbers - and a target that has moved out of reach again. Your unlocked size is waiting the next time you open the game.\n\nCARDS LAND ON THE BOARD\nPowerup cards drop onto the grid while you play. A card takes up a cell and blocks merges until you use it, so where one lands is part of the puzzle. Tap it to fire it:\n\n- Bomb - destroys the selected tile\n- Magnet - pulls every tile of the same value into the one you choose\n- Joker - your next move spawns a wildcard that merges with anything\n- Sort - re-orders the whole board when it jams up\n- Multiply - multiplies the selected tile x2, or x4 if you are lucky\n\nCards you have not been dealt can be stocked with keys and played from the bar.\n\nNO CEILING\n8,192. 65,536. 1,048,576. Tiles keep doubling as long as you keep playing, and the board keeps growing to hold them.\n\nENDLESS MODE\nWant one grid and a clean run? Endless plays out on a single fixed board, with the same powerup cards in the deck and its own high score to beat.\n\nKEEP WHAT YOU EARN\n- Silver, gold and star chests, each on its own timer\n- A prize wheel for keys and diamonds\n- A global leaderboard, and 30 achievements to chase\n- Cloud save, so a new device picks up exactly where you left off\n\nEASY TO START, HARD TO PUT DOWN\nSwipe to move. Matching tiles merge and double. One rule, one thumb, no timer - play a round while the kettle boils or chase a grid unlock all evening.\n\nSwipe. Merge. Watch the arena get bigger.\n\nNo Limit Arena is free to play, contains ads, and offers optional in-app purchases.",
+    "image": "/no-limit-game-card.webp",
     "screenshots": [
-      "https://picsum.photos/seed/2048-no-limit-shot-1/1600/900",
-      "https://picsum.photos/seed/2048-no-limit-shot-2/1600/900",
-      "https://picsum.photos/seed/2048-no-limit-shot-3/1600/900"
+      "/no-limit-game-card.webp"
     ],
     "tags": [
-      "Puzzle",
-      "Released"
+      "Puzzle"
     ],
     "genre": "Puzzle",
     "platform": [
@@ -23,24 +20,22 @@
     "rating": 0,
     "downloads": "",
     "releaseDate": "",
-    "videoUrl": "https://youtu.be/AsqQOu1qJ8Y",
+    "videoUrl": "",
     "createdAt": "2026-05-23T00:00:00.000Z",
-    "updatedAt": "2026-05-23T00:00:00.000Z"
+    "updatedAt": "2026-05-23T00:00:00.000Z",
+    "playStoreUrl": "https://play.google.com/store/apps/details?id=com.NexenovaStudios.NoLimit",
+    "appStoreUrl": "",
+    "accentHue": 96
   },
   {
     "id": "bird-hunter",
     "title": "Bird Hunter",
     "description": "Bird Hunter isn't your average mobile game. The sky above you is alive — birds are closing in, eggs are dropping fast, and the chaos keeps building with every second you wait. You have a cannon. You have one job. Blast as many eggs as you can before they hit the ground and damage your cannon. Simple to understand, brutally hard to master — and impossible to put down.",
     "fullDescription": "Most games ask you to survive. Bird Hunter dares you to stay in control.\n\nThe arena is yours — until the birds show up. They come in waves, they come in numbers, and they come with one goal: overwhelm you. As they swoop across the sky, they drop eggs that fall straight toward the ground. Your job is to shoot them down before they break through your defense. Miss too many and the pressure builds. Every egg that slips through damages your cannon — and if it takes too many hits, it won't survive.\n\nWhat makes it electric is what happens when you hit. Bigger eggs don't just disappear — they crack open and split into smaller ones, scattering across the screen and multiplying the chaos in an instant. One well-placed shot can set off a chain reaction that clears the board. A badly-timed one can bury you under a storm of shells you never saw coming.\n\nBird Hunter is built around that tension — the thrill of keeping everything under control while the screen fills up and the pressure climbs. Chain your shots into combos, manage what's falling, choose the right cannon for the moment, and push through 30 chapters and 20 levels each — 600 levels total — that keep getting sharper, faster, and more satisfying the deeper you go.\n\nEvery few levels, you earn a spin. Every spin brings something new — a power-up, a weapon, a boost that shifts how you play. That's Bird Hunter. Fast. Focused. Relentless.\n\n## Core Mechanics\n\n**The Egg System** — Eggs come in four sizes — small, medium, large, and massive. When you shoot a large egg, it doesn't vanish. It breaks into two medium eggs. Shoot those and you get four small ones. Shoot a massive egg and the whole thing cascades — one well-placed bullet can eventually turn into eight falling targets. A miss on a big egg doesn't just mean you wasted a shot — it means that egg is getting closer to the ground and it's about to multiply.\n\n**Pressure System** — Every egg carries a weight value — bigger eggs carry more. When the total weight of everything falling at once crosses the level's limit, birds temporarily stop releasing new eggs, giving you a moment to breathe. But it's a short window. The pressure system isn't a safety net — it's the game telling you you're already behind.\n\n**Scoring and Combos** — Chaining shots together — hitting egg after egg without missing — builds a combo multiplier that bumps your score significantly and drops coin bonuses along the way. Accuracy isn't just satisfying, it's mechanically rewarded. Each level has a target score you need to hit within a specific time window.\n\n**How Difficulty Grows** — Bird Hunter doesn't just get harder in one direction. Difficulty climbs two ways at the same time. The further you progress across all 30 chapters, the challenge steadily increases. Within each chapter's 20 levels, difficulty builds progressively, with spikes at key levels. The game also includes an adaptive relief system that temporarily adjusts spawn rates after sustained struggle.\n\n## Cannons\n\n**Single Cannon** — Fires a single projectile per attack cycle. The baseline weapon for performance balancing across other cannon types.\n\n**Rapid Cannon** — Fires 1 bullet per attack cycle with higher firing speed. Generates consistent sustained damage output.\n\n**Spread Cannon** — Fires wide, covering ground that a focused shot never could — perfect for moments when the screen is filling faster than you can track.\n\n**Explosive Cannon** — Deals area damage on impact and can clear clusters that would take a focused shot twice as long to handle.\n\n**Critical Cannon** — Hits harder on key strikes, rewarding accuracy with damage spikes that cut through tougher egg tiers.\n\n**Dual Cannon** — Fires two shots at once — chaotic in the best possible way, and genuinely powerful in the right hands.\n\n**Tri Cannon** — Fires three shots at once — maximum firepower for players who know how to use it.\n\n## Upgrade System\n\nEvery cannon in Bird Hunter has ten upgrade levels — and the difference between a level one cannon and a fully upgraded one is not subtle. Upgrades are built around two resources: coins and materials. Coins you earn naturally as you play — by destroying eggs, chaining combos, and clearing levels. Materials come through gameplay milestones and spin rewards. There is no single cannon that outperforms everything else at every upgrade level. You are building a collection of tools and learning when to use each one.",
-    "image": "https://picsum.photos/seed/bird-hunter-cover/1200/800",
-    "screenshots": [
-      "https://picsum.photos/seed/bird-hunter-shot-1/1600/900",
-      "https://picsum.photos/seed/bird-hunter-shot-2/1600/900",
-      "https://picsum.photos/seed/bird-hunter-shot-3/1600/900"
-    ],
+    "image": "",
+    "screenshots": [],
     "tags": [
-      "Action",
-      "Coming Soon"
+      "Action"
     ],
     "genre": "Action",
     "platform": [
@@ -51,346 +46,56 @@
     "rating": 0,
     "downloads": "",
     "releaseDate": "",
-    "videoUrl": "https://youtu.be/AsqQOu1qJ8Y",
+    "videoUrl": "",
     "createdAt": "2026-05-23T00:00:00.000Z",
     "updatedAt": "2026-05-23T00:00:00.000Z",
-    "tagline": "Eggs are falling fast. Protect your cannon or it's game over."
+    "tagline": "Eggs are falling fast. Protect your cannon or it's game over.",
+    "playStoreUrl": "",
+    "appStoreUrl": ""
   },
   {
     "id": "smashy-qube",
     "title": "Smashy Qube",
-    "description": "Plan your path, time your swipes, and detonate every target in one continuous chain. A swipe-and-destroy puzzle where every move counts.",
-    "fullDescription": "Smashy Qube is a swipe puzzle built around one feeling — the satisfying click of a perfectly planned chain. You swipe in any of four directions, the cube slides until it hits something, and every target it crosses gets destroyed on contact. When your moves run out, the cube explodes.\n\nThe twist is the limit. You only get so many swipes per level. That makes every direction a decision: a wrong slide leaves a target untouched, and the explosion at the end won't save you. Levels reward path optimization — the same puzzle often has two or three valid solutions, and finding the cleanest one is where the depth lives.\n\nLater levels introduce level elements that change the rules: moving blocks that carry you across the grid, rotating bars with timing windows, portals that teleport with momentum, mirror cubes that copy your movement. Each one layers on top of the swipe-slide-destroy loop without diluting it.\n\n## Core Mechanics\n\n**Swipe and Slide** — Four-directional swipe input. The cube slides until it hits a wall or block — no mid-path stops, no in-between positions. Every move resolves fully before the next input is accepted.\n\n**Destroy on Contact** — Any target the cube passes through is destroyed instantly. Combo your destruction by lining up targets in a straight line — a single swipe can clear half a level if the geometry's right.\n\n**Final Explosion** — When you run out of moves, the cube detonates. Any target still standing fails the level. The explosion is both the timer and the resolution — it forces every level to end on a beat.\n\n**Level Elements** — Moving blocks, rotating bars, spike traps, push blocks, portals, disappearing tiles, and a mirror player cube that copies your every move. Designers toggle these per level to keep the core loop fresh across hundreds of stages.",
-    "image": "https://picsum.photos/seed/smashy-qube-cover/1200/800",
+    "description": "Slide. Smash. Win. A satisfying cube puzzle with one simple rule.",
+    "fullDescription": "Smashy Qube is a satisfying slide puzzle game that's easy to pick\nup but hard to put down.\n\nSwipe your jelly cube across the grid and smash every Red target to\nclear the level. Sounds simple — until walls, portals, moving\nplatforms, spike traps, and Crack floors get in your way.\n\nFEATURES\n- handcrafted levels\n- Unique obstacles — portals, spikes, rotating bars, moving blocks\n- Satisfying jelly soft-body physics on every move\n- 3-star rating system — can you perfect every level?\n- Global leaderboard — compete with players worldwide\n- Clean, minimal design with smooth animations\n\nHOW TO PLAY\nSwipe in any direction to slide your cube. It moves until it hits\na wall or obstacle. Smash all the targets to win. Use your moves\nwisely — fewer moves means more stars.\n\nCan you master all levels?",
+    "image": "/smashy-cube-game-card.webp",
     "screenshots": [
-      "https://picsum.photos/seed/smashy-qube-shot-1/1600/900",
-      "https://picsum.photos/seed/smashy-qube-shot-2/1600/900",
-      "https://picsum.photos/seed/smashy-qube-shot-3/1600/900"
+      "/smashy-cube-game-card.webp"
     ],
     "tags": [
-      "Puzzle",
-      "Coming Soon"
+      "Puzzle"
     ],
     "genre": "Puzzle",
     "platform": [
       "Android",
       "iOS"
     ],
-    "status": "Coming Soon",
+    "status": "Released",
     "rating": 0,
     "downloads": "",
     "releaseDate": "",
-    "videoUrl": "https://youtu.be/AsqQOu1qJ8Y",
+    "videoUrl": "",
     "createdAt": "2026-05-23T00:00:00.000Z",
     "updatedAt": "2026-05-23T00:00:00.000Z",
-    "tagline": "Swipe. Slide. Destroy. Explode."
-  },
-  {
-    "id": "2048-striker",
-    "title": "2048: Striker",
-    "description": "A physics-based take on the classic merge puzzle. Drag, release, and bank shots off walls to chain merges and climb the leaderboard.",
-    "fullDescription": "2048: Striker reinvents the merge puzzle with skill-based physics. Instead of swiping rows, you aim a striker, set your force, and let it loose. Same-value blocks fuse on controlled collision — chain a clean shot through three or four and the whole board cascades.\n\nThe arena is bounded, the blocks are physical, and the board gets messier the longer you play. Bumper walls let you bank shots into hard angles, sticky blocks reduce momentum, and unstable blocks add just enough randomness that no two runs play the same. It's an endless score format — the leaderboard is the goal.\n\nDepth comes from precision and chain planning. Anyone can fire a striker. Reading the board, picking the bank shot that triggers a five-merge cascade, and keeping the arena from collapsing — that's the skill curve.\n\n## Core Mechanics\n\n**Aim and Release** — Drag back to aim and set force, release to shoot. The striker travels with full physics — angle, speed, and rebound all matter. A trajectory preview helps you commit to the right line.\n\n**Collision Merge** — Two blocks of the same value fuse when they collide above a velocity threshold. Chain reactions are the heart of the game — one striker can trigger a sequence of merges that cascade across the board.\n\n**Board Pressure** — The play area is bounded and gets more crowded as values climb. Cross the boundary or run out of room and the run ends. Heavy blocks resist motion, sticky blocks dampen flow, and unstable blocks add chaos.\n\n**Endless Score Run** — No level cap, no defined ending. You're chasing a score against the global leaderboard. Cosmetic skins, board themes, and striker variants let you personalize the run.",
-    "image": "https://picsum.photos/seed/2048-striker-cover/1200/800",
-    "screenshots": [
-      "https://picsum.photos/seed/2048-striker-shot-1/1600/900",
-      "https://picsum.photos/seed/2048-striker-shot-2/1600/900",
-      "https://picsum.photos/seed/2048-striker-shot-3/1600/900"
-    ],
-    "tags": [
-      "Puzzle",
-      "Coming Soon"
-    ],
-    "genre": "Puzzle",
-    "platform": [
-      "Android",
-      "iOS"
-    ],
-    "status": "Coming Soon",
-    "rating": 0,
-    "downloads": "",
-    "releaseDate": "",
-    "videoUrl": "https://youtu.be/AsqQOu1qJ8Y",
-    "createdAt": "2026-05-23T00:00:00.000Z",
-    "updatedAt": "2026-05-23T00:00:00.000Z",
-    "tagline": "Aim. Shoot. Collide. Merge."
-  },
-  {
-    "id": "flip-trace",
-    "title": "Flip Trace",
-    "description": "Rotate tiles to guide an auto-walking character to the goal. Indirect control, pre-planning, and a fresh take on path puzzles.",
-    "fullDescription": "Flip Trace puts you one step removed from the action. The character moves on their own, following whatever direction the tile under their feet is pointing. Your job is to tap and rotate tiles before they get there — straights, left turns, right turns, blocks, and goal tiles.\n\nThe satisfaction comes from pre-planning. You see the path before the character takes it, and you have a limited number of rotations to make it work. Tapping the wrong tile too late wastes a move and might send them off a ledge. Tapping the right one at the right moment opens a path that wasn't there a second ago.\n\nIt's a fresh angle on the tile-manipulation puzzle — you're shaping the environment, not steering the player. Onboarding matters a lot here, so early levels are deliberately small and visually clear; complexity ramps as players internalize the rhythm.\n\n## Core Mechanics\n\n**Indirect Control** — Tap a tile to rotate it. The character moves automatically and follows whatever the tile points to. You never directly control the character — only their environment.\n\n**Tile Vocabulary** — Straight tiles continue direction, turn tiles redirect left or right, block tiles stop movement, and goal tiles complete the level. Designers mix them to build paths with multiple valid solutions.\n\n**Limited Rotations** — Each level caps the number of rotations you can use. The puzzle is figuring out the minimum-rotation path — and recovering when you've misread the geometry.\n\n**Pre-Planning Window** — The character's auto-move speed is tuned to let you think ahead by one or two tiles, not five. Decisions happen in real time but with enough breathing room to make them deliberately.",
-    "image": "https://picsum.photos/seed/flip-trace-cover/1200/800",
-    "screenshots": [
-      "https://picsum.photos/seed/flip-trace-shot-1/1600/900",
-      "https://picsum.photos/seed/flip-trace-shot-2/1600/900",
-      "https://picsum.photos/seed/flip-trace-shot-3/1600/900"
-    ],
-    "tags": [
-      "Puzzle",
-      "Coming Soon"
-    ],
-    "genre": "Puzzle",
-    "platform": [
-      "Android",
-      "iOS"
-    ],
-    "status": "Coming Soon",
-    "rating": 0,
-    "downloads": "",
-    "releaseDate": "",
-    "videoUrl": "https://youtu.be/AsqQOu1qJ8Y",
-    "createdAt": "2026-05-23T00:00:00.000Z",
-    "updatedAt": "2026-05-23T00:00:00.000Z",
-    "tagline": "You don't move the character. You change the path."
-  },
-  {
-    "id": "echo-loop",
-    "title": "Echo Loop",
-    "description": "Every attempt leaves a clone behind. Cooperate with your past selves to solve puzzles only multiple players could clear.",
-    "fullDescription": "Echo Loop is a time-layered puzzle. You swipe to move on a grid, and when your attempt ends, the game records every move you made. The next attempt, your past self replays those moves as a clone — and now you're playing alongside it.\n\nSolutions require coordination across time. One clone holds a switch open while present-you crosses through. Two clones stand on pressure plates while a third you opens the door. The puzzles get richer the more clones the game allows, and the depth comes from learning to plan a sequence of attempts that combine into one solved level.\n\nIt starts simple — a single clone, a single objective — and builds carefully. Cognitive overload is the real risk here, so early levels are designed to teach the language of cooperation before stacking complexity.\n\n## Core Mechanics\n\n**Move and Record** — Swipe to move on a grid. Every move is recorded. When the attempt ends, the recording becomes a clone that replays those exact moves on the next attempt.\n\n**Multi-Self Cooperation** — Past clones interact with the world — they trigger switches, hold doors, block enemies. Solving a level means planning a sequence of attempts whose recordings combine into one coordinated solution.\n\n**Attempt Budget** — Each level caps the number of attempts you have to record clones. Use one badly and you've burned a slot. The constraint forces deliberate, plan-first play.\n\n**Temporal Planning** — The puzzle isn't just spatial — it's temporal. Where you stand at second 3 of one attempt has to match where the door needs to be open at second 3 of the next. That's the depth source.",
-    "image": "https://picsum.photos/seed/echo-loop-cover/1200/800",
-    "screenshots": [
-      "https://picsum.photos/seed/echo-loop-shot-1/1600/900",
-      "https://picsum.photos/seed/echo-loop-shot-2/1600/900",
-      "https://picsum.photos/seed/echo-loop-shot-3/1600/900"
-    ],
-    "tags": [
-      "Puzzle",
-      "Coming Soon"
-    ],
-    "genre": "Puzzle",
-    "platform": [
-      "Android",
-      "iOS"
-    ],
-    "status": "Coming Soon",
-    "rating": 0,
-    "downloads": "",
-    "releaseDate": "",
-    "videoUrl": "https://youtu.be/AsqQOu1qJ8Y",
-    "createdAt": "2026-05-23T00:00:00.000Z",
-    "updatedAt": "2026-05-23T00:00:00.000Z",
-    "tagline": "Your past selves are part of the solution."
-  },
-  {
-    "id": "chain-architect",
-    "title": "Chain Architect",
-    "description": "Place triggers across a structure and ignite a single chain reaction that clears everything. Spatial planning meets satisfying destruction.",
-    "fullDescription": "Chain Architect is a chain reaction builder. You're given a structure — clusters of reactive blocks, connectors, and obstacles — and a limited number of triggers to place. Tap to set a trigger, then ignite. If your placements were right, the whole structure clears in one cascading chain.\n\nThe joy is in the explosion. Watching a single tap propagate across the board, knocking down everything in sequence, is the entire point. The skill is in the placement — too many triggers and you've over-budgeted, too few and the chain dies halfway through.\n\nLevels reward both completion and economy. Clearing a structure with the minimum triggers earns the top tier, which feeds into the replay loop. Strong VFX is critical to keep the satisfaction high across hundreds of stages without the visuals feeling repetitive.\n\n## Core Mechanics\n\n**Place and Ignite** — Tap to place triggers anywhere on the board. When you're ready, ignite — the chain plays out automatically, propagating through connected reactive blocks until it dies.\n\n**Limited Placements** — Every level caps how many triggers you can place. The puzzle is figuring out the smallest possible set that still clears the whole structure.\n\n**Spatial Planning** — Triggers chain through adjacency and connection. Reading the structure, predicting where the reaction will travel, and placing triggers at the right junctions is the depth source.\n\n**Replay Optimization** — Cleared a level? You can retry to beat it with fewer triggers. The top tier requires the minimum-trigger solution, which keeps each level alive long past the first completion.",
-    "image": "https://picsum.photos/seed/chain-architect-cover/1200/800",
-    "screenshots": [
-      "https://picsum.photos/seed/chain-architect-shot-1/1600/900",
-      "https://picsum.photos/seed/chain-architect-shot-2/1600/900",
-      "https://picsum.photos/seed/chain-architect-shot-3/1600/900"
-    ],
-    "tags": [
-      "Puzzle",
-      "Coming Soon"
-    ],
-    "genre": "Puzzle",
-    "platform": [
-      "Android",
-      "iOS"
-    ],
-    "status": "Coming Soon",
-    "rating": 0,
-    "downloads": "",
-    "releaseDate": "",
-    "videoUrl": "https://youtu.be/AsqQOu1qJ8Y",
-    "createdAt": "2026-05-23T00:00:00.000Z",
-    "updatedAt": "2026-05-23T00:00:00.000Z",
-    "tagline": "Place a trigger. Watch it all fall."
-  },
-  {
-    "id": "phase-shift-runner",
-    "title": "Phase Shift Runner",
-    "description": "Auto-run forward and tap to switch between two parallel dimensions. Plan ahead across both worlds to reach the end.",
-    "fullDescription": "Phase Shift Runner is an auto-runner with a twist — two worlds overlap, and you can shift between them with a single tap. Obstacles in one dimension are paths in the other. Read both layers fast enough and you flow through; misread and you crash.\n\nThe input is just tap. The depth is in dual-layer planning — your eyes have to track both dimensions at once, and you have to commit to the shift early enough that the runner doesn't smash into the wall you didn't see coming. Switches are limited per level, which adds resource management on top of the reflex challenge.\n\nColor-coded worlds keep things readable even when the action gets fast. The dual-dimension hook is the kind of mechanic that demos well in two seconds and reveals depth over hundreds of runs — a strong fit for the platform.\n\n## Core Mechanics\n\n**Auto-Run, Tap to Shift** — The runner moves forward on their own. Your only input is a tap, which swaps the runner between two parallel dimensions instantly.\n\n**Dual-Layer Reading** — Obstacles in one world are paths in the other. You're always reading two layers at once, planning your next shift two or three steps ahead of where the runner actually is.\n\n**Switch Budget** — Each level limits how many times you can shift. The constraint turns a reflex game into a planning game — every shift has to count.\n\n**Color-Coded Worlds** — The two dimensions are visually distinct from a single glance. Even at high speeds, you can tell which world you're in and what's coming in the other one.",
-    "image": "https://picsum.photos/seed/phase-shift-runner-cover/1200/800",
-    "screenshots": [
-      "https://picsum.photos/seed/phase-shift-runner-shot-1/1600/900",
-      "https://picsum.photos/seed/phase-shift-runner-shot-2/1600/900",
-      "https://picsum.photos/seed/phase-shift-runner-shot-3/1600/900"
-    ],
-    "tags": [
-      "Puzzle",
-      "Coming Soon"
-    ],
-    "genre": "Puzzle",
-    "platform": [
-      "Android",
-      "iOS"
-    ],
-    "status": "Coming Soon",
-    "rating": 0,
-    "downloads": "",
-    "releaseDate": "",
-    "videoUrl": "https://youtu.be/AsqQOu1qJ8Y",
-    "createdAt": "2026-05-23T00:00:00.000Z",
-    "updatedAt": "2026-05-23T00:00:00.000Z",
-    "tagline": "Two worlds. One runner. One tap."
-  },
-  {
-    "id": "pressure-grid",
-    "title": "Pressure Grid",
-    "description": "Move across tiles that gain pressure as you cross them. Balance the grid without crossing any tile's pressure limit.",
-    "fullDescription": "Pressure Grid is a balance puzzle. You swipe to move across a grid, and every tile you cross gains pressure. Each tile has a pressure limit — cross it too many times and it breaks. Win the level by balancing the grid into a stable state without overloading any single tile.\n\nThe depth comes from system interaction. The grid is alive — pressure spreads, decays, and interacts with neighboring tiles in ways that create emergent puzzles. Two players can solve the same level with completely different routes, and the optimal solution is rarely the obvious one.\n\nThe core risk is that pressure is abstract — players need crystal-clear visual feedback to feel the mechanic. Strong color states, animated pressure indicators, and instant feedback on every move are non-negotiable for this concept to land.\n\n## Core Mechanics\n\n**Swipe to Move** — Standard swipe input moves your token one tile in any cardinal direction. Each tile crossed gains a unit of pressure.\n\n**Pressure Limits** — Every tile has a cap. Exceed it and the tile breaks — usually a fail state. Different tile types have different limits, telegraphed clearly through color and visual weight.\n\n**Balance to Win** — Levels are won by reaching a balanced grid state — all tiles within their pressure limits, often with specific tiles hitting target values. Under-pressure can fail you just as easily as over-pressure.\n\n**System-Driven Depth** — Pressure interacts across tiles. Some types drain, others amplify, others propagate. The grid responds to your route in ways that reward experimentation and route optimization.",
-    "image": "https://picsum.photos/seed/pressure-grid-cover/1200/800",
-    "screenshots": [
-      "https://picsum.photos/seed/pressure-grid-shot-1/1600/900",
-      "https://picsum.photos/seed/pressure-grid-shot-2/1600/900",
-      "https://picsum.photos/seed/pressure-grid-shot-3/1600/900"
-    ],
-    "tags": [
-      "Puzzle",
-      "Coming Soon"
-    ],
-    "genre": "Puzzle",
-    "platform": [
-      "Android",
-      "iOS"
-    ],
-    "status": "Coming Soon",
-    "rating": 0,
-    "downloads": "",
-    "releaseDate": "",
-    "videoUrl": "https://youtu.be/AsqQOu1qJ8Y",
-    "createdAt": "2026-05-23T00:00:00.000Z",
-    "updatedAt": "2026-05-23T00:00:00.000Z",
-    "tagline": "Move smart. Don't break the grid."
-  },
-  {
-    "id": "split-control",
-    "title": "Split Control",
-    "description": "Control multiple units simultaneously with a single swipe. Coordinate every unit to their goal — if any one fails, you all fail.",
-    "fullDescription": "Split Control is a multi-agent puzzle. One swipe moves every unit on the board at the same time, in the same direction. Walls, gaps, and obstacles affect each unit differently — what frees one might trap another. Win the level by getting every unit to its goal. Lose any one of them, and the level fails.\n\nThe complexity scales with the unit count. Two units is easy. Four is challenging. Six and the level is a coordination puzzle that requires careful sequencing. The mastery curve is steep — and that's the appeal. Solving a tough level feels like solving five puzzles at once.\n\nThe core risk is complexity spikes. Adding a fourth unit can multiply difficulty in ways that frustrate rather than challenge. Level design has to scale gradually and ration new unit slots carefully.\n\n## Core Mechanics\n\n**Shared Input** — Swipe in any direction. Every unit on the board moves that direction simultaneously, sliding until they hit a wall or obstacle.\n\n**All-or-Nothing Goals** — Each unit has its own goal tile. Win the level only when every unit is on its goal at the same time. If any unit ends up stuck or wrong, the level fails.\n\n**Scaling Unit Count** — Levels start with two units and gradually scale. Each added unit multiplies the coordination challenge geometrically, not linearly.\n\n**Coordination Depth** — Walls, doors, and hazards affect each unit based on position. The puzzle is finding a sequence of shared moves that separates and rejoins the units exactly when needed.",
-    "image": "https://picsum.photos/seed/split-control-cover/1200/800",
-    "screenshots": [
-      "https://picsum.photos/seed/split-control-shot-1/1600/900",
-      "https://picsum.photos/seed/split-control-shot-2/1600/900",
-      "https://picsum.photos/seed/split-control-shot-3/1600/900"
-    ],
-    "tags": [
-      "Puzzle",
-      "Coming Soon"
-    ],
-    "genre": "Puzzle",
-    "platform": [
-      "Android",
-      "iOS"
-    ],
-    "status": "Coming Soon",
-    "rating": 0,
-    "downloads": "",
-    "releaseDate": "",
-    "videoUrl": "https://youtu.be/AsqQOu1qJ8Y",
-    "createdAt": "2026-05-23T00:00:00.000Z",
-    "updatedAt": "2026-05-23T00:00:00.000Z",
-    "tagline": "One swipe. Every unit moves."
-  },
-  {
-    "id": "reality-fold",
-    "title": "Reality Fold",
-    "description": "Fold the grid in on itself to create paths between distant points. Spatial reasoning at its most satisfying.",
-    "fullDescription": "Reality Fold gives you a god's-eye view of a grid and asks you to do something simple-sounding and brain-bending — fold it. Swipe to fold the world along an axis, bringing two distant points together and creating a path that didn't exist a second ago. Reach the destination and you win.\n\nThe depth is spatial reasoning. You're not solving a maze, you're reshaping the maze. Each fold uses one of your limited folds, so over-folding to brute-force a path will run you out before you reach the goal. The puzzle is finding the minimum-fold sequence that connects start to end.\n\nThe mechanic is unusual and visually striking — when it clicks, it's deeply satisfying. The risk is complexity: folding 3D geometry in your head is a real cognitive load, so early levels stay flat and simple, and complexity ramps slowly as players build intuition.\n\n## Core Mechanics\n\n**Swipe to Fold** — Swipe across the grid to fold it along that axis. The world physically bends, bringing distant tiles into contact and opening new path possibilities.\n\n**Spatial Transformation** — Folds permanently transform the grid until you reset. Multiple folds can stack — a vertical fold followed by a horizontal one creates geometries that wouldn't be reachable from any single fold.\n\n**Limited Folds** — Each level caps fold count. Reaching the destination with fewer folds is the optimization metric, which gives every level multiple difficulty tiers.\n\n**Path Creation** — Win by reaching the destination tile. Fail by running out of folds without a valid path. The puzzle is purely topological — no enemies, no timing, just geometry.",
-    "image": "https://picsum.photos/seed/reality-fold-cover/1200/800",
-    "screenshots": [
-      "https://picsum.photos/seed/reality-fold-shot-1/1600/900",
-      "https://picsum.photos/seed/reality-fold-shot-2/1600/900",
-      "https://picsum.photos/seed/reality-fold-shot-3/1600/900"
-    ],
-    "tags": [
-      "Puzzle",
-      "Coming Soon"
-    ],
-    "genre": "Puzzle",
-    "platform": [
-      "Android",
-      "iOS"
-    ],
-    "status": "Coming Soon",
-    "rating": 0,
-    "downloads": "",
-    "releaseDate": "",
-    "videoUrl": "https://youtu.be/AsqQOu1qJ8Y",
-    "createdAt": "2026-05-23T00:00:00.000Z",
-    "updatedAt": "2026-05-23T00:00:00.000Z",
-    "tagline": "Bend the world. Find the path."
-  },
-  {
-    "id": "momentum-painter",
-    "title": "Momentum Painter",
-    "description": "Move continuously and leave trails behind you. Reuse your own trails to solve puzzles only your past path could have made possible.",
-    "fullDescription": "Momentum Painter takes inspiration from paper.io but turns it inward. You move continuously across an open space, leaving a trail behind you. That trail isn't decorative — it's terrain. You can cross your own trails, ride them, and use them as scaffolding to reach places you couldn't reach with a single stroke.\n\nLevels are about trail economy. You have a maximum trail length per attempt, and the puzzle is figuring out a route that uses your own past trails as bridges. Dead-end on a path you can't get out of and the run fails. Plot a route that loops back through itself efficiently and you reveal a solution that looked impossible at first glance.\n\nThe concept is unique but risky — visual clutter is a real concern when trails accumulate, and onboarding will need to teach the trail-as-tool concept carefully. Early levels stay simple and short to let the mechanic breathe.\n\n## Core Mechanics\n\n**Continuous Motion** — Hold to move, release to stop. The character travels continuously and the trail builds behind them in real time.\n\n**Trails as Terrain** — Your past trails aren't walls — they're walkable. Cross your own path, ride it across a gap, or use it as a platform to reach the next objective.\n\n**Trail Budget** — Each attempt caps your total trail length. Spend it badly and you've stranded yourself. The puzzle is finding the most economical route that still chains every objective.\n\n**Self-Generated Levels** — Because you build the terrain you walk on, every level feels co-created. The solution isn't laid out for you — you draw it.",
-    "image": "https://picsum.photos/seed/momentum-painter-cover/1200/800",
-    "screenshots": [
-      "https://picsum.photos/seed/momentum-painter-shot-1/1600/900",
-      "https://picsum.photos/seed/momentum-painter-shot-2/1600/900",
-      "https://picsum.photos/seed/momentum-painter-shot-3/1600/900"
-    ],
-    "tags": [
-      "Puzzle",
-      "Coming Soon"
-    ],
-    "genre": "Puzzle",
-    "platform": [
-      "Android",
-      "iOS"
-    ],
-    "status": "Coming Soon",
-    "rating": 0,
-    "downloads": "",
-    "releaseDate": "",
-    "videoUrl": "https://youtu.be/AsqQOu1qJ8Y",
-    "createdAt": "2026-05-23T00:00:00.000Z",
-    "updatedAt": "2026-05-23T00:00:00.000Z",
-    "tagline": "Every move leaves a path. Every path is a tool."
-  },
-  {
-    "id": "signal-sync",
-    "title": "Signal Sync",
-    "description": "Send signals through a network and time them so every system fires in sync. A timing puzzle for players who love rhythm.",
-    "fullDescription": "Signal Sync is a timing puzzle. You tap to send signals through a network of nodes, and each signal takes a measurable amount of time to propagate. Win the level by timing your taps so that every signal arrives at its destination inside the same sync window. Miss the window and the whole network desyncs.\n\nThe depth is in the timing — short paths fire fast, long paths fire slow, and you have to stagger your taps so they all converge. Some networks have branches, loops, and delays that complicate the puzzle. The satisfaction is in the moment everything snaps into sync.\n\nThe concept is functional but visually quieter than the others — it leans on audio and haptics for the dopamine hit. It needs strong polish to land, and is flagged as ideation-required because the visual presentation hasn't fully crystallized yet.\n\n## Core Mechanics\n\n**Tap to Send** — Tap any input node to fire a signal. The signal travels through connected nodes at a measured speed, visible as a moving pulse along the network.\n\n**Sync Windows** — Each level has one or more sync targets — points where multiple signals must arrive within the same narrow window of time. Miss it and the run fails.\n\n**Network Variety** — Branches, loops, delay nodes, and amplifiers shape how signals propagate. Reading the network and predicting timing is the core skill.\n\n**Audio-Forward Feedback** — Successful syncs are scored with audio and haptic hits, not just visuals. The format leans on rhythm-game sensibility to make timing feel satisfying.",
-    "image": "https://picsum.photos/seed/signal-sync-cover/1200/800",
-    "screenshots": [
-      "https://picsum.photos/seed/signal-sync-shot-1/1600/900",
-      "https://picsum.photos/seed/signal-sync-shot-2/1600/900",
-      "https://picsum.photos/seed/signal-sync-shot-3/1600/900"
-    ],
-    "tags": [
-      "Puzzle",
-      "Coming Soon"
-    ],
-    "genre": "Puzzle",
-    "platform": [
-      "Android",
-      "iOS"
-    ],
-    "status": "Coming Soon",
-    "rating": 0,
-    "downloads": "",
-    "releaseDate": "",
-    "videoUrl": "https://youtu.be/AsqQOu1qJ8Y",
-    "createdAt": "2026-05-23T00:00:00.000Z",
-    "updatedAt": "2026-05-23T00:00:00.000Z",
-    "tagline": "Tap. Send. Sync."
+    "tagline": "Swipe. Slide. Destroy. Explode.",
+    "playStoreUrl": "https://play.google.com/store/apps/details?id=com.NexenovaStudios.SmashyQube",
+    "appStoreUrl": "",
+    "accentHue": 324
   },
   {
     "id": "endless-merge-2048",
     "title": "Endless Merge 2048",
-    "description": "Slide numbered blocks together, chain bigger merges, and see how long you can keep the board alive. An endless spin on 2048 built for one-more-run sessions.",
-    "fullDescription": "Endless Merge 2048 takes the merge puzzle everyone knows and strips out the game-over screen. Slide tiles, fuse matching numbers, and keep the chain going as the board fills and the numbers climb.\n\nThe hook is momentum. Good runs snowball — a single well-placed slide can trigger a cascade that clears half the grid and resets your breathing room. A careless one boxes you in. There is no finish line, only the next merge and the score you are chasing.\n\n## Core Mechanics\n\n**Slide & Merge** — Move the whole board in four directions. Equal values fuse into their sum. Simple to learn, brutal to master.\n\n**Endless Run** — No level cap. Play for score, chase your personal best, and climb toward the higher-value tiles.\n\n**Board Pressure** — Space is the real resource. Read the board two moves ahead and keep your escape routes open.",
-    "image": "https://picsum.photos/seed/endless-merge-2048-cover/1200/800",
+    "description": "Shoot & merge cubes to 2048 and beyond in this addictive 3D puzzle game!",
+    "fullDescription": "Endless Merge 2048 is a satisfying 3D merge puzzle where you shoot numbered cubes onto a physics board and watch them combine — 2, 4, 8, 16… all the way to 2048 and beyond!\n\nAim, shoot, and stack matching cubes to merge them into bigger numbers. Chain combos for huge points, keep the board under control, and push for your highest score in a game that's easy to pick up but hard to put down.\n\n🎯 SIMPLE, ADDICTIVE GAMEPLAY\nJust tap and aim to launch your cube. Land it next to matching numbers to merge — the more you chain, the higher your score climbs.\n\n♾️ ENDLESS MODE\nThere's no finish line — only your best run. Every game is a fresh chance to beat your high score.\n\n🏆 GLOBAL LEADERBOARD\nCompete with players around the world. Climb the rankings and prove you're the ultimate merge master.\n\n💣 POWER-UPS\nStuck in a tight spot? Use the Bomb to clear cubes and the Magnet to pull matches together when the board heats up.\n\n🧊 SATISFYING PHYSICS\nReal cube physics make every merge feel chunky and rewarding — tumble, stack, and combine in glorious 3D.\n\n✨ FEATURES\n• Addictive 2048-style merge mechanics\n• Endless gameplay with high-score chasing\n• Worldwide leaderboard\n• Bomb & Magnet power-ups\n• Smooth, colorful 3D visuals\n• Free to play\n\nDownload Endless Merge 2048 now, start shooting cubes, and see how far you can climb. Can you reach 2048?",
+    "image": "/endless-merge-game-card.webp",
     "screenshots": [
-      "https://picsum.photos/seed/endless-merge-2048-shot-1/1600/900",
-      "https://picsum.photos/seed/endless-merge-2048-shot-2/1600/900",
-      "https://picsum.photos/seed/endless-merge-2048-shot-3/1600/900"
+      "/endless-merge-game-card.webp"
     ],
     "platform": [
       "Android",
       "iOS"
     ],
-    "status": "Coming Soon",
+    "status": "Released",
     "rating": 0,
     "downloads": "",
     "releaseDate": "",
@@ -398,29 +103,30 @@
     "createdAt": "2026-07-05T00:00:00.000Z",
     "updatedAt": "2026-07-05T00:00:00.000Z",
     "tags": [
+      "Casual",
       "Puzzle",
-      "Merge",
-      "Coming Soon"
+      "Merge"
     ],
-    "genre": "Puzzle",
-    "tagline": "Merge, stack, and never stop."
+    "genre": "Casual",
+    "tagline": "Merge, stack, and never stop.",
+    "playStoreUrl": "https://play.google.com/store/apps/details?id=com.nexenova.endlessmerge",
+    "appStoreUrl": "https://apps.apple.com/in/app/endless-merge-2048/id6786999822",
+    "accentHue": 96
   },
   {
     "id": "last-turn",
     "title": "Last Turn",
-    "description": "A tense turn-based puzzler about making the right play when you only have one left. Read the board, plan ahead, and outlast every setup.",
-    "fullDescription": "Last Turn is a puzzle of pressure. Each stage hands you a board and a limited set of moves, and the tension lives in that shrinking count — the closer you get to your last turn, the more every decision matters.\n\nThere is usually more than one way to clear a board, but rarely an obvious one. The game rewards players who slow down, read the whole setup, and commit to a plan instead of reacting move to move.\n\n## Core Mechanics\n\n**Limited Turns** — Every level caps your moves. Waste one and the board may become unsolvable.\n\n**Plan the Sequence** — Order matters as much as choice. The cleanest solution is a sequence, not a single clever play.\n\n**Escalating Boards** — New elements layer onto the core loop as you progress, keeping the read fresh.",
-    "image": "https://picsum.photos/seed/last-turn-cover/1200/800",
+    "description": "Drift through endless tunnels, dodge obstacles & collect coins. One last turn!",
+    "fullDescription": "🏎 ONE WRONG TURN AND IT'S GAME OVER!\n\nHow far can you go?\n\nLast Turn is a fast-paced arcade driving game that puts your reflexes to the test. Drift through sharp corners, avoid obstacles, collect coins, and survive for as long as you can using simple one-touch controls.\n\nEasy to learn. Challenging to master. Impossible to put down!\n\n🎮 EASY ONE-TOUCH CONTROLS\n\nHold to turn. Release to drive straight.\n\nSimple controls let anyone play, while mastering every turn requires precision and perfect timing.\n\n♾️ TWO GAME MODES\n\nENDLESS MODE\n• Drive as far as you can.\n• Beat your highest score.\n• Survive increasing speed and difficulty.\n\nLEVEL MODE\n• Complete handcrafted levels.\n• Reach the finish line.\n• Master unique track layouts.\n\n🚗 UNLOCK AWESOME CARS\n\nCollect coins during every run and unlock a variety of stylish cars, each featuring its own unique look and colorful drift trail.\n\n🎁 DAILY REWARDS\n\nSpin the daily reward wheel every day to earn free coins and unlock new cars even faster.\n\n🏆 COMPETE FOR THE TOP\n\nChallenge yourself, beat your friends, and climb the leaderboard to prove you're the ultimate driver.\n\n✨ FEATURES\n\n• Fast-paced arcade gameplay\n• Simple one-touch controls\n• Endless and Level game modes\n• Unlock multiple unique cars\n• Daily rewards\n• Smooth drifting mechanics\n• Colorful visuals and satisfying effects\n• Endless replayability\n• Free to play\n\nEvery turn matters. Every second counts.\n\nThink you've got what it takes?\n\nDownload Last Turn and start drifting today!\n\n──────────────────\n\nEnjoying the game?\nLeave us a ★★★★★ review—it helps us make the game even better!",
+    "image": "/last-turn-game-card.webp",
     "screenshots": [
-      "https://picsum.photos/seed/last-turn-shot-1/1600/900",
-      "https://picsum.photos/seed/last-turn-shot-2/1600/900",
-      "https://picsum.photos/seed/last-turn-shot-3/1600/900"
+      "/last-turn-game-card.webp"
     ],
     "platform": [
       "Android",
       "iOS"
     ],
-    "status": "Coming Soon",
+    "status": "Released",
     "rating": 0,
     "downloads": "",
     "releaseDate": "",
@@ -428,29 +134,30 @@
     "createdAt": "2026-07-05T00:00:00.000Z",
     "updatedAt": "2026-07-05T00:00:00.000Z",
     "tags": [
+      "Racing",
       "Puzzle",
-      "Strategy",
-      "Coming Soon"
+      "Strategy"
     ],
-    "genre": "Puzzle",
-    "tagline": "Every move is your last chance."
+    "genre": "Racing",
+    "tagline": "Every move is your last chance.",
+    "playStoreUrl": "https://play.google.com/store/apps/details?id=com.nexenova.lastturn",
+    "appStoreUrl": "",
+    "accentHue": 48
   },
   {
     "id": "sweet-tumble",
     "title": "Sweet Tumble",
-    "description": "A cozy sort-and-match puzzle. Group the tumbling sweets by color, clear the board, and unwind through hundreds of bite-sized levels.",
-    "fullDescription": "Sweet Tumble is the kind of puzzle you reach for to decompress. Sweets tumble into the play area and pile up by color — your job is to sort, group, and clear them before the board overflows.\n\nIt is gentle on the surface and quietly deep underneath. Early levels teach the sort-and-clear loop; later ones stack constraints that make you think about order and timing without ever losing the cozy feel.\n\n## Core Mechanics\n\n**Sort by Color** — Group matching sweets together to clear them off the board.\n\n**Keep It Flowing** — New pieces keep tumbling in. Stay ahead of the pile.\n\n**Bite-Sized Levels** — Hundreds of short, satisfying stages built for quick sessions.",
-    "image": "https://picsum.photos/seed/sweet-tumble-cover/1200/800",
+    "description": "Sort tumbling candies into matching color gates! Tap, match & beat your score.",
+    "fullDescription": "Sweet Tumble is the deliciously simple color-sorting game that's easy to pick up and impossible to put down!\n\n- Candies come tumbling out of the dispenser one by one — your job is to send each one through its matching color gate. Just tap to flip the gate, line up the colors, and keep the sweets flowing. Miss a match and you'll lose a life… so stay sharp!\n\nIt starts off gentle and relaxing, but don't get too comfortable. The candies fall faster and faster, new colors keep joining the mix, and before you know it you're making split-second decisions to keep your streak alive. One more candy. One more point. One more try!\n\n🍬 HOW TO PLAY\n• Watch the next candy drop from the dispenser\n• Tap to flip the gate to the matching color\n• Sort it correctly to score — send it to the wrong gate and you lose a life\n• Survive as long as you can and beat your high score!\n\n✨ FEATURES\n• One-tap controls — anyone can play in seconds\n• Endless gameplay — chase your personal best again and again\n• Ramping difficulty — speed climbs and new colors appear the longer you last\n• Satisfying & relaxing — smooth candy physics and soothing sounds\n• Unlock fun skins — customize your candies and backgrounds in the shop\n• Get a second chance — earn an extra life to keep your run going\n• Play offline — no internet required, perfect for anywhere\n• Free to play — jump in and start sorting!\n\nWhether you've got five seconds or fifty minutes, Sweet Tumble is the perfect bite-sized brain-teaser. Test your reflexes, train your focus, and find out how long you can keep the candy flowing.\n\nCan you sort them all? Download Sweet Tumble now and start the sweet chaos! 🍭",
+    "image": "/sweet-tumble-game-card.webp",
     "screenshots": [
-      "https://picsum.photos/seed/sweet-tumble-shot-1/1600/900",
-      "https://picsum.photos/seed/sweet-tumble-shot-2/1600/900",
-      "https://picsum.photos/seed/sweet-tumble-shot-3/1600/900"
+      "/sweet-tumble-game-card.webp"
     ],
     "platform": [
       "Android",
       "iOS"
     ],
-    "status": "Coming Soon",
+    "status": "Released",
     "rating": 0,
     "downloads": "",
     "releaseDate": "",
@@ -459,28 +166,28 @@
     "updatedAt": "2026-07-05T00:00:00.000Z",
     "tags": [
       "Puzzle",
-      "Casual",
-      "Coming Soon"
+      "Casual"
     ],
     "genre": "Casual",
-    "tagline": "Sort the chaos, one tumble at a time."
+    "tagline": "Sort the chaos, one tumble at a time.",
+    "playStoreUrl": "https://play.google.com/store/apps/details?id=com.Nexenova.SortTheBears",
+    "appStoreUrl": "",
+    "accentHue": 120
   },
   {
     "id": "twisty-snake",
     "title": "Twisty Snake",
-    "description": "The classic snake, reimagined with tight twisty controls and escalating chaos. Grow longer, dodge yourself, and chase the high score.",
-    "fullDescription": "Twisty Snake takes the arcade classic and tightens every screw. The controls are snappy, the turns are sharp, and the board fills up fast — the longer you survive, the more of your own tail you have to weave around.\n\nIt is pure pick-up-and-play arcade tension: one input, an instantly readable board, and a high score that always feels one run away.\n\n## Core Mechanics\n\n**Twisty Control** — Responsive, precise steering built for tight escapes.\n\n**Grow & Weave** — Every pickup makes you longer and the board more dangerous.\n\n**Score Chase** — Endless format tuned for one-more-run sessions and leaderboard bragging rights.",
-    "image": "https://picsum.photos/seed/twisty-snake-cover/1200/800",
+    "description": "Twist through rings, grow your snake & blast into Fire Mode in this tube run!",
+    "fullDescription": "Twist. Dodge. Grow. Go fire!\n\nTwisty Snake is the addictive one-finger runner that turns a simple idea into pure \"just one more run\" fun. Guide your snake down\nan endless spinning tube, twist to slip through the gap in every obstacle ring, and watch your snake grow longer with every\nflawless move. Sounds easy? The rings come faster, the gaps get tighter, and the only way forward is to stay perfect.\n\nHOW TO PLAY\n• Hold and twist to rotate your snake and line up with each ring's gap.\n• Slide through cleanly — no touching! — to score a Perfect.\n• Every Perfect grows your snake and builds your combo.\n• Clip a ring and your combo resets, so keep your nerve.\n\nCHASE FIRE MODE\nString together perfect passes to fill the meter (0/4 → 4/4). Hit the top and your snake erupts into FIRE MODE — a blazing fire\nhead that smashes straight through obstacles in a shower of effects. It's the most satisfying moment in the game, and it's all\nabout your skill.\n\nENDLESS, EVER-HARDER LEVELS\nThere's no finish line. Levels are generated on the fly and ramp up forever — longer tubes, trickier ring angles and meaner\nobstacle patterns the deeper you go. Every five levels you \"Level Up\" and start with a bigger snake. How far can you push it?\n\nCOLLECT & CUSTOMIZE\n• Grab sparkling diamonds mid-run to cash in bonus coins.\n• Unlock a collection of snake skins and swap your look.\n• Change the whole vibe with vortex tube skins, trails and color themes.\n• Spend your coins your way and make every run feel fresh.\n\nBEAT YOUR BEST\nEvery run logs your score and pushes you toward a new personal record. Come back daily to keep your streak alive — and to find out\nif today is the day you finally hit a new high.\n\nWHY YOU'LL LOVE IT\n• Pick-up-and-play one-finger controls — easy to learn, tough to master.\n• Oddly satisfying twist-and-grow gameplay with juicy effects and haptics.\n• Quick runs that fit any spare minute.\n• Plays offline, anywhere.\n• Free to play.\n\nSign in with Google Play Games to keep your progress safe across sessions.\n\nCan you stay perfect, chase the combo and ride the fire? Download Twisty Snake now and find out how long your snake — and your\nnerve — can really get!",
+    "image": "/twisty-snake-game-card.webp",
     "screenshots": [
-      "https://picsum.photos/seed/twisty-snake-shot-1/1600/900",
-      "https://picsum.photos/seed/twisty-snake-shot-2/1600/900",
-      "https://picsum.photos/seed/twisty-snake-shot-3/1600/900"
+      "/twisty-snake-game-card.webp"
     ],
     "platform": [
       "Android",
       "iOS"
     ],
-    "status": "Coming Soon",
+    "status": "Released",
     "rating": 0,
     "downloads": "",
     "releaseDate": "",
@@ -489,10 +196,126 @@
     "updatedAt": "2026-07-05T00:00:00.000Z",
     "tags": [
       "Arcade",
-      "Casual",
-      "Coming Soon"
+      "Casual"
     ],
-    "genre": "Arcade",
-    "tagline": "Twist, weave, survive."
+    "genre": "Casual",
+    "tagline": "Twist, weave, survive.",
+    "playStoreUrl": "https://play.google.com/store/apps/details?id=com.Nexenova.TwistySnake",
+    "appStoreUrl": "",
+    "accentHue": 240
+  },
+  {
+    "id": "park-escape",
+    "title": "Park Escape",
+    "description": "Untangle the traffic! Tap cars to escape the jam before time runs out.",
+    "fullDescription": "Gridlock never felt this good to solve.\n\nPark Escape is the tap-to-play traffic puzzle where every car is stuck — and only you can set them free. Tap a car, watch\nit drive along its path to the exit, and clear the whole jam before the timer hits zero. Easy to start, deliciously\ntricky to master.\n\n🚗 ONE-THUMB PLAY\nJust tap. Each car knows its route — your job is the order. Simple enough for a quick break, deep enough to keep you\nthinking.\n\n⏱️ BEAT THE CLOCK\nEvery level is a race. Read the jam, plan your moves, and escape before time runs out. Nail it with seconds to spare for\nthat perfect clear.\n\n🧩 HUNDREDS OF PUZZLES\nFrom gentle warm-ups to brain-bending gridlocks packed with gates, poles, and switches. The difficulty ramps just right —\nyou'll always feel that \"one more level\" pull.\n\n🚦 OBSTACLES THAT BITE\nFlip gates, trigger colored poles, hit buttons in the right order. Later levels turn the parking lot into a proper puzzle\nbox.\n\n🏆 CLIMB, COLLECT, COMPETE\nEarn coins, unlock a garage of cars, and chase the leaderboard. Show off your best and prove you're the sharpest driver\non the road.\n\n✨ MADE FOR MOBILE\nSnappy controls, satisfying feedback, quick sessions. Play offline, anywhere.\n\nThink you can clear the jam? Tap in and escape the gridlock.\n\nFree to play. Optional in-app purchases and ads.",
+    "image": "/park-escape-game-card.webp",
+    "screenshots": [
+      "/park-escape-game-card.webp"
+    ],
+    "platform": [
+      "Android",
+      "iOS"
+    ],
+    "status": "Released",
+    "rating": 0,
+    "downloads": "—",
+    "releaseDate": "",
+    "videoUrl": "",
+    "createdAt": "2026-07-05T00:00:00.000Z",
+    "updatedAt": "2026-07-05T00:00:00.000Z",
+    "tags": [
+      "Mobile",
+      "Puzzle"
+    ],
+    "genre": "Puzzle",
+    "tagline": "Twist, weave, survive.",
+    "playStoreUrl": "https://play.google.com/store/apps/details?id=com.nexenova.ParkEscape",
+    "appStoreUrl": "",
+    "accentHue": 48
+  },
+  {
+    "id": "big-brain",
+    "title": "Big Brain",
+    "description": "Pick the right gate, grow your runner, and take the crowd to the finish.",
+    "fullDescription": "Big Brain is a run-and-choose game: gates split the track, each one adds or subtracts, and the maths decides whether you arrive as a crowd or alone.\n\nQuick reads, instant feedback, and a finish line that rewards the greedier line.\n\n> Draft copy — replace with the studio’s own description before launch.",
+    "image": "/big-brain-game-card.webp",
+    "screenshots": [
+      "/big-brain-game-card.webp"
+    ],
+    "platform": [
+      "Android",
+      "iOS"
+    ],
+    "status": "Coming Soon",
+    "rating": 0,
+    "downloads": "—",
+    "releaseDate": "",
+    "videoUrl": "",
+    "createdAt": "2026-07-05T00:00:00.000Z",
+    "updatedAt": "2026-07-05T00:00:00.000Z",
+    "tags": [
+      "Mobile",
+      "Casual"
+    ],
+    "genre": "Casual",
+    "tagline": "Twist, weave, survive.",
+    "playStoreUrl": "",
+    "appStoreUrl": "",
+    "accentHue": 84
+  },
+  {
+    "id": "tiny-vanguard",
+    "title": "Tiny Vanguard",
+    "description": "Head-to-head 1v1 skirmishes. Out-think one opponent, one match at a time.",
+    "fullDescription": "Tiny Vanguard is a 1v1 multiplayer game built around short, decisive matches against a single opponent.\n\n> Draft copy — replace with the studio’s own description before launch.",
+    "image": "",
+    "screenshots": [],
+    "platform": [
+      "Android",
+      "iOS"
+    ],
+    "status": "Coming Soon",
+    "rating": 0,
+    "downloads": "—",
+    "releaseDate": "",
+    "videoUrl": "",
+    "createdAt": "2026-07-05T00:00:00.000Z",
+    "updatedAt": "2026-07-05T00:00:00.000Z",
+    "tags": [
+      "Mobile",
+      "Multiplayer"
+    ],
+    "genre": "Multiplayer",
+    "tagline": "Twist, weave, survive.",
+    "playStoreUrl": "",
+    "appStoreUrl": ""
+  },
+  {
+    "id": "tower-defence-system",
+    "title": "Tower Defence System",
+    "description": "Place, upgrade, hold the line. Every wave punishes a lazy layout.",
+    "fullDescription": "Tower Defence System is a lane-defence strategy game about building a layout that survives escalating waves.\n\n> Draft copy — replace with the studio’s own description before launch.",
+    "image": "",
+    "screenshots": [],
+    "platform": [
+      "Android",
+      "iOS"
+    ],
+    "status": "Coming Soon",
+    "rating": 0,
+    "downloads": "—",
+    "releaseDate": "",
+    "videoUrl": "",
+    "createdAt": "2026-07-05T00:00:00.000Z",
+    "updatedAt": "2026-07-05T00:00:00.000Z",
+    "tags": [
+      "Mobile",
+      "Strategy"
+    ],
+    "genre": "Strategy",
+    "tagline": "Twist, weave, survive.",
+    "playStoreUrl": "",
+    "appStoreUrl": ""
   }
 ]

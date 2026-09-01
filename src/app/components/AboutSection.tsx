@@ -48,7 +48,7 @@ export function AboutSection({ description: _description }: AboutSectionProps) {
   ]
 
   return (
-    <section id="about" className="py-20 bg-secondary/10">
+    <section id="about" className="section-about py-24">
       <div className="container mx-auto px-4">
         <AnimatedSection className="text-center mb-16">
           <motion.span
@@ -56,7 +56,7 @@ export function AboutSection({ description: _description }: AboutSectionProps) {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
-            className="inline-block text-xs uppercase tracking-[0.22em] text-primary font-medium mb-4"
+            className="section-eyebrow mb-4 inline-block"
           >
             About the Studio
           </motion.span>
@@ -89,10 +89,10 @@ export function AboutSection({ description: _description }: AboutSectionProps) {
               direction={i % 2 === 0 ? 'left' : 'right'}
             >
               <motion.div whileHover={{ y: -4 }} transition={{ duration: 0.3 }}>
-                <Card className="border-border/60 shadow-sm hover:shadow-md transition-shadow h-full bg-card/60 backdrop-blur-sm">
+                <Card className="border-border/60 shadow-sm hover:shadow-md transition-shadow h-full bg-[var(--surface-1)] backdrop-blur-sm">
                   <CardContent className="p-7">
                     <div className="flex items-start gap-4">
-                      <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary flex-shrink-0">
+                      <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-[color-mix(in_oklab,var(--section-accent)_12%,transparent)] text-[var(--section-accent)] flex-shrink-0">
                         <p.icon className="h-6 w-6" />
                       </span>
                       <div>
@@ -112,7 +112,7 @@ export function AboutSection({ description: _description }: AboutSectionProps) {
           <div className="rounded-2xl border border-border/60 bg-card/70 backdrop-blur-sm overflow-hidden">
             <div className="grid lg:grid-cols-12 gap-0">
               <div className="lg:col-span-5 p-8 lg:p-10 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border-b lg:border-b-0 lg:border-r border-border/60">
-                <span className="inline-block text-xs uppercase tracking-[0.22em] text-primary font-medium mb-3">
+                <span className="section-eyebrow mb-3 inline-block">
                   Our Playbook
                 </span>
                 <h3 className="text-3xl font-bold mb-4 tracking-tight leading-tight">
@@ -133,7 +133,7 @@ export function AboutSection({ description: _description }: AboutSectionProps) {
                       viewport={{ once: true }}
                       className="flex items-start gap-4"
                     >
-                      <span className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-background border border-border/60 text-primary flex-shrink-0">
+                      <span className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-background border border-border/60 text-[var(--section-accent)] flex-shrink-0">
                         <step.icon className="h-5 w-5" />
                       </span>
                       <div>

@@ -1,8 +1,11 @@
-import { ArrowLeft, ChevronDown, ChevronUp, ExternalLink } from 'lucide-react'
+import { ChevronDown, ChevronUp, ExternalLink, Play } from 'lucide-react'
 import { motion } from 'motion/react'
 import ReactMarkdown from 'react-markdown'
 import { Button } from '../ui/button'
 import { Badge } from '../ui/badge'
+import { StatusPill } from '../GameStatusPill'
+import { StoreBadges } from '../StoreBadges'
+import { stageOf } from '../../data/stages'
 import { Card, CardContent } from '../ui/card'
 import { ImageWithFallback } from '../figma/ImageWithFallback'
 import { useState } from 'react'
@@ -15,6 +18,10 @@ interface Game {
   image: string
   tags: string[]
   steamUrl?: string
+  playStoreUrl?: string
+  appStoreUrl?: string
+  /** Hue sampled from this game's key art; see gameAccent(). */
+  accentHue?: number
   status: string
   downloads: string
   rating: number
@@ -38,6 +45,24 @@ function extractVideoId(url: string): string {
   return match ? match[1] : 'dQw4w9WgXcQ'
 }
 
+/**
+ * Per-game accent, sampled from its key art.
+ *
+ * Only the HUE comes from the artwork. Lightness and chroma are pinned to the
+ * site's own accent values (L .78 / C .148), which is what keeps every game
+ * page above 9:1 on the black ground — a raw "dominant colour" lifted from a
+ * PNG would be arbitrarily dark, washed out, or neon.
+ *
+ * The hue is also the artwork's most DISTINCTIVE colour, not its most common
+ * one: every card shares a purple-blue background, so dominant-colour sampling
+ * put all eight games within 260-310 degrees and made the pages look identical.
+ */
+function gameAccent(game: Game): string | undefined {
+  return typeof game.accentHue === 'number'
+    ? `oklch(0.78 0.148 ${game.accentHue})`
+    : undefined
+}
+
 export function GamePage({ game, onNavigateHome, onNavigateToGame, relatedGames = [] }: GamePageProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [aboutExpanded, setAboutExpanded] = useState(false)
@@ -54,17 +79,18 @@ export function GamePage({ game, onNavigateHome, onNavigateToGame, relatedGames 
   }
 
   // Transform the game data for display
+  const [playing, setPlaying] = useState(false)
+
   const transformedGame = {
     id: game.id,
     title: game.title || 'Unknown Game',
     tags: game.tags || [],
     description: game.fullDescription || game.description || 'No description available.',
     images: (game.screenshots && game.screenshots.length > 0) ? game.screenshots : (game.image ? [game.image] : []),
-    videoId: game.videoUrl ? extractVideoId(game.videoUrl) : 'dQw4w9WgXcQ',
-    steamUrl: game.steamUrl || '',
+    videoId: game.videoUrl ? extractVideoId(game.videoUrl) : '',
+    steamUrl: game.playStoreUrl || game.steamUrl || '',
     features: [
       game.genre && `Genre: ${game.genre}`,
-      `Status: ${game.status || 'Unknown'}`,
       (game.platform && game.platform.length > 0) && `Platforms: ${game.platform.join(', ')}`,
       game.rating && `Rating: ${game.rating}/10`,
       game.downloads && `Downloads: ${game.downloads}`,
@@ -72,190 +98,159 @@ export function GamePage({ game, onNavigateHome, onNavigateToGame, relatedGames 
     ].filter(Boolean)
   }
 
-  const nextImage = () => {
-    if (transformedGame.images && transformedGame.images.length > 0) {
-      setCurrentImageIndex((prev) => (prev + 1) % transformedGame.images.length)
-    }
-  }
-
-  const prevImage = () => {
-    if (transformedGame.images && transformedGame.images.length > 0) {
-      setCurrentImageIndex((prev) => (prev - 1 + transformedGame.images.length) % transformedGame.images.length)
-    }
-  }
+  const accent = gameAccent(game)
 
   return (
-    <div className="min-h-screen bg-background pt-16">
-      {/* Hero Section */}
-      <motion.section 
-        className="relative py-20 bg-gradient-to-br from-background to-secondary/20"
+    <div
+      className="relative min-h-screen overflow-x-hidden bg-background pt-16"
+      // Overrides the section accent for this page only; the artwork tints the
+      // headings, buttons, pills and glow without any component knowing about it.
+      style={accent ? ({ '--section-accent': accent } as Record<string, string>) : undefined}
+    >
+      {/* A wash of the game's own colour behind the fold */}
+      {accent && (
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 top-0 h-[560px]"
+          style={{ background: `radial-gradient(70% 55% at 62% 0%, color-mix(in oklab, ${accent} 16%, transparent), transparent 72%)` }}
+        />
+      )}
+      {/* Overview — copy on the left, artwork on the right. These used to be
+          four stacked full-height sections (hero, trailer, about, gallery),
+          which made a short page scroll for a very long time. */}
+      <motion.section
+        className="py-12 md:py-16"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1, duration: 0.4 }}
       >
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">{transformedGame.title}</h1>
-            <div className="flex flex-wrap justify-center gap-2 mb-6">
-              {transformedGame.tags?.map((tag, index) => (
-                <Badge key={index} variant="secondary" className="text-sm">
-                  {tag}
-                </Badge>
-              ))}
-            </div>
-            {transformedGame.features.length > 0 && (
-              <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-muted-foreground mb-8">
-                {transformedGame.features.map((feature, i) => (
-                  <span key={i} className="inline-flex items-center gap-2">
-                    <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-                    {feature}
-                  </span>
-                ))}
-              </div>
-            )}
-            {transformedGame.steamUrl && (
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button
-                  size="lg"
-                  onClick={() => window.open(transformedGame.steamUrl, '_blank')}
-                  className="flex items-center space-x-2"
-                >
-                  <ExternalLink className="h-5 w-5" />
-                  <span>View on Store</span>
-                </Button>
-              </div>
-            )}
-          </div>
-        </div>
-      </motion.section>
+          <div className="grid gap-10 lg:grid-cols-12 lg:gap-14">
 
-      {/* Video Section - Only show if there's a video */}
-      {transformedGame.videoId && transformedGame.videoId !== 'dQw4w9WgXcQ' && (
-        <motion.section
-          className="py-20"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3, duration: 0.4 }}
-        >
-          <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold text-center mb-12">Gameplay Video</h2>
-            <div className="max-w-4xl mx-auto">
-              <div className="aspect-video rounded-lg overflow-hidden bg-muted shadow-lg">
-                <iframe
-                  src={`https://www.youtube.com/embed/${transformedGame.videoId}`}
-                  title={`${transformedGame.title} Gameplay Video`}
-                  className="w-full h-full"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
-              </div>
-            </div>
-          </div>
-        </motion.section>
-      )}
+            {/* LEFT — identity and copy */}
+            <div className="lg:col-span-7">
+              <StatusPill stage={stageOf(game)} />
 
-      {/* Description Section */}
-      <motion.section
-        className="py-20 bg-secondary/10"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4, duration: 0.4 }}
-      >
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto">
-            <h2 className="text-3xl font-bold mb-6">About the Game</h2>
-            {transformedGame.description ? (
-              <div className="relative">
-                <div
-                  className={`prose prose-neutral dark:prose-invert max-w-none prose-headings:font-semibold prose-headings:tracking-tight prose-p:leading-relaxed prose-li:leading-relaxed prose-a:text-primary overflow-hidden transition-[max-height] duration-500 ${
-                    aboutExpanded ? 'max-h-[12000px]' : 'max-h-80'
-                  }`}
-                >
-                  <ReactMarkdown>{transformedGame.description}</ReactMarkdown>
-                </div>
-                {!aboutExpanded && (
-                  <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-secondary/10 to-transparent" />
-                )}
-                <button
-                  type="button"
-                  onClick={() => setAboutExpanded((v) => !v)}
-                  className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline underline-offset-4"
-                >
-                  {aboutExpanded ? (
-                    <>
-                      Show less
-                      <ChevronUp className="h-4 w-4" />
-                    </>
-                  ) : (
-                    <>
-                      Read more
-                      <ChevronDown className="h-4 w-4" />
-                    </>
-                  )}
-                </button>
-              </div>
-            ) : (
-              <p>No description available.</p>
-            )}
-          </div>
-        </div>
-      </motion.section>
+              <h1 className="mt-4 font-display text-4xl font-extrabold tracking-[-0.035em] md:text-5xl">
+                {transformedGame.title}
+              </h1>
 
-      {/* Gallery Section */}
-      {transformedGame.images && transformedGame.images.length > 0 && (
-        <motion.section
-          className="py-20"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.4 }}
-        >
-          <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold text-center mb-12">Gallery</h2>
-            <div className="max-w-4xl mx-auto">
-              <div className="relative">
-                <div className="aspect-video rounded-lg overflow-hidden bg-muted">
-                  <ImageWithFallback
-                    src={transformedGame.images[currentImageIndex] || ''}
-                    alt={`${transformedGame.title} screenshot ${currentImageIndex + 1}`}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-
-                {/* Navigation arrows */}
-                {transformedGame.images.length > 1 && (
-                  <>
-                    <button
-                      onClick={prevImage}
-                      className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors"
-                    >
-                      <ArrowLeft className="h-5 w-5" />
-                    </button>
-                    <button
-                      onClick={nextImage}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors"
-                    >
-                      <ArrowLeft className="h-5 w-5 rotate-180" />
-                    </button>
-                  </>
-                )}
-
-                {/* Dots indicator */}
-                <div className="flex justify-center mt-4 space-x-2">
-                  {transformedGame.images.map((_, index) => (
-                    <button
-                      key={index}
-                      onClick={() => setCurrentImageIndex(index)}
-                      className={`w-2 h-2 rounded-full transition-colors ${
-                        index === currentImageIndex ? 'bg-primary' : 'bg-muted-foreground/30'
-                      }`}
-                    />
+              {transformedGame.tags?.length > 0 && (
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {transformedGame.tags.map((tag, index) => (
+                    <Badge key={index} variant="secondary" className="text-xs">
+                      {tag}
+                    </Badge>
                   ))}
                 </div>
+              )}
+
+              {transformedGame.features.length > 0 && (
+                <div className="mt-5 flex flex-wrap gap-x-6 gap-y-2 font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
+                  {transformedGame.features.map((feature, i) => (
+                    <span key={i} className="inline-flex items-center gap-2">
+                      <span className="h-1.5 w-1.5 rounded-full bg-[var(--section-accent)]" />
+                      {feature}
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              <div className="mt-7 max-w-sm">
+                <StoreBadges
+                  playStoreUrl={game.playStoreUrl}
+                  appStoreUrl={game.appStoreUrl}
+                  title={transformedGame.title}
+                />
+              </div>
+
+              <h2 className="mt-10 mb-4 text-xl font-extrabold tracking-tight">About the game</h2>
+              {transformedGame.description ? (
+                <div className="relative">
+                  <div
+                    className={`prose prose-neutral dark:prose-invert max-w-none prose-headings:font-semibold prose-headings:tracking-tight prose-p:leading-relaxed prose-li:leading-relaxed prose-a:text-[var(--section-accent)] overflow-hidden transition-[max-height] duration-500 ${
+                      aboutExpanded ? 'max-h-[12000px]' : 'max-h-72'
+                    }`}
+                  >
+                    <ReactMarkdown>{transformedGame.description}</ReactMarkdown>
+                  </div>
+                  {!aboutExpanded && (
+                    <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-background to-transparent" />
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => setAboutExpanded((v) => !v)}
+                    className="mt-4 inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-[var(--section-accent)] hover:underline underline-offset-4"
+                  >
+                    {aboutExpanded ? (<>Show less<ChevronUp className="h-4 w-4" /></>) : (<>Read more<ChevronDown className="h-4 w-4" /></>)}
+                  </button>
+                </div>
+              ) : (
+                <p className="text-muted-foreground">No description available.</p>
+              )}
+            </div>
+
+            {/* RIGHT — artwork, doubling as the trailer poster when there is one */}
+            <div className="lg:col-span-5">
+              <div className="lg:sticky lg:top-24">
+                <div className="relative aspect-[2/3] overflow-hidden rounded-2xl border border-border bg-[var(--surface-2)]">
+                  {playing && transformedGame.videoId ? (
+                    <iframe
+                      src={`https://www.youtube-nocookie.com/embed/${transformedGame.videoId}?autoplay=1&rel=0`}
+                      title={`${transformedGame.title} trailer`}
+                      className="absolute inset-0 h-full w-full"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  ) : (
+                    <>
+                      <ImageWithFallback
+                        src={transformedGame.images[currentImageIndex] || ''}
+                        alt={`${transformedGame.title} artwork`}
+                        width={800}
+                        height={1200}
+                        className="absolute inset-0 h-full w-full object-cover"
+                      />
+                      {transformedGame.videoId && (
+                        <button
+                          type="button"
+                          onClick={() => setPlaying(true)}
+                          aria-label={`Play the ${transformedGame.title} trailer`}
+                          className="group absolute inset-0 flex items-center justify-center bg-black/25 transition-colors hover:bg-black/40"
+                        >
+                          <span
+                            className="flex h-16 w-16 items-center justify-center rounded-full transition-transform group-hover:scale-110"
+                            style={{ backgroundColor: 'var(--section-accent)' }}
+                          >
+                            <Play className="ml-1 h-7 w-7 fill-current text-[var(--background)]" />
+                          </span>
+                        </button>
+                      )}
+                    </>
+                  )}
+                </div>
+
+                {transformedGame.images.length > 1 && (
+                  <div className="mt-3 flex gap-2">
+                    {transformedGame.images.map((img, index) => (
+                      <button
+                        key={index}
+                        type="button"
+                        onClick={() => { setCurrentImageIndex(index); setPlaying(false) }}
+                        aria-label={`Show artwork ${index + 1}`}
+                        className="aspect-[2/3] w-14 overflow-hidden rounded-lg border transition-colors"
+                        style={{ borderColor: index === currentImageIndex ? 'var(--section-accent)' : 'var(--border)' }}
+                      >
+                        <ImageWithFallback src={img} alt="" className="h-full w-full object-cover" />
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </div>
-        </motion.section>
-      )}
+        </div>
+      </motion.section>
 
       {/* Related Games Section */}
       {relatedGames && relatedGames.length > 0 && (
@@ -323,7 +318,7 @@ export function GamePage({ game, onNavigateHome, onNavigateToGame, relatedGames 
                   className="flex items-center space-x-2"
                 >
                   <ExternalLink className="h-5 w-5" />
-                  <span>View on Store</span>
+                  <span>Get it on Google Play</span>
                 </Button>
               )}
               <Button

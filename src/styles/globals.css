@@ -39,6 +39,34 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  /* Studio Black — surfaces */
+  --surface-1: oklch(0.985 0 0);
+  --surface-2: oklch(0.96 0 0);
+
+  /* Studio Black — maturity ramp. Same lightness & chroma, hue only varies,
+     so the five states read as one family. Light-mode values sit at L=0.52
+     so they clear AA on white; the .dark block lifts them to L=0.78. */
+  --stage-ideation: oklch(0.52 0.148 299);
+  --stage-prototype: oklch(0.52 0.148 216);
+  --stage-softlaunch: oklch(0.52 0.148 75);
+  --stage-soon: oklch(0.52 0.148 25);
+  --stage-live: oklch(0.52 0.148 150);
+
+  /* Brand arc, measured off public/logo-mark.png: the star runs purple 299deg ->
+     blue 271deg -> cyan 216deg. Section identity is sampled from this arc, so
+     no section ever wears a colour the logo doesn't contain. */
+  --brand-purple: oklch(0.52 0.148 299);
+  --brand-blue: oklch(0.52 0.148 271);
+  --brand-cyan: oklch(0.52 0.148 216);
+
+  /* Section accent — every section sets this to one brand colour (see
+     .section-* below); components read var(--section-accent), never a hue. */
+  --section-accent: var(--brand-blue);
+
+  --ff-display: 'Bricolage Grotesque', 'Archivo', system-ui, sans-serif;
+  --ff-body: 'Archivo', system-ui, -apple-system, 'Helvetica Neue', sans-serif;
+  --ff-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
 .dark {
@@ -53,12 +81,12 @@
   --secondary: oklch(0.269 0 0);
   --secondary-foreground: oklch(0.985 0 0);
   --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
+  --muted-foreground: oklch(0.76 0 0);
   --accent: oklch(0.269 0 0);
   --accent-foreground: oklch(0.985 0 0);
   --destructive: oklch(0.396 0.141 25.723);
   --destructive-foreground: oklch(0.637 0.237 25.331);
-  --border: oklch(0.269 0 0);
+  --border: oklch(0.30 0 0);
   --input: oklch(0.269 0 0);
   --ring: oklch(0.439 0 0);
   --font-weight-medium: 500;
@@ -76,6 +104,22 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(0.269 0 0);
   --sidebar-ring: oklch(0.439 0 0);
+
+  /* Studio Black — surfaces (page #0a0a0a, card #151515, art well #202020) */
+  --surface-1: oklch(0.196 0 0);
+  --surface-2: oklch(0.245 0 0);
+
+  --brand-purple: oklch(0.78 0.148 299);
+  --brand-blue: oklch(0.78 0.148 271);
+  --brand-cyan: oklch(0.78 0.148 216);
+
+  /* Maturity ramp on black: every value clears AA on both the page and card
+     surfaces at 8.3:1 or better. */
+  --stage-ideation: oklch(0.78 0.148 299);
+  --stage-prototype: oklch(0.78 0.148 216);
+  --stage-softlaunch: oklch(0.78 0.148 75);
+  --stage-soon: oklch(0.78 0.148 25);
+  --stage-live: oklch(0.78 0.148 150);
 }
 
 @theme inline {
@@ -117,6 +161,20 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-surface-1: var(--surface-1);
+  --color-surface-2: var(--surface-2);
+  --color-stage-ideation: var(--stage-ideation);
+  --color-stage-prototype: var(--stage-prototype);
+  --color-stage-softlaunch: var(--stage-softlaunch);
+  --color-stage-soon: var(--stage-soon);
+  --color-stage-live: var(--stage-live);
+  --color-brand-purple: var(--brand-purple);
+  --color-brand-blue: var(--brand-blue);
+  --color-brand-cyan: var(--brand-cyan);
+  --color-section-accent: var(--section-accent);
+  --font-display: var(--ff-display);
+  --font-body: var(--ff-body);
+  --font-mono: var(--ff-mono);
 }
 
 @layer base {
@@ -132,6 +190,7 @@
 
   body {
     @apply bg-background text-foreground;
+    font-family: var(--ff-body);
     /* Предотвращение горизонтального скролла */
     overflow-x: hidden;
   }
@@ -358,4 +417,80 @@
       left: 100%;
     }
   }
+}
+/* ---------------------------------------------------------------------------
+   Studio Black — section identity.
+   Black is constant; each section declares which stage of the studio it
+   represents and everything inside it inherits that accent. This replaces the
+   old py-20 / bg-secondary/10 alternation as the thing that separates
+   sections. The pipeline board is the deliberate exception: it shows the whole
+   ramp at once, because there the colours are the content.
+--------------------------------------------------------------------------- */
+.section-hero     { --section-accent: var(--brand-blue); }
+.section-about    { --section-accent: var(--brand-purple); }
+.section-games    { --section-accent: var(--brand-cyan); }
+.section-team     { --section-accent: var(--brand-blue); }
+
+/* ---------------------------------------------------------------------------
+   Team — "Ink & Halftone" on black.
+   The cards keep the comic treatment (cream panel, ink keyline, halftone,
+   hard offset shadow) but the SECTION stays on the site's black ground — a
+   cream section fought the rest of the site. The offset shadow is therefore
+   thrown in the member's discipline colour, since an ink shadow would be
+   invisible against black.
+--------------------------------------------------------------------------- */
+.section-team {
+  --section-accent: var(--brand-blue);
+  --ink: #14121a;
+  --cream: #f3ead9;
+}
+.section-devlog   { --section-accent: var(--brand-cyan); }
+.section-contact  { --section-accent: var(--brand-blue); }
+
+/* Default buttons, links and focus rings inside a section adopt that section's
+   accent, so the whole UI stays on the brand arc without every call site
+   naming a colour. Light mode accents are dark (L .52) so they take white
+   text; on black they are light (L .78) and take near-black text. */
+.section-hero,
+.section-about,
+.section-games,
+.section-team,
+.section-devlog,
+.section-contact {
+  --primary: var(--section-accent);
+  --primary-foreground: oklch(0.985 0 0);
+  --ring: var(--section-accent);
+}
+
+.dark .section-hero,
+.dark .section-about,
+.dark .dark .section-games,
+.dark .section-team,
+.dark .section-devlog,
+.dark .section-contact {
+  --primary-foreground: oklch(0.145 0 0);
+}
+
+h1, h2, h3, .font-display { font-family: var(--ff-display); }
+
+/* Eyebrow label above every section heading. */
+.section-eyebrow {
+  font-family: var(--ff-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--section-accent);
+}
+
+/* Discipline blocks on the team cards. These pastels are backgrounds carrying
+   ink-stroked lettering, so they are the L=.78 values regardless of theme. */
+.ink-halftone {
+  background-image: radial-gradient(circle at center, rgba(20,18,26,.34) 1.4px, transparent 1.6px);
+  background-size: 9px 9px;
+}
+.ink-burst {
+  background: conic-gradient(from 0deg,
+    var(--cream) 0 10deg, transparent 10deg 22deg, var(--cream) 22deg 32deg,
+    transparent 32deg 44deg, var(--cream) 44deg 54deg, transparent 54deg 66deg,
+    var(--cream) 66deg 76deg, transparent 76deg 90deg);
 }

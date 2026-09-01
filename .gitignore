@@ -17,3 +17,7 @@ dist
 # Visual-review artifacts (local-only)
 .screenshots/
 _*.mjs
+
+# Design exploration canvases — published as Artifacts, not part of the site.
+# Each file embeds a ~2.4MB editor bundle.
+design-drafts/

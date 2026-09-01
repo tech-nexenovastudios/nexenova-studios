@@ -34,7 +34,7 @@ export function DevlogSection({ onNavigateToDevlog, onNavigateToPost }: DevlogSe
   if (loaded && posts.length === 0) return null
 
   return (
-    <section id="devlog" className="py-20 bg-secondary/10">
+    <section id="devlog" className="section-devlog py-24">
       <div className="container mx-auto px-4">
         <AnimatedSection className="text-center mb-14">
           <motion.span
@@ -42,7 +42,7 @@ export function DevlogSection({ onNavigateToDevlog, onNavigateToPost }: DevlogSe
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
-            className="inline-block text-xs uppercase tracking-[0.22em] text-primary font-medium mb-4"
+            className="section-eyebrow mb-4 inline-block"
           >
             From the Studio
           </motion.span>
@@ -51,7 +51,7 @@ export function DevlogSection({ onNavigateToDevlog, onNavigateToPost }: DevlogSe
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="text-4xl md:text-5xl font-bold mb-5 tracking-tight"
+            className="text-4xl md:text-5xl font-extrabold mb-5 tracking-tight"
           >
             Latest devlog.
           </motion.h2>
@@ -76,16 +76,16 @@ export function DevlogSection({ onNavigateToDevlog, onNavigateToPost }: DevlogSe
                 transition={{ duration: 0.3 }}
                 className="w-full text-left group focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background rounded-xl"
               >
-                <Card className="border-border/60 bg-card/60 backdrop-blur-sm hover:shadow-md transition-shadow h-full">
+                <Card className="border-border/60 bg-[var(--surface-1)] backdrop-blur-sm hover:shadow-md transition-shadow h-full">
                   <CardContent className="p-6 flex flex-col h-full">
-                    <span className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary mb-4 flex-shrink-0">
+                    <span className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-[color-mix(in_oklab,var(--section-accent)_12%,transparent)] text-[var(--section-accent)] mb-4 flex-shrink-0">
                       <FileText className="h-5 w-5" />
                     </span>
                     <div className="flex items-center gap-2 text-xs text-muted-foreground mb-2">
                       <Calendar className="h-3.5 w-3.5" />
                       {formatDate(post.published_at)}
                     </div>
-                    <h3 className="text-lg font-semibold mb-2 leading-tight group-hover:text-primary transition-colors">
+                    <h3 className="text-lg font-semibold mb-2 leading-tight group-hover:text-[var(--section-accent)] transition-colors">
                       {post.title}
                     </h3>
                     {post.excerpt && (
@@ -93,7 +93,7 @@ export function DevlogSection({ onNavigateToDevlog, onNavigateToPost }: DevlogSe
                         {post.excerpt}
                       </p>
                     )}
-                    <div className="mt-auto flex items-center gap-1 text-sm font-medium text-primary group-hover:translate-x-1 transition-transform">
+                    <div className="mt-auto flex items-center gap-1 text-sm font-medium text-[var(--section-accent)] group-hover:translate-x-1 transition-transform">
                       Read post
                       <ArrowRight className="h-3.5 w-3.5" />
                     </div>

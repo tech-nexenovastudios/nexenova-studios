@@ -84,12 +84,8 @@ try {
   const roles = await fetchSupabaseRows(
     `careers?select=slug,updated_at,closed_at&closed_at=is.null`,
   )
-  // Kept in step with PLACEHOLDER_ROLES in src/app/data/careers.ts — a slug
-  // hidden from the site must not be advertised to Google either.
-  const PLACEHOLDER_ROLES = new Set(['game-mathematician', 'senior-2d-animator'])
   if (roles) {
     for (const r of roles) {
-      if (PLACEHOLDER_ROLES.has(r.slug)) continue
       urls.push({
         loc: `/careers/${r.slug}`,
         changefreq: 'weekly',

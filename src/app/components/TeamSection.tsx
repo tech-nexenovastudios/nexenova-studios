@@ -36,36 +36,23 @@ type TeamCard = {
 }
 
 /**
- * Enrichment for people we hold more detail on than the CMS record carries.
- *
- * Keyed by the name stored in the database, and merged OVER that record so the
- * person keeps their place in the roster — the database has "Prabhat / Unity
- * Developer", and this upgrades that same card rather than adding a second one.
+ * Extra detail we hold beyond what the CMS record carries — credits, links and
+ * a fuller bio. Keyed by the name in the database and merged over that record,
+ * so each person keeps their place in the roster.
  *
  * Bio text comes from Prabhat's public LinkedIn profile. The phone number and
  * private email on that CV are deliberately not reproduced: this is a public
  * page, and the contact form is the route in.
  */
-/**
- * People who have left the roster. The CMS record still lists them and this
- * session has no write access to it, so they are filtered out here. Delete the
- * record in the CMS and the name can come off this list.
- */
-const FORMER_MEMBERS = new Set(['Prodipta'])
-
 const PROFILES: Record<string, Partial<TeamCard> & { shipped?: string[] }> = {
-  Prabhat: {
-    name: 'Prabhat Kumar',
-    role: 'Senior Unity Developer',
+  'Prabhat Kumar': {
     bio: 'Owns the full production stack solo — gameplay in C#, meta systems, and live-ops on Unity Gaming Services.',
     skills: ['Unity', 'C#', 'Live-Ops', 'Unity IAP'],
     shipped: ['No Limit Arena', 'Twisty Snake', 'Big Brain', 'Sweet Tumble'],
     creditLabel: 'Built solo',
     social: { linkedin: 'https://www.linkedin.com/in/prabhatkumar5071/' },
   },
-  Ashutosh: {
-    name: 'Ashutosh Kushwah',
-    role: 'Unity Developer',
+  'Ashutosh Kushwah': {
     bio: 'Unity and C# developer focused on gameplay mechanics, AI behaviour, and keeping builds fast across every device tier.',
     skills: ['Unity', 'C#', 'Gameplay AI'],
     shipped: ['Smashy Qube', 'Last Turn'],
@@ -151,7 +138,7 @@ function initialsOf(name: string): string {
 export function TeamSection({ teamMembers = [], onNavigateToCareers }: TeamSectionProps) {
   const team: TeamCard[] =
     teamMembers.length > 0
-      ? teamMembers.filter(m => !FORMER_MEMBERS.has(m.name)).map((m) => {
+      ? teamMembers.map((m) => {
           const extra = PROFILES[m.name] ?? {}
           return {
             name: m.name,

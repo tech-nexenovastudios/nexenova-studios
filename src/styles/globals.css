@@ -53,7 +53,7 @@
   --stage-soon: oklch(0.52 0.148 25);
   --stage-live: oklch(0.52 0.148 150);
 
-  /* Brand arc, measured off public/logo-mark.png: the star runs purple 299deg ->
+  /* Brand arc, measured off the star mark: the star runs purple 299deg ->
      blue 271deg -> cyan 216deg. Section identity is sampled from this arc, so
      no section ever wears a colour the logo doesn't contain. */
   --brand-purple: oklch(0.52 0.148 299);

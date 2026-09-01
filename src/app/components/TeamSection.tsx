@@ -1,6 +1,7 @@
 import { motion } from 'motion/react'
 import { Github, Linkedin } from 'lucide-react'
 import { XIcon } from './icons/XIcon'
+import { AppLink } from './AppLink'
 import { AnimatedSection } from './AnimatedSection'
 import {
   Carousel,
@@ -288,13 +289,11 @@ export function TeamSection({ teamMembers = [], onNavigateToCareers }: TeamSecti
           <p className="text-sm text-muted-foreground">
             We&rsquo;re hiring craft we believe in.{' '}
             {onNavigateToCareers ? (
-              <button
-                type="button"
-                onClick={onNavigateToCareers}
+              <AppLink href="/careers" onNavigate={onNavigateToCareers}
                 className="font-medium text-[var(--section-accent)] hover:underline underline-offset-4"
               >
                 See open roles &rarr;
-              </button>
+              </AppLink>
             ) : (
               <a
                 href="/careers"

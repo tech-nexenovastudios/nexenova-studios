@@ -4,6 +4,7 @@ import { ArrowRight, Calendar, FileText } from 'lucide-react'
 import { Card, CardContent } from './ui/card'
 import { AnimatedSection } from './AnimatedSection'
 import { listPosts, type DevlogPost } from '../data/devlog'
+import { handleNavClick } from './AppLink'
 
 interface DevlogSectionProps {
   onNavigateToDevlog: () => void
@@ -69,12 +70,12 @@ export function DevlogSection({ onNavigateToDevlog, onNavigateToPost }: DevlogSe
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
           {posts.map((post, i) => (
             <AnimatedSection key={post.id} delay={i * 0.1} direction="up">
-              <motion.button
-                type="button"
-                onClick={() => onNavigateToPost(post.slug)}
+              <motion.a
+                href={`/devlog/${post.slug}`}
+                onClick={handleNavClick(() => onNavigateToPost(post.slug))}
                 whileHover={{ y: -4 }}
                 transition={{ duration: 0.3 }}
-                className="w-full text-left group focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background rounded-xl"
+                className="block w-full text-left group focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background rounded-xl"
               >
                 <Card className="border-border/60 bg-[var(--surface-1)] backdrop-blur-sm hover:shadow-md transition-shadow h-full">
                   <CardContent className="p-6 flex flex-col h-full">
@@ -99,22 +100,22 @@ export function DevlogSection({ onNavigateToDevlog, onNavigateToPost }: DevlogSe
                     </div>
                   </CardContent>
                 </Card>
-              </motion.button>
+              </motion.a>
             </AnimatedSection>
           ))}
         </div>
 
         <AnimatedSection delay={0.3} className="text-center">
-          <motion.button
-            type="button"
-            onClick={onNavigateToDevlog}
+          <motion.a
+            href="/devlog"
+            onClick={handleNavClick(onNavigateToDevlog)}
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
             className="inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-border bg-background hover:border-primary/40 hover:bg-primary/5 transition-colors font-medium"
           >
             Read all posts
             <ArrowRight className="h-4 w-4" />
-          </motion.button>
+          </motion.a>
         </AnimatedSection>
       </div>
     </section>

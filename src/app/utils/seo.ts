@@ -1,14 +1,46 @@
 import { useEffect } from 'react'
+import {
+  DEFAULT_IMAGE,
+  DEFAULT_IMAGE_ALT,
+  SITE_NAME,
+  SITE_URL,
+  TWITTER_HANDLE,
+  absoluteUrl,
+} from '../../../shared/seo/schema.mjs'
 
-// Absolute origin of the production site. Used to build canonical/OG URLs and
-// the sitemap. Update here if the primary domain ever changes.
-export const SITE_URL = 'https://nexenovastudios.com'
-export const SITE_NAME = 'Nexenova Studios'
+// The values themselves — titles, descriptions, JSON-LD — live in
+// shared/seo/*.mjs so the build step and the Cloudflare middleware can bake the
+// exact same head into the raw HTML (see functions/_middleware.js). This module
+// is only the browser half: it applies a SeoConfig to the live document.
+export {
+  SITE_URL,
+  SITE_NAME,
+  clip,
+  absoluteUrl,
+  organizationLd,
+  websiteLd,
+  breadcrumbLd,
+  videoGameLd,
+  blogPostingLd,
+  jobPostingLd,
+} from '../../../shared/seo/schema.mjs'
 
-// Default social share image: a 1200×630 PNG (raster — SVG isn't rendered by
-// Facebook/LinkedIn/X crawlers). Game and devlog pages override this with their
-// own artwork; other routes fall back to this branded card.
-const DEFAULT_IMAGE = `${SITE_URL}/og-image.png`
+export {
+  homeSeo,
+  devlogIndexSeo,
+  careersIndexSeo,
+  privacySeo,
+  termsSeo,
+  cookiesSeo,
+  deleteAccountSeo,
+  notFoundSeo,
+  gameSeo,
+  gameNotFoundSeo,
+  devlogPostSeo,
+  devlogPostNotFoundSeo,
+  careerSeo,
+  careerNotFoundSeo,
+} from '../../../shared/seo/routes.mjs'
 
 export interface SeoConfig {
   /** Full <title> text (also used for og:title / twitter:title). */
@@ -25,20 +57,6 @@ export interface SeoConfig {
   robots?: string
   /** JSON-LD structured data object(s) to inject. */
   jsonLd?: object | object[] | null
-}
-
-/** Clip text to a clean, snippet-friendly length on a word boundary. */
-export function clip(text: string, max = 160): string {
-  const t = text.replace(/\s+/g, ' ').trim()
-  if (t.length <= max) return t
-  const cut = t.slice(0, max - 1)
-  const lastSpace = cut.lastIndexOf(' ')
-  return (lastSpace > max * 0.6 ? cut.slice(0, lastSpace) : cut).trimEnd() + '…'
-}
-
-function absoluteUrl(pathOrUrl: string): string {
-  if (/^https?:\/\//i.test(pathOrUrl)) return pathOrUrl
-  return SITE_URL + (pathOrUrl.startsWith('/') ? '' : '/') + pathOrUrl
 }
 
 function upsertMeta(attr: 'name' | 'property', key: string, content: string) {
@@ -62,7 +80,9 @@ function upsertLink(rel: string, href: string) {
 }
 
 function setJsonLd(data: SeoConfig['jsonLd']) {
-  // Remove previously-injected blocks so stale schema doesn't linger between routes.
+  // Removes both the blocks a previous route injected and the ones the
+  // Cloudflare middleware baked into the shell (it tags them with the same
+  // attribute), so the document never carries two copies of a schema.
   document.head
     .querySelectorAll('script[data-seo-jsonld]')
     .forEach((n) => n.remove())
@@ -84,6 +104,7 @@ function setJsonLd(data: SeoConfig['jsonLd']) {
 export function applySeo(cfg: SeoConfig): void {
   const url = absoluteUrl(cfg.path)
   const image = absoluteUrl(cfg.image || DEFAULT_IMAGE)
+  const imageAlt = cfg.image ? cfg.title : DEFAULT_IMAGE_ALT
 
   document.title = cfg.title
   upsertMeta('name', 'description', cfg.description)
@@ -96,8 +117,21 @@ export function applySeo(cfg: SeoConfig): void {
   upsertMeta('property', 'og:type', cfg.type ?? 'website')
   upsertMeta('property', 'og:site_name', SITE_NAME)
   upsertMeta('property', 'og:image', image)
+  upsertMeta('property', 'og:image:alt', imageAlt)
+  // Dimensions describe the default branded card only — page artwork has
+  // arbitrary size, so publishing 1200x630 for it would be a lie.
+  if (cfg.image) {
+    document.head
+      .querySelectorAll('meta[property="og:image:width"], meta[property="og:image:height"]')
+      .forEach((n) => n.remove())
+  } else {
+    upsertMeta('property', 'og:image:width', '1200')
+    upsertMeta('property', 'og:image:height', '630')
+  }
 
   upsertMeta('name', 'twitter:card', 'summary_large_image')
+  upsertMeta('name', 'twitter:site', TWITTER_HANDLE)
+  upsertMeta('name', 'twitter:creator', TWITTER_HANDLE)
   upsertMeta('name', 'twitter:title', cfg.title)
   upsertMeta('name', 'twitter:description', cfg.description)
   upsertMeta('name', 'twitter:image', image)
@@ -111,156 +145,4 @@ export function useSeo(cfg: SeoConfig): void {
     applySeo(cfg)
     // Serialize so callers don't need to memoize the config object.
   }, [cfg.path, cfg.title, cfg.description, cfg.image, cfg.type, cfg.robots, JSON.stringify(cfg.jsonLd)])
-}
-
-// ---------------------------------------------------------------------------
-// JSON-LD builders
-// ---------------------------------------------------------------------------
-
-export function organizationLd() {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'Organization',
-    name: SITE_NAME,
-    alternateName: 'Nexenova',
-    url: SITE_URL,
-    logo: `${SITE_URL}/logo-lockup.png`,
-    slogan: 'An AI-powered indie mobile game studio built for rapid prototyping.',
-    description:
-      'Nexenova Studios is an indie mobile game studio in India that uses AI and rapid prototyping to build and ship puzzle, casual, arcade, and action games worldwide.',
-    email: 'tech@nexenovastudios.com',
-    foundingLocation: { '@type': 'Place', name: 'India' },
-    address: {
-      '@type': 'PostalAddress',
-      streetAddress: '6th Floor, ALTF Coworking Space, Sector 142',
-      addressLocality: 'Noida',
-      addressRegion: 'Uttar Pradesh',
-      addressCountry: 'IN',
-    },
-    knowsAbout: [
-      'Indie mobile game development',
-      'AI-assisted game development',
-      'Rapid game prototyping',
-      'Puzzle games',
-      'Casual and hyper-casual games',
-      'Arcade games',
-    ],
-  }
-}
-
-export function websiteLd() {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'WebSite',
-    name: SITE_NAME,
-    url: SITE_URL,
-  }
-}
-
-interface GameLike {
-  id: string
-  title: string
-  description: string
-  image?: string
-  genre?: string
-  platform?: string[]
-  rating?: number
-  status?: string
-}
-
-export function videoGameLd(game: GameLike) {
-  const ld: Record<string, unknown> = {
-    '@context': 'https://schema.org',
-    '@type': 'VideoGame',
-    name: game.title,
-    description: clip(game.description, 300),
-    url: `${SITE_URL}/game/${game.id}`,
-    image: game.image ? absoluteUrl(game.image) : undefined,
-    genre: game.genre,
-    gamePlatform: game.platform,
-    applicationCategory: 'GameApplication',
-    operatingSystem: game.platform?.join(', '),
-    publisher: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
-  }
-  if (game.rating && game.rating > 0) {
-    ld.aggregateRating = {
-      '@type': 'AggregateRating',
-      ratingValue: game.rating,
-      bestRating: 5,
-      ratingCount: 1,
-    }
-  }
-  return ld
-}
-
-interface PostLike {
-  slug: string
-  title: string
-  excerpt: string | null
-  cover_image: string | null
-  published_at: string
-  updated_at?: string
-}
-
-export function blogPostingLd(post: PostLike) {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'BlogPosting',
-    headline: post.title,
-    description: post.excerpt || undefined,
-    image: post.cover_image ? absoluteUrl(post.cover_image) : undefined,
-    datePublished: post.published_at,
-    dateModified: post.updated_at || post.published_at,
-    url: `${SITE_URL}/devlog/${post.slug}`,
-    author: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
-    publisher: {
-      '@type': 'Organization',
-      name: SITE_NAME,
-      logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo-lockup.png` },
-    },
-  }
-}
-
-interface RoleLike {
-  slug: string
-  title: string
-  location: string | null
-  employment_type: string | null
-  short_summary: string | null
-  description: string
-  posted_at: string
-  closed_at: string | null
-}
-
-export function jobPostingLd(role: RoleLike) {
-  const remote = /remote/i.test(role.location || '')
-  const ld: Record<string, unknown> = {
-    '@context': 'https://schema.org',
-    '@type': 'JobPosting',
-    title: role.title,
-    description: role.description,
-    datePosted: role.posted_at,
-    validThrough: role.closed_at || undefined,
-    employmentType: (role.employment_type || 'FULL_TIME')
-      .toUpperCase()
-      .replace(/[\s-]+/g, '_'),
-    hiringOrganization: {
-      '@type': 'Organization',
-      name: SITE_NAME,
-      sameAs: SITE_URL,
-      logo: `${SITE_URL}/logo-lockup.png`,
-    },
-    directApply: true,
-  }
-  if (role.location) {
-    ld.jobLocation = {
-      '@type': 'Place',
-      address: { '@type': 'PostalAddress', addressLocality: role.location, addressCountry: 'IN' },
-    }
-  }
-  if (remote) {
-    ld.jobLocationType = 'TELECOMMUTE'
-    ld.applicantLocationRequirements = { '@type': 'Country', name: 'India' }
-  }
-  return ld
 }

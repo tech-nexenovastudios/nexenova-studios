@@ -7,6 +7,9 @@
     "skipLibCheck": true,
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
+    // shared/seo/*.mjs is framework-free JS shared with the build scripts and
+    // the Cloudflare middleware; allowJs lets the app import it directly.
+    "allowJs": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
@@ -22,5 +25,5 @@
       "@/*": ["./src/app/*"]
     }
   },
-  "include": ["src"]
+  "include": ["src", "shared"]
 }

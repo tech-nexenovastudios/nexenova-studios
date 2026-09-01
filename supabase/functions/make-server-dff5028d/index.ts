@@ -176,7 +176,7 @@ async function sendEmail(to: string, subject: string, htmlContent: string): Prom
         from_name: 'Nexenova Studios Contact Form',
         subject: subject,
         message_html: htmlContent,
-        reply_to: 'noreply@nexenovastudios.com'
+        reply_to: 'support@nexenovastudios.com'
       }
     };
     // EmailJS strict mode requires the private key as accessToken.
@@ -595,7 +595,7 @@ app.post("/make-server-dff5028d/contact", async (c) => {
     
     // Send the email to Nexenova's support inbox
     const emailSent = await sendEmail(
-      'tech@nexenovastudios.com',
+      'support@nexenovastudios.com',
       emailSubject,
       emailHTML
     );
@@ -702,7 +702,7 @@ app.post("/make-server-dff5028d/apply", async (c) => {
     `;
 
     const emailSent = await sendEmail(
-      'tech@nexenovastudios.com',
+      'support@nexenovastudios.com',
       `Application: ${role_title} — ${name}`,
       emailHTML,
     );
@@ -711,7 +711,7 @@ app.post("/make-server-dff5028d/apply", async (c) => {
       console.warn('Application email failed to send');
       return c.json({
         success: false,
-        error: 'Could not deliver your application. Please email tech@nexenovastudios.com directly.',
+        error: 'Could not deliver your application. Please email support@nexenovastudios.com directly.',
       }, 500);
     }
 
@@ -1128,7 +1128,7 @@ app.get("/make-server-dff5028d/content", async (c) => {
       companyInfo: {
         name: "Nexenova Studios",
         description: "Independent mobile game studio crafting puzzle and action titles for global audiences.",
-        email: "tech@nexenovastudios.com",
+        email: "support@nexenovastudios.com",
         phone: "",
         address: "India"
       }
@@ -1344,7 +1344,7 @@ app.post("/make-server-dff5028d/init", async (c) => {
 // the next cron run — nothing is silently marked complete.
 
 const DELETION_GRACE_DAYS = 30;
-const ADMIN_EMAIL = 'tech@nexenovastudios.com';
+const ADMIN_EMAIL = 'support@nexenovastudios.com';
 const SITE_URL = (Deno.env.get('SITE_URL') || 'https://nexenovastudios.com').replace(/\/+$/, '');
 // game id (from the in-game deep link ?game=<id>, stored on each request) -> Unity project id.
 // ONE org-scoped service account (UNITY_SERVICE_ACCOUNT_KEY/SECRET) authorizes deletes across
@@ -1374,10 +1374,21 @@ function gameProjectMap(): Record<string, string> {
   return map;
 }
 
+// Slugs arrive from several builds with inconsistent separators ("park-escape",
+// "parkescape", "Park Escape") — compare on lowercase alphanumerics only.
+function normalizeGameSlug(s: unknown): string {
+  return String(s ?? '').toLowerCase().replace(/[^a-z0-9]/g, '');
+}
+
 function mapGameToProject(game: unknown): string | null {
-  const key = String(game ?? '').trim();
+  const key = normalizeGameSlug(game);
   if (!key) return null;
-  return gameProjectMap()[key] || null;
+  const map = gameProjectMap();
+  if (map[String(game ?? '').trim()]) return map[String(game ?? '').trim()];
+  for (const [k, v] of Object.entries(map)) {
+    if (normalizeGameSlug(k) === key) return v;
+  }
+  return null;
 }
 
 // Allow-list of project ids the org-scoped credential may target. A client can
@@ -1413,6 +1424,19 @@ function resolveProjectId(req: any): { projectId: string | null; reason?: string
   if (def) return { projectId: def.trim() };
   return { projectId: null, reason: `no project id resolved for game ${JSON.stringify(req?.game ?? null)}` };
 }
+
+// Public: the games the deletion form may name. Sourced from the same map the
+// deleter resolves against, so a picked option always resolves to a project —
+// the admin games list (KV) is a separate, unrelated catalogue. Slugs only;
+// project ids never leave the server.
+app.get("/make-server-dff5028d/account-deletion/games", (c) => {
+  const titleize = (s: string) =>
+    s.split(/[-_]+/).filter(Boolean)
+      .map((w) => (/^\d/.test(w) ? w : w.charAt(0).toUpperCase() + w.slice(1)))
+      .join(' ');
+  const data = Object.keys(gameProjectMap()).sort().map((id) => ({ id, title: titleize(id) }));
+  return c.json({ success: true, data });
+});
 
 const esc = (s: unknown) => String(s ?? '')
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');

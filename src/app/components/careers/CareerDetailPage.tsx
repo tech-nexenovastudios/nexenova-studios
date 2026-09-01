@@ -7,7 +7,8 @@ import { Badge } from '../ui/badge'
 import { Button } from '../ui/button'
 import { getRoleBySlug, type CareerPosting } from '../../data/careers'
 import { ApplicationForm } from './ApplicationForm'
-import { applySeo, clip, jobPostingLd, SITE_NAME } from '../../utils/seo'
+import { applySeo, careerNotFoundSeo, careerSeo } from '../../utils/seo'
+import { AppLink } from '../AppLink'
 
 interface CareerDetailPageProps {
   slug: string
@@ -25,21 +26,10 @@ export function CareerDetailPage({ slug, onNavigateHome, onNavigateToCareers }: 
   useEffect(() => {
     if (role === undefined) return
     if (role === null) {
-      applySeo({
-        title: `Role Not Found — Careers | ${SITE_NAME}`,
-        description: 'This role could not be found.',
-        path: `/careers/${slug}`,
-        robots: 'noindex,follow',
-      })
+      applySeo(careerNotFoundSeo(slug))
       return
     }
-    const meta = [role.employment_type, role.location].filter(Boolean).join(' · ')
-    applySeo({
-      title: `${role.title} — Careers | ${SITE_NAME}`,
-      description: clip(role.short_summary || `${role.title}${meta ? ` (${meta})` : ''} at ${SITE_NAME}. ${role.description}`),
-      path: `/careers/${role.slug}`,
-      jsonLd: jobPostingLd(role),
-    })
+    applySeo(careerSeo(role))
   }, [role, slug])
 
   if (role === undefined) {
@@ -51,12 +41,14 @@ export function CareerDetailPage({ slug, onNavigateHome, onNavigateToCareers }: 
       <div className="min-h-screen bg-background pt-32 flex flex-col items-center text-center px-4">
         <h1 className="text-2xl font-bold mb-3">Role not found</h1>
         <p className="text-muted-foreground mb-6">It may have been closed or never existed.</p>
-        <Button onClick={onNavigateToCareers}>See open roles</Button>
+        <Button asChild>
+          <AppLink href="/careers" onNavigate={onNavigateToCareers}>See open roles</AppLink>
+        </Button>
       </div>
     )
   }
 
-  const applyEmail = role.apply_email || 'tech@nexenovastudios.com'
+  const applyEmail = role.apply_email || 'support@nexenovastudios.com'
 
   return (
     <div className="min-h-screen bg-background pt-16">
@@ -67,14 +59,11 @@ export function CareerDetailPage({ slug, onNavigateHome, onNavigateToCareers }: 
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
           >
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={onNavigateToCareers}
-              className="mb-6 -ml-2 text-muted-foreground hover:text-foreground"
-            >
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              All roles
+            <Button asChild variant="ghost" size="sm" className="mb-6 -ml-2 text-muted-foreground hover:text-foreground">
+              <AppLink href="/careers" onNavigate={onNavigateToCareers}>
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                All roles
+              </AppLink>
             </Button>
             <div className="flex items-center gap-3 mb-4">
               <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-primary/15 text-primary">
@@ -139,12 +128,14 @@ export function CareerDetailPage({ slug, onNavigateHome, onNavigateToCareers }: 
         </Card>
 
         <div className="mt-10 pt-8 border-t border-border/60 flex items-center justify-between text-sm">
-          <Button variant="ghost" size="sm" onClick={onNavigateToCareers}>
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            All roles
+          <Button asChild variant="ghost" size="sm">
+            <AppLink href="/careers" onNavigate={onNavigateToCareers}>
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              All roles
+            </AppLink>
           </Button>
-          <Button variant="ghost" size="sm" onClick={onNavigateHome}>
-            Home
+          <Button asChild variant="ghost" size="sm">
+            <AppLink href="/" onNavigate={onNavigateHome}>Home</AppLink>
           </Button>
         </div>
       </main>

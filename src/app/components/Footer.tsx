@@ -1,7 +1,7 @@
 import { Mail, Phone, MapPin, Github, Linkedin, Youtube } from 'lucide-react'
 import { XIcon } from './icons/XIcon'
-import { BrandLogo } from './BrandLogo'
 import gamesSeed from '../data/games.seed.json'
+import { AppLink, SectionLink } from './AppLink'
 
 interface CompanyInfo {
   name: string
@@ -35,34 +35,24 @@ export function Footer({
     description: "Crafting memorable mobile gaming experiences for global audiences.",
     email: "support@nexenovastudios.com",
     phone: "",
-    address: "6th Floor, ALTF Coworking Space, Sector 142, Noida, India"
+    address: "India"
   }
 
   const explore = [
-    { label: 'Home', href: '#home' },
-    { label: 'The Studio', href: '#about' },
-    { label: 'Games', href: '#portfolio' },
-    { label: 'Say Hello', href: '#contact' }
+    { label: 'Home', hash: 'home' },
+    { label: 'The Studio', hash: 'about' },
+    { label: 'Games', hash: 'portfolio' },
+    { label: 'Say Hello', hash: 'contact' }
   ]
 
-  // Derived from the catalogue, newest-shipped first — a hardcoded list here
-  // went stale the moment games were renamed or removed.
-  const games = [
-    ...(gamesSeed as { id: string; title: string; status: string }[])
-      .filter(g => g.status === 'Released')
-      .slice(0, 4)
-      .map(g => ({ label: g.title, href: '#portfolio' })),
-    { label: 'See all games →', href: '#portfolio' },
-  ]
-
-  const scrollToSection = (href: string) => {
-    if (href.charAt(0) === '#') {
-      const element = document.querySelector(href)
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' })
-      }
-    }
-  }
+  // Footer game links point at the real /game/:id pages rather than the
+  // homepage anchor — that is internal link equity the crawler can follow, and
+  // the titles stay in sync with the seed instead of being hardcoded here.
+  // Shipped titles only — the list is derived so it cannot name a game that
+  // has been renamed or removed.
+  const games = (gamesSeed as { id: string; title: string; status: string }[])
+    .filter(g => g.status === 'Released')
+    .slice(0, 4)
 
   return (
     <footer className="bg-card border-t border-border">
@@ -71,7 +61,22 @@ export function Footer({
           {/* Company Info */}
           <div className="space-y-4 col-span-2 md:col-span-1">
             <div className="flex items-center gap-2">
-              <BrandLogo size="h-10" textSize="text-2xl" />
+              <img
+                src="/logo-star.png"
+                alt=""
+                width={192}
+                height={192}
+                className="h-9 w-9"
+                aria-hidden="true"
+              />
+              <div className="flex items-baseline gap-1.5">
+                <span className="text-2xl font-semibold tracking-tight text-foreground">
+                  Nexenova
+                </span>
+                <span className="text-sm font-medium uppercase tracking-[0.18em] text-primary">
+                  Studios
+                </span>
+              </div>
             </div>
             <p className="text-muted-foreground text-sm leading-relaxed">
               Independent mobile games made in India. We make them. You play them.
@@ -108,26 +113,25 @@ export function Footer({
           <div>
             <h3 className="font-semibold mb-4">Explore</h3>
             <ul className="space-y-2">
-              {explore.map((link, index) => (
-                <li key={index}>
-                  <button
-                    onClick={() => scrollToSection(link.href)}
+              {explore.map((link) => (
+                <li key={link.hash}>
+                  <SectionLink
+                    hash={link.hash}
                     className="text-muted-foreground hover:text-primary transition-colors text-sm"
                   >
                     {link.label}
-                  </button>
+                  </SectionLink>
                 </li>
               ))}
-              {onNavigateToCareers && (
-                <li>
-                  <button
-                    onClick={onNavigateToCareers}
-                    className="text-muted-foreground hover:text-primary transition-colors text-sm"
-                  >
-                    Careers
-                  </button>
-                </li>
-              )}
+              <li>
+                <AppLink
+                  href="/careers"
+                  onNavigate={onNavigateToCareers}
+                  className="text-muted-foreground hover:text-primary transition-colors text-sm"
+                >
+                  Careers
+                </AppLink>
+              </li>
             </ul>
           </div>
 
@@ -135,16 +139,24 @@ export function Footer({
           <div>
             <h3 className="font-semibold mb-4">Games</h3>
             <ul className="space-y-2">
-              {games.map((game, index) => (
-                <li key={index}>
-                  <button
-                    onClick={() => scrollToSection(game.href)}
+              {games.map((game) => (
+                <li key={game.id}>
+                  <a
+                    href={`/game/${game.id}`}
                     className="text-muted-foreground hover:text-primary transition-colors text-sm"
                   >
-                    {game.label}
-                  </button>
+                    {game.title}
+                  </a>
                 </li>
               ))}
+              <li>
+                <SectionLink
+                  hash="portfolio"
+                  className="text-muted-foreground hover:text-primary transition-colors text-sm"
+                >
+                  See all games &rarr;
+                </SectionLink>
+              </li>
             </ul>
           </div>
 
@@ -199,32 +211,35 @@ export function Footer({
               © {currentYear} {defaultCompanyInfo.name}. All rights reserved.
             </div>
             <div className="flex space-x-6 text-sm text-muted-foreground">
-              <button 
-                onClick={onNavigateToPrivacy}
+              <AppLink
+                href="/privacy"
+                onNavigate={onNavigateToPrivacy}
                 className="hover:text-primary transition-colors"
               >
                 Privacy Policy
-              </button>
-              <button 
-                onClick={onNavigateToTerms}
+              </AppLink>
+              <AppLink
+                href="/terms"
+                onNavigate={onNavigateToTerms}
                 className="hover:text-primary transition-colors"
               >
                 Terms of Service
-              </button>
-              <button
-                onClick={onNavigateToCookies}
+              </AppLink>
+              <AppLink
+                href="/cookies"
+                onNavigate={onNavigateToCookies}
                 className="hover:text-primary transition-colors"
               >
                 Cookie Policy
-              </button>
-              {onNavigateToDeleteAccount && (
-                <button
-                  onClick={onNavigateToDeleteAccount}
-                  className="hover:text-primary transition-colors"
-                >
-                  Delete Account
-                </button>
-              )}
+              </AppLink>
+              <AppLink
+                href="/delete-account"
+                onNavigate={onNavigateToDeleteAccount}
+                rel="nofollow"
+                className="hover:text-primary transition-colors"
+              >
+                Delete Account
+              </AppLink>
             </div>
           </div>
         </div>

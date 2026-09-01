@@ -26,6 +26,7 @@ import {
 } from '../ui/select'
 import { toast } from 'sonner@2.0.3'
 import { projectId, publicAnonKey } from '../../utils/supabase/info'
+import { AppLink } from '../AppLink'
 
 interface DeleteAccountPageProps {
   onNavigateHome: () => void
@@ -34,12 +35,19 @@ interface DeleteAccountPageProps {
 const API = `https://${projectId}.supabase.co/functions/v1/make-server-dff5028d`
 const GRACE_DAYS = 30
 
+type DeletableGame = { id: string; title: string }
+
 /**
- * Games with player accounts, shown in the deletion form's dropdown.
- * The id (slug) must match a key in the server's UNITY_GAME_PROJECT_MAP —
- * that's how the backend resolves which Unity project to delete from.
+ * Games with player accounts, shown in the deletion form's dropdown. Each id
+ * must match a key in the server's UNITY_GAME_PROJECT_MAP — that's how the
+ * backend resolves which Unity project to delete from.
+ *
+ * This is the offline fallback only: the form asks the server for the live list
+ * (which is derived from that map, so it can never drift) and replaces this one
+ * as soon as it arrives. Kept so a failed request leaves a usable dropdown
+ * rather than an empty one.
  */
-const DELETABLE_GAMES = [
+const DELETABLE_GAMES: DeletableGame[] = [
   { id: '2048-no-limit', title: '2048 No Limit' },
   { id: 'big-brain', title: 'Big Brain' },
   { id: 'endless-merge', title: 'Endless Merge' },
@@ -96,14 +104,11 @@ export function DeleteAccountPage({ onNavigateHome }: DeleteAccountPageProps) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
           >
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={onNavigateHome}
-              className="mb-6 -ml-2 text-muted-foreground hover:text-foreground"
-            >
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Home
+            <Button asChild variant="ghost" size="sm" className="mb-6 -ml-2 text-muted-foreground hover:text-foreground">
+              <AppLink href="/" onNavigate={onNavigateHome}>
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Back to Home
+              </AppLink>
             </Button>
             <div className="flex items-center gap-3 mb-4">
               <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-destructive/15 text-destructive">
@@ -451,6 +456,11 @@ function SessionDeleteFlow({ sessionId, onDone }: { sessionId: string; onDone: (
 /* ---------------------------------------------------------------------- */
 
 function DeletionForm() {
+  // Deletion-eligible games, from the backend's game -> Unity project map. Not
+  // the marketing catalogue: a game only belongs here once its account deletion
+  // can actually be carried out. Starts from the bundled list so the dropdown is
+  // never empty, then the server's copy takes over.
+  const [games, setGames] = useState<DeletableGame[]>(DELETABLE_GAMES)
   // Prefill from URL params when the game deep-links into this page.
   const prefill = useMemo(readPrefill, [])
   const [form, setForm] = useState({
@@ -463,6 +473,38 @@ function DeletionForm() {
   const [acknowledged, setAcknowledged] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
+
+  useEffect(() => {
+    let cancelled = false
+    fetch(`${API}/account-deletion/games`, {
+      headers: { Authorization: `Bearer ${publicAnonKey}` },
+    })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((j) => {
+        // An empty list means the map isn't configured — keep the bundled one.
+        if (!cancelled && j?.success && Array.isArray(j.data) && j.data.length) {
+          setGames(j.data)
+        }
+      })
+      .catch(() => {})
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  // A deep link may spell the slug differently than the option value
+  // ("parkescape" vs "park-escape"). Snap it to the real option so the field
+  // shows the game instead of an empty placeholder. Mirrors the server's
+  // normalizeGameSlug; the backend still resolves either spelling.
+  useEffect(() => {
+    if (!games.length) return
+    setForm((f) => {
+      if (!f.game || games.some((g) => g.id === f.game)) return f
+      const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, '')
+      const match = games.find((g) => norm(g.id) === norm(f.game))
+      return match ? { ...f, game: match.id } : f
+    })
+  }, [games])
 
   const set = (k: keyof typeof form, v: string) => setForm((f) => ({ ...f, [k]: v }))
 
@@ -524,7 +566,7 @@ function DeletionForm() {
             {GRACE_DAYS}-day grace period during which you can still cancel.
           </p>
           <p className="text-xs text-muted-foreground mt-4">
-            Didn&rsquo;t get it? Check spam, or email tech@nexenovastudios.com.
+            Didn&rsquo;t get it? Check spam, or email support@nexenovastudios.com.
           </p>
         </CardContent>
       </Card>
@@ -620,7 +662,7 @@ function DeletionForm() {
                     <SelectValue placeholder="Select a game" />
                   </SelectTrigger>
                   <SelectContent>
-                    {DELETABLE_GAMES.map((g) => (
+                    {games.map((g) => (
                       <SelectItem key={g.id} value={g.id}>
                         {g.title}
                       </SelectItem>

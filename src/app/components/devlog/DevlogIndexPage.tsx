@@ -6,6 +6,7 @@ import { Badge } from '../ui/badge'
 import { Button } from '../ui/button'
 import { ImageWithFallback } from '../figma/ImageWithFallback'
 import { listPosts, type DevlogPost } from '../../data/devlog'
+import { AppLink, handleNavClick } from '../AppLink'
 
 interface DevlogIndexPageProps {
   onNavigateHome: () => void
@@ -36,14 +37,11 @@ export function DevlogIndexPage({ onNavigateHome, onNavigateToPost }: DevlogInde
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
           >
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={onNavigateHome}
-              className="mb-6 -ml-2 text-muted-foreground hover:text-foreground"
-            >
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Home
+            <Button asChild variant="ghost" size="sm" className="mb-6 -ml-2 text-muted-foreground hover:text-foreground">
+              <AppLink href="/" onNavigate={onNavigateHome}>
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Back to Home
+              </AppLink>
             </Button>
             <div className="flex items-center gap-3 mb-4">
               <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-primary/15 text-primary">
@@ -71,16 +69,16 @@ export function DevlogIndexPage({ onNavigateHome, onNavigateToPost }: DevlogInde
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {posts.map((post, i) => (
-              <motion.button
+              <motion.a
                 key={post.id}
-                type="button"
-                onClick={() => onNavigateToPost(post.slug)}
+                href={`/devlog/${post.slug}`}
+                onClick={handleNavClick(() => onNavigateToPost(post.slug))}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: i * 0.05 }}
                 whileHover={{ y: -4 }}
-                className="text-left group focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background rounded-2xl"
+                className="block text-left group focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background rounded-2xl"
               >
                 <Card className="border-border/60 bg-card/60 backdrop-blur-sm hover:shadow-md transition-shadow overflow-hidden h-full flex flex-col">
                   {post.cover_image && (
@@ -120,7 +118,7 @@ export function DevlogIndexPage({ onNavigateHome, onNavigateToPost }: DevlogInde
                     </div>
                   </CardContent>
                 </Card>
-              </motion.button>
+              </motion.a>
             ))}
           </div>
         )}

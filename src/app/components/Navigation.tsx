@@ -1,10 +1,10 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, type MouseEvent as ReactMouseEvent } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { Button } from './ui/button'
-import { BrandLogo } from './BrandLogo'
 import { Moon, Sun, Menu, X } from 'lucide-react'
+import { isModifiedClick } from './AppLink'
 
 interface NavigationProps {
   onNavigateHome: () => void
@@ -16,9 +16,8 @@ export function Navigation({ onNavigateHome }: NavigationProps) {
   const [isScrolled, setIsScrolled] = useState(false)
 
   useEffect(() => {
-    // Studio Black is the default theme; only an explicit 'light' opts out.
-    // index.html already applied the class before first paint — this just
-    // syncs the toggle's own state.
+    // Studio Black is the default; only an explicit 'light' opts out.
+    // index.html already applied the class before first paint.
     const theme = localStorage.getItem('theme')
     if (theme !== 'light') {
       setIsDark(true)
@@ -55,6 +54,20 @@ export function Navigation({ onNavigateHome }: NavigationProps) {
     { label: 'Team', href: '#team' },
     { label: 'Contact', href: '#contact' }
   ]
+
+  // Section links are real <a href="/#section"> anchors so they're crawlable and
+  // ⌘-clickable; a plain left click is intercepted here for the smooth scroll.
+  const handleSectionClick = (event: ReactMouseEvent<HTMLAnchorElement>, href: string) => {
+    if (isModifiedClick(event)) return
+    event.preventDefault()
+    scrollToSection(href)
+  }
+
+  const handleHomeClick = (event: ReactMouseEvent<HTMLAnchorElement>) => {
+    if (isModifiedClick(event)) return
+    event.preventDefault()
+    handleNavigateHome()
+  }
 
   const scrollToSection = (href: string) => {
     // If we're not on the homepage, navigate home first, then scroll
@@ -104,30 +117,45 @@ export function Navigation({ onNavigateHome }: NavigationProps) {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="flex items-center"
           >
-            <motion.button
+            <motion.a
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="flex-shrink-0 cursor-pointer flex items-center gap-2 select-none"
-              onClick={handleNavigateHome}
+              href="/"
+              onClick={handleHomeClick}
               aria-label="Nexenova Studios — Home"
             >
-              {/* Full-colour artwork — the mark carries the brand purple/cyan
-                  itself, so it is never filtered or inverted. */}
-              <BrandLogo size="h-9" textSize="text-xl" />
-            </motion.button>
+              <img
+                src="/logo-star.png"
+                alt=""
+                width={192}
+                height={192}
+                className="h-8 w-8"
+                aria-hidden="true"
+              />
+              <span className="flex items-baseline gap-1.5">
+                <span className="text-xl font-semibold tracking-tight text-foreground">
+                  Nexenova
+                </span>
+                <span className="text-sm font-medium uppercase tracking-[0.18em] text-primary">
+                  Studios
+                </span>
+              </span>
+            </motion.a>
           </motion.div>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-6">
             {navItems.map((item, index) => (
-              <motion.button
+              <motion.a
                 key={item.label}
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => scrollToSection(item.href)}
+                href={`/${item.href}`}
+                onClick={(event) => handleSectionClick(event, item.href)}
                 className="text-foreground hover:text-primary transition-colors relative group cursor-pointer"
               >
                 {item.label}
@@ -135,7 +163,7 @@ export function Navigation({ onNavigateHome }: NavigationProps) {
                   className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary group-hover:w-full transition-all duration-300"
                   whileHover={{ width: '100%' }}
                 />
-              </motion.button>
+              </motion.a>
             ))}
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
@@ -208,18 +236,19 @@ export function Navigation({ onNavigateHome }: NavigationProps) {
             >
               <div className="flex flex-col space-y-3 pt-4">
                 {navItems.map((item, index) => (
-                  <motion.button
+                  <motion.a
                     key={item.label}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.3, delay: index * 0.1 }}
                     whileHover={{ x: 10 }}
                     whileTap={{ scale: 0.95 }}
-                    onClick={() => scrollToSection(item.href)}
-                    className="text-left text-foreground hover:text-primary transition-colors cursor-pointer"
+                    href={`/${item.href}`}
+                    onClick={(event) => handleSectionClick(event, item.href)}
+                    className="text-left text-foreground hover:text-primary transition-colors cursor-pointer py-1"
                   >
                     {item.label}
-                  </motion.button>
+                  </motion.a>
                 ))}
               </div>
             </motion.div>

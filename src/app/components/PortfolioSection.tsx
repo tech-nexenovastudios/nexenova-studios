@@ -5,6 +5,7 @@ import gamesSeed from '../data/games.seed.json'
 import { STAGE_BY_ID, STAGES, stageColor, stageOf, type Stage } from '../data/stages'
 import { StoreBadges } from './StoreBadges'
 import { StatusPill } from './GameStatusPill'
+import { AppLink } from './AppLink'
 
 interface Game {
   id: string
@@ -186,13 +187,22 @@ export function PortfolioSection({ onGameSelect }: PortfolioSectionProps) {
             </p>
           ) : (
             ordered.map((game, i) => (
-              <motion.article
+              <AppLink
                 key={game.id}
+                href={`/game/${game.id}`}
+                // A real href so Googlebot follows it and the card is keyboard
+                // reachable; the SPA still handles a plain left click.
+                onNavigate={() => handleCardClick(game.id)}
+                onClick={e => {
+                  if (!canHover.current) e.preventDefault()
+                }}
+                aria-label={game.title}
+              >
+              <motion.article
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: Math.min(i * 0.04, 0.3) }}
                 viewport={{ once: true }}
-                onClick={() => handleCardClick(game.id)}
                 onMouseEnter={() => openOnPointer(game.id)}
                 onMouseLeave={() => closeOnPointer(game.id)}
                 // Tabbing into a store link should reveal the panel it lives in.
@@ -228,7 +238,7 @@ export function PortfolioSection({ onGameSelect }: PortfolioSectionProps) {
                     }}
                   >
                     <img
-                      src="/logo-mark.png"
+                      src="/logo-star.png"
                       alt=""
                       aria-hidden="true"
                       loading="lazy"
@@ -304,6 +314,7 @@ export function PortfolioSection({ onGameSelect }: PortfolioSectionProps) {
                   </button>
                 </div>
               </motion.article>
+              </AppLink>
             ))
           )}
         </div>
